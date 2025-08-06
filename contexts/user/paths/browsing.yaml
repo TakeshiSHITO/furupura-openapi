@@ -1,0 +1,40 @@
+/products:
+  get:
+    tags:
+      - browsing
+    summary: 商品一覧取得（公開商品のみ）
+    description: 公開されている商品の一覧を取得します。カテゴリや価格帯でフィルタリング可能です。
+    operationId: browseProducts
+    security: []
+    parameters:
+      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PageParam'
+      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PerPageParam'
+      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/SearchParam'
+      - name: category
+        in: query
+        schema:
+          type: string
+      - name: min_price
+        in: query
+        schema:
+          type: integer
+      - name: max_price
+        in: query
+        schema:
+          type: integer
+    responses:
+      '200':
+        description: 商品一覧
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '../schemas/product.yaml#/components/schemas/PublicProduct'
+                pagination:
+                  $ref: '../../../shared/schemas/common.yaml#/components/schemas/Pagination'
+      '400':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'

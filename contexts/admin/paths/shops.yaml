@@ -1,0 +1,35 @@
+/shops:
+  get:
+    tags:
+      - shops
+    summary: ショップ一覧取得
+    description: システム内のショップ一覧を取得します。ステータスでフィルタリング可能です。
+    operationId: listShops
+    parameters:
+      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PageParam'
+      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PerPageParam'
+      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/SearchParam'
+      - name: status
+        in: query
+        schema:
+          type: string
+          enum:
+            - active
+            - pending
+            - suspended
+    responses:
+      '200':
+        description: ショップ一覧
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '../schemas/shop.yaml#/components/schemas/Shop'
+                pagination:
+                  $ref: '../../../shared/schemas/common.yaml#/components/schemas/Pagination'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'

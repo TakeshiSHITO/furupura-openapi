@@ -1,0 +1,40 @@
+/profile:
+  get:
+    tags:
+      - profile
+    summary: プロフィール取得
+    description: ログイン中のユーザーのプロフィール情報を取得します。
+    operationId: getProfile
+    responses:
+      '200':
+        description: プロフィール情報
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/user.yaml#/components/schemas/UserProfile'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+        
+  patch:
+    tags:
+      - profile
+    summary: プロフィール更新
+    description: プロフィール情報を部分的に更新します。
+    operationId: updateProfile
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/user.yaml#/components/schemas/UpdateProfileRequest'
+    responses:
+      '200':
+        description: 更新成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/user.yaml#/components/schemas/UserProfile'
+      '400':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'

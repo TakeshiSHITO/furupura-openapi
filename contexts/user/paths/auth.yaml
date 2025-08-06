@@ -1,0 +1,47 @@
+/auth/signup:
+  post:
+    tags:
+      - auth
+    summary: ユーザー登録
+    description: 新規ユーザーアカウントを作成します。
+    operationId: signup
+    security: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/auth.yaml#/components/schemas/SignupRequest'
+    responses:
+      '201':
+        description: 登録成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/auth.yaml#/components/schemas/AuthResponse'
+      '400':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
+        
+/auth/login:
+  post:
+    tags:
+      - auth
+    summary: ログイン
+    description: メールアドレスとパスワードでログインします。
+    operationId: login
+    security: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/auth.yaml#/components/schemas/LoginRequest'
+    responses:
+      '200':
+        description: ログイン成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/auth.yaml#/components/schemas/AuthResponse'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
