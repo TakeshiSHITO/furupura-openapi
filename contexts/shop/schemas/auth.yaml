@@ -1,0 +1,52 @@
+components:
+  schemas:
+    ShopSignupRequest:
+      type: object
+      required:
+        - shop_name
+        - email
+        - password
+      properties:
+        shop_name:
+          type: string
+          maxLength: 100
+          description: ショップ名
+        email:
+          type: string
+          format: email
+          description: ショップのメールアドレス
+        password:
+          type: string
+          format: password
+          minLength: 8
+          description: パスワード（8文字以上）
+          
+    ShopLoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          description: ショップのメールアドレス
+        password:
+          type: string
+          format: password
+          description: パスワード
+          
+    ShopAuthResponse:
+      type: object
+      required:
+        - access_token
+        - expires_in
+      properties:
+        access_token:
+          type: string
+          description: アクセストークン
+        expires_in:
+          type: integer
+          description: アクセストークンの有効期限（秒）
+        shop:
+          $ref: './shop.yaml#/components/schemas/ShopProfile'

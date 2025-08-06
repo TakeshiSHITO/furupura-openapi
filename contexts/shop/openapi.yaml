@@ -14,6 +14,8 @@ servers:
     description: Staging
 
 tags:
+  - name: auth
+    description: 認証
   - name: products
     description: 商品管理
   - name: orders
@@ -30,6 +32,12 @@ paths:
     $ref: './paths/products.yaml#/~1products~1{productId}'
   /orders:
     $ref: './paths/orders.yaml#/~1orders'
+  /auth/signup:
+    $ref: './paths/auths.yaml#/~1auth~1signup'
+  /auth/login:
+    $ref: './paths/auths.yaml#/~1auth~1login'
+  /auth/logout:
+    $ref: './paths/auths.yaml#/~1auth~1logout'
 
 components:
   securitySchemes:
