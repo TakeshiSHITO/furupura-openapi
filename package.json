@@ -11,12 +11,15 @@
     "validate:user": "redocly lint contexts/user/openapi.yaml",
     "validate:admin": "redocly lint contexts/admin/openapi.yaml",
     "validate:all": "pnpm run validate:shop && pnpm run validate:user && pnpm run validate:admin",
-    "preview:shop": "redocly preview-docs contexts/shop/openapi.yaml",
-    "preview:user": "redocly preview-docs contexts/user/openapi.yaml",
-    "preview:admin": "redocly preview-docs contexts/admin/openapi.yaml"
+    "preview:shop": "npx open-cli http://localhost:8080 && python3 -m http.server 8080 --directory docs/shop",
+    "preview:user": "npx open-cli http://localhost:8080 && python3 -m http.server 8080 --directory docs/user",
+    "preview:admin": "npx open-cli http://localhost:8080 && python3 -m http.server 8080 --directory docs/admin",
+    "docs:build": "pnpm run bundle:all && npm run docs:build:html",
+    "docs:build:html": "mkdir -p docs && npx @redocly/cli build-docs bundled/shop.openapi.yaml -o docs/shop/index.html && npx @redocly/cli build-docs bundled/user.openapi.yaml -o docs/user/index.html && npx @redocly/cli build-docs bundled/admin.openapi.yaml -o docs/admin/index.html"
   },
   "devDependencies": {
-    "@redocly/cli": "^2.0.2"
+    "@redocly/cli": "^2.0.2",
+    "@redocly/openapi-core": "^2.0.2"
   },
   "packageManager": "pnpm@9.0.0"
 }

@@ -5,10 +5,10 @@ rules:
   operation-operationId: error
   operation-summary: error
   tag-description: warn
-  info-description: warn
   operation-description: warn
   no-server-example.com: error
   no-unused-components: error
+  info-license: off
   
 apis:
   shop:

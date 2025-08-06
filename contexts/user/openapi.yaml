@@ -31,6 +31,7 @@ paths:
       tags:
         - auth
       summary: ユーザー登録
+      description: 新規ユーザーアカウントを作成します。
       operationId: signup
       security: []
       requestBody:
@@ -54,6 +55,7 @@ paths:
       tags:
         - auth
       summary: ログイン
+      description: メールアドレスとパスワードでログインします。
       operationId: login
       security: []
       requestBody:
@@ -77,6 +79,7 @@ paths:
       tags:
         - profile
       summary: プロフィール取得
+      description: ログイン中のユーザーのプロフィール情報を取得します。
       operationId: getProfile
       responses:
         '200':
@@ -92,6 +95,7 @@ paths:
       tags:
         - profile
       summary: プロフィール更新
+      description: プロフィール情報を部分的に更新します。
       operationId: updateProfile
       requestBody:
         required: true
@@ -116,6 +120,7 @@ paths:
       tags:
         - browsing
       summary: 商品一覧取得（公開商品のみ）
+      description: 公開されている商品の一覧を取得します。カテゴリや価格帯でフィルタリング可能です。
       operationId: browseProducts
       security: []
       parameters:
@@ -148,12 +153,15 @@ paths:
                       $ref: './schemas/product.yaml#/components/schemas/PublicProduct'
                   pagination:
                     $ref: '../../shared/schemas/common.yaml#/components/schemas/Pagination'
+        '400':
+          $ref: '../../shared/responses/common.yaml#/components/responses/BadRequest'
                     
   /cart:
     get:
       tags:
         - cart
       summary: カート内容取得
+      description: 現在のカートの内容を取得します。
       operationId: getCart
       responses:
         '200':
@@ -169,6 +177,7 @@ paths:
       tags:
         - cart
       summary: カートに商品追加
+      description: 指定した商品をカートに追加します。
       operationId: addToCart
       requestBody:
         required: true
