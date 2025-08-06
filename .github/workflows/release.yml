@@ -1,0 +1,50 @@
+name: Release OpenAPI Definitions
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
+          
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+          
+      - name: Install dependencies
+        run: pnpm install
+        
+      - name: Validate all APIs
+        run: pnpm run validate:all
+        
+      - name: Bundle all APIs
+        run: pnpm run bundle:all
+        
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            bundled/shop.openapi.yaml
+            bundled/user.openapi.yaml
+            bundled/admin.openapi.yaml
+          generate_release_notes: true
+          
+      - name: Trigger client updates
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.DISPATCH_TOKEN }}
+          repository: furupura/furupura-frontend
+          event-type: openapi-updated
+          client-payload: '{"version": "${{ github.ref_name }}"}'

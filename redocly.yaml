@@ -1,0 +1,19 @@
+extends:
+  - recommended
+
+rules:
+  operation-operationId: error
+  operation-summary: error
+  tag-description: warn
+  info-description: warn
+  operation-description: warn
+  no-server-example.com: error
+  no-unused-components: error
+  
+apis:
+  shop:
+    root: contexts/shop/openapi.yaml
+  user:
+    root: contexts/user/openapi.yaml
+  admin:
+    root: contexts/admin/openapi.yaml

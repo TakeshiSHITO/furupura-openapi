@@ -1,0 +1,45 @@
+components:
+  parameters:
+    PageParam:
+      name: page
+      in: query
+      description: ページ番号
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+        
+    PerPageParam:
+      name: per_page
+      in: query
+      description: 1ページあたりの件数
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+        
+    SortParam:
+      name: sort
+      in: query
+      description: ソート順
+      schema:
+        type: string
+        enum:
+          - asc
+          - desc
+        default: desc
+        
+    OrderByParam:
+      name: order_by
+      in: query
+      description: ソートキー
+      schema:
+        type: string
+        
+    SearchParam:
+      name: q
+      in: query
+      description: 検索キーワード
+      schema:
+        type: string

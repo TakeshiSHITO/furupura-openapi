@@ -1,0 +1,220 @@
+openapi: 3.1.0
+info:
+  title: Furupura Admin API
+  description: ふるぷら管理者向けAPI
+  version: 1.0.0
+  contact:
+    name: Furupura API Team
+    email: api@furupura.jp
+
+servers:
+  - url: https://api.furupura.jp/admin/v1
+    description: Production
+  - url: https://api-staging.furupura.jp/admin/v1
+    description: Staging
+
+tags:
+  - name: auth
+    description: 管理者認証
+  - name: users
+    description: ユーザー管理
+  - name: shops
+    description: ショップ管理
+  - name: analytics
+    description: 分析・レポート
+  - name: system
+    description: システム管理
+
+paths:
+  /auth/login:
+    post:
+      tags:
+        - auth
+      summary: 管理者ログイン
+      operationId: adminLogin
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/auth.yaml#/components/schemas/AdminLoginRequest'
+      responses:
+        '200':
+          description: ログイン成功
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/auth.yaml#/components/schemas/AdminAuthResponse'
+        '401':
+          $ref: '../../shared/responses/common.yaml#/components/responses/Unauthorized'
+          
+  /users:
+    get:
+      tags:
+        - users
+      summary: ユーザー一覧取得
+      operationId: listUsers
+      parameters:
+        - $ref: '../../shared/parameters/common.yaml#/components/parameters/PageParam'
+        - $ref: '../../shared/parameters/common.yaml#/components/parameters/PerPageParam'
+        - $ref: '../../shared/parameters/common.yaml#/components/parameters/SearchParam'
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum:
+              - active
+              - suspended
+              - deleted
+        - name: created_from
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: created_to
+          in: query
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: ユーザー一覧
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: './schemas/user.yaml#/components/schemas/User'
+                  pagination:
+                    $ref: '../../shared/schemas/common.yaml#/components/schemas/Pagination'
+        '401':
+          $ref: '../../shared/responses/common.yaml#/components/responses/Unauthorized'
+        '403':
+          $ref: '../../shared/responses/common.yaml#/components/responses/Forbidden'
+          
+  /users/{userId}:
+    get:
+      tags:
+        - users
+      summary: ユーザー詳細取得
+      operationId: getUser
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ユーザー詳細
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/user.yaml#/components/schemas/UserDetail'
+        '404':
+          $ref: '../../shared/responses/common.yaml#/components/responses/NotFound'
+          
+    patch:
+      tags:
+        - users
+      summary: ユーザー情報更新
+      operationId: updateUser
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/user.yaml#/components/schemas/UpdateUserRequest'
+      responses:
+        '200':
+          description: 更新成功
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/user.yaml#/components/schemas/UserDetail'
+        '400':
+          $ref: '../../shared/responses/common.yaml#/components/responses/BadRequest'
+        '404':
+          $ref: '../../shared/responses/common.yaml#/components/responses/NotFound'
+          
+  /shops:
+    get:
+      tags:
+        - shops
+      summary: ショップ一覧取得
+      operationId: listShops
+      parameters:
+        - $ref: '../../shared/parameters/common.yaml#/components/parameters/PageParam'
+        - $ref: '../../shared/parameters/common.yaml#/components/parameters/PerPageParam'
+        - $ref: '../../shared/parameters/common.yaml#/components/parameters/SearchParam'
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum:
+              - active
+              - pending
+              - suspended
+      responses:
+        '200':
+          description: ショップ一覧
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: './schemas/shop.yaml#/components/schemas/Shop'
+                  pagination:
+                    $ref: '../../shared/schemas/common.yaml#/components/schemas/Pagination'
+        '401':
+          $ref: '../../shared/responses/common.yaml#/components/responses/Unauthorized'
+          
+  /analytics/dashboard:
+    get:
+      tags:
+        - analytics
+      summary: ダッシュボード統計取得
+      operationId: getDashboardStats
+      parameters:
+        - name: period
+          in: query
+          schema:
+            type: string
+            enum:
+              - today
+              - week
+              - month
+              - year
+            default: month
+      responses:
+        '200':
+          description: ダッシュボード統計
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/analytics.yaml#/components/schemas/DashboardStats'
+        '401':
+          $ref: '../../shared/responses/common.yaml#/components/responses/Unauthorized'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []

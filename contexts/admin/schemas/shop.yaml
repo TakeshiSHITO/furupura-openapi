@@ -1,0 +1,53 @@
+components:
+  schemas:
+    Shop:
+      type: object
+      required:
+        - id
+        - name
+        - owner_id
+        - status
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        owner_id:
+          type: string
+        logo_url:
+          type: string
+          format: uri
+        status:
+          type: string
+          enum:
+            - active
+            - pending
+            - suspended
+        business_info:
+          $ref: '#/components/schemas/BusinessInfo'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+          
+    BusinessInfo:
+      type: object
+      properties:
+        company_name:
+          type: string
+        registration_number:
+          type: string
+        representative:
+          type: string
+        address:
+          $ref: '../../../shared/schemas/common.yaml#/components/schemas/Address'
+        phone:
+          type: string
+        email:
+          type: string
+          format: email

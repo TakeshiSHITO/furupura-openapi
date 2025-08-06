@@ -1,0 +1,54 @@
+components:
+  schemas:
+    Cart:
+      type: object
+      required:
+        - items
+        - total_amount
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartItem'
+        total_amount:
+          type: integer
+          minimum: 0
+        item_count:
+          type: integer
+          minimum: 0
+        estimated_tax:
+          type: integer
+          minimum: 0
+          
+    CartItem:
+      type: object
+      required:
+        - product_id
+        - quantity
+        - price
+      properties:
+        product_id:
+          type: string
+        product:
+          $ref: './product.yaml#/components/schemas/PublicProduct'
+        quantity:
+          type: integer
+          minimum: 1
+        price:
+          type: integer
+          minimum: 0
+        subtotal:
+          type: integer
+          minimum: 0
+          
+    AddToCartRequest:
+      type: object
+      required:
+        - product_id
+        - quantity
+      properties:
+        product_id:
+          type: string
+        quantity:
+          type: integer
+          minimum: 1

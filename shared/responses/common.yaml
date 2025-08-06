@@ -1,0 +1,51 @@
+components:
+  responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/common.yaml#/components/schemas/Error'
+          example:
+            code: BAD_REQUEST
+            message: リクエストが不正です
+            
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/common.yaml#/components/schemas/Error'
+          example:
+            code: UNAUTHORIZED
+            message: 認証が必要です
+            
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/common.yaml#/components/schemas/Error'
+          example:
+            code: FORBIDDEN
+            message: アクセス権限がありません
+            
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/common.yaml#/components/schemas/Error'
+          example:
+            code: NOT_FOUND
+            message: リソースが見つかりません
+            
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/common.yaml#/components/schemas/Error'
+          example:
+            code: INTERNAL_SERVER_ERROR
+            message: サーバーエラーが発生しました

@@ -1,0 +1,69 @@
+components:
+  schemas:
+    Order:
+      type: object
+      required:
+        - id
+        - order_number
+        - customer_id
+        - total_amount
+        - status
+      properties:
+        id:
+          type: string
+          format: uuid
+        order_number:
+          type: string
+          pattern: '^ORD-\d{8}$'
+        customer_id:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+        total_amount:
+          type: integer
+          minimum: 0
+        tax_amount:
+          type: integer
+          minimum: 0
+        shipping_fee:
+          type: integer
+          minimum: 0
+        status:
+          type: string
+          enum:
+            - pending
+            - processing
+            - shipped
+            - delivered
+            - cancelled
+        shipping_address:
+          $ref: '../../../shared/schemas/common.yaml#/components/schemas/Address'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+          
+    OrderItem:
+      type: object
+      required:
+        - product_id
+        - quantity
+        - unit_price
+      properties:
+        product_id:
+          type: string
+        product_name:
+          type: string
+        quantity:
+          type: integer
+          minimum: 1
+        unit_price:
+          type: integer
+          minimum: 0
+        subtotal:
+          type: integer
+          minimum: 0

@@ -1,0 +1,199 @@
+openapi: 3.1.0
+info:
+  title: Furupura User API
+  description: ふるぷらユーザー向けAPI
+  version: 1.0.0
+  contact:
+    name: Furupura API Team
+    email: api@furupura.jp
+
+servers:
+  - url: https://api.furupura.jp/user/v1
+    description: Production
+  - url: https://api-staging.furupura.jp/user/v1
+    description: Staging
+
+tags:
+  - name: auth
+    description: 認証
+  - name: profile
+    description: プロフィール管理
+  - name: browsing
+    description: 商品閲覧
+  - name: cart
+    description: カート管理
+  - name: checkout
+    description: 購入手続き
+
+paths:
+  /auth/signup:
+    post:
+      tags:
+        - auth
+      summary: ユーザー登録
+      operationId: signup
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/auth.yaml#/components/schemas/SignupRequest'
+      responses:
+        '201':
+          description: 登録成功
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/auth.yaml#/components/schemas/AuthResponse'
+        '400':
+          $ref: '../../shared/responses/common.yaml#/components/responses/BadRequest'
+          
+  /auth/login:
+    post:
+      tags:
+        - auth
+      summary: ログイン
+      operationId: login
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/auth.yaml#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: ログイン成功
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/auth.yaml#/components/schemas/AuthResponse'
+        '401':
+          $ref: '../../shared/responses/common.yaml#/components/responses/Unauthorized'
+          
+  /profile:
+    get:
+      tags:
+        - profile
+      summary: プロフィール取得
+      operationId: getProfile
+      responses:
+        '200':
+          description: プロフィール情報
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/user.yaml#/components/schemas/UserProfile'
+        '401':
+          $ref: '../../shared/responses/common.yaml#/components/responses/Unauthorized'
+          
+    patch:
+      tags:
+        - profile
+      summary: プロフィール更新
+      operationId: updateProfile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/user.yaml#/components/schemas/UpdateProfileRequest'
+      responses:
+        '200':
+          description: 更新成功
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/user.yaml#/components/schemas/UserProfile'
+        '400':
+          $ref: '../../shared/responses/common.yaml#/components/responses/BadRequest'
+        '401':
+          $ref: '../../shared/responses/common.yaml#/components/responses/Unauthorized'
+          
+  /products:
+    get:
+      tags:
+        - browsing
+      summary: 商品一覧取得（公開商品のみ）
+      operationId: browseProducts
+      security: []
+      parameters:
+        - $ref: '../../shared/parameters/common.yaml#/components/parameters/PageParam'
+        - $ref: '../../shared/parameters/common.yaml#/components/parameters/PerPageParam'
+        - $ref: '../../shared/parameters/common.yaml#/components/parameters/SearchParam'
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: min_price
+          in: query
+          schema:
+            type: integer
+        - name: max_price
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 商品一覧
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: './schemas/product.yaml#/components/schemas/PublicProduct'
+                  pagination:
+                    $ref: '../../shared/schemas/common.yaml#/components/schemas/Pagination'
+                    
+  /cart:
+    get:
+      tags:
+        - cart
+      summary: カート内容取得
+      operationId: getCart
+      responses:
+        '200':
+          description: カート内容
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/cart.yaml#/components/schemas/Cart'
+        '401':
+          $ref: '../../shared/responses/common.yaml#/components/responses/Unauthorized'
+          
+    post:
+      tags:
+        - cart
+      summary: カートに商品追加
+      operationId: addToCart
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/cart.yaml#/components/schemas/AddToCartRequest'
+      responses:
+        '200':
+          description: 追加成功
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/cart.yaml#/components/schemas/Cart'
+        '400':
+          $ref: '../../shared/responses/common.yaml#/components/responses/BadRequest'
+        '401':
+          $ref: '../../shared/responses/common.yaml#/components/responses/Unauthorized'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []

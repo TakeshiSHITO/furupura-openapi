@@ -1,0 +1,46 @@
+components:
+  schemas:
+    PublicProduct:
+      type: object
+      required:
+        - id
+        - name
+        - price
+        - in_stock
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: integer
+          minimum: 0
+        original_price:
+          type: integer
+          minimum: 0
+          description: 定価（セール時のみ表示）
+        category:
+          type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+        images:
+          type: array
+          items:
+            type: string
+            format: uri
+        in_stock:
+          type: boolean
+        rating:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 5
+        review_count:
+          type: integer
+          minimum: 0

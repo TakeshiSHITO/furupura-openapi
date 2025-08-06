@@ -1,0 +1,157 @@
+openapi: 3.1.0
+info:
+  title: Furupura Shop API
+  description: ふるぷらショップ向けAPI
+  version: 1.0.0
+  contact:
+    name: Furupura API Team
+    email: api@furupura.jp
+
+servers:
+  - url: https://api.furupura.jp/shop/v1
+    description: Production
+  - url: https://api-staging.furupura.jp/shop/v1
+    description: Staging
+
+tags:
+  - name: products
+    description: 商品管理
+  - name: orders
+    description: 注文管理
+  - name: inventory
+    description: 在庫管理
+  - name: shop
+    description: ショップ情報
+
+paths:
+  /products:
+    get:
+      tags:
+        - products
+      summary: 商品一覧取得
+      operationId: listProducts
+      parameters:
+        - $ref: '../../shared/parameters/common.yaml#/components/parameters/PageParam'
+        - $ref: '../../shared/parameters/common.yaml#/components/parameters/PerPageParam'
+        - $ref: '../../shared/parameters/common.yaml#/components/parameters/SearchParam'
+        - name: category_id
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum:
+              - active
+              - inactive
+              - draft
+      responses:
+        '200':
+          description: 商品一覧
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: './schemas/product.yaml#/components/schemas/Product'
+                  pagination:
+                    $ref: '../../shared/schemas/common.yaml#/components/schemas/Pagination'
+        '400':
+          $ref: '../../shared/responses/common.yaml#/components/responses/BadRequest'
+        '401':
+          $ref: '../../shared/responses/common.yaml#/components/responses/Unauthorized'
+          
+    post:
+      tags:
+        - products
+      summary: 商品登録
+      operationId: createProduct
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/product.yaml#/components/schemas/ProductCreateRequest'
+      responses:
+        '201':
+          description: 商品登録成功
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/product.yaml#/components/schemas/Product'
+        '400':
+          $ref: '../../shared/responses/common.yaml#/components/responses/BadRequest'
+        '401':
+          $ref: '../../shared/responses/common.yaml#/components/responses/Unauthorized'
+          
+  /products/{productId}:
+    get:
+      tags:
+        - products
+      summary: 商品詳細取得
+      operationId: getProduct
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 商品詳細
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/product.yaml#/components/schemas/Product'
+        '404':
+          $ref: '../../shared/responses/common.yaml#/components/responses/NotFound'
+          
+  /orders:
+    get:
+      tags:
+        - orders
+      summary: 注文一覧取得
+      operationId: listOrders
+      parameters:
+        - $ref: '../../shared/parameters/common.yaml#/components/parameters/PageParam'
+        - $ref: '../../shared/parameters/common.yaml#/components/parameters/PerPageParam'
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum:
+              - pending
+              - processing
+              - shipped
+              - delivered
+              - cancelled
+      responses:
+        '200':
+          description: 注文一覧
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: './schemas/order.yaml#/components/schemas/Order'
+                  pagination:
+                    $ref: '../../shared/schemas/common.yaml#/components/schemas/Pagination'
+        '401':
+          $ref: '../../shared/responses/common.yaml#/components/responses/Unauthorized'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []

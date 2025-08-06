@@ -1,0 +1,45 @@
+name: Validate OpenAPI Definitions
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
+          
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+          
+      - name: Install dependencies
+        run: pnpm install
+        
+      - name: Validate Shop API
+        run: pnpm run validate:shop
+        
+      - name: Validate User API
+        run: pnpm run validate:user
+        
+      - name: Validate Admin API
+        run: pnpm run validate:admin
+        
+      - name: Bundle APIs
+        run: pnpm run bundle:all
+        
+      - name: Upload bundled APIs
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundled-apis
+          path: bundled/
+          retention-days: 30

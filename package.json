@@ -1,0 +1,22 @@
+{
+  "name": "furupura-openapi",
+  "version": "1.0.0",
+  "description": "Furupura API Contract Definitions",
+  "scripts": {
+    "bundle:shop": "redocly bundle contexts/shop/openapi.yaml -o bundled/shop.openapi.yaml",
+    "bundle:user": "redocly bundle contexts/user/openapi.yaml -o bundled/user.openapi.yaml",
+    "bundle:admin": "redocly bundle contexts/admin/openapi.yaml -o bundled/admin.openapi.yaml",
+    "bundle:all": "pnpm run bundle:shop && pnpm run bundle:user && pnpm run bundle:admin",
+    "validate:shop": "redocly lint contexts/shop/openapi.yaml",
+    "validate:user": "redocly lint contexts/user/openapi.yaml",
+    "validate:admin": "redocly lint contexts/admin/openapi.yaml",
+    "validate:all": "pnpm run validate:shop && pnpm run validate:user && pnpm run validate:admin",
+    "preview:shop": "redocly preview-docs contexts/shop/openapi.yaml",
+    "preview:user": "redocly preview-docs contexts/user/openapi.yaml",
+    "preview:admin": "redocly preview-docs contexts/admin/openapi.yaml"
+  },
+  "devDependencies": {
+    "@redocly/cli": "^2.0.2"
+  },
+  "packageManager": "pnpm@9.0.0"
+}

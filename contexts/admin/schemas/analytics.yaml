@@ -1,0 +1,92 @@
+components:
+  schemas:
+    DashboardStats:
+      type: object
+      required:
+        - period
+        - sales
+        - orders
+        - users
+        - shops
+      properties:
+        period:
+          type: string
+          enum:
+            - today
+            - week
+            - month
+            - year
+        sales:
+          $ref: '#/components/schemas/SalesStats'
+        orders:
+          $ref: '#/components/schemas/OrderStats'
+        users:
+          $ref: '#/components/schemas/UserStats'
+        shops:
+          $ref: '#/components/schemas/ShopStats'
+          
+    SalesStats:
+      type: object
+      properties:
+        total:
+          type: integer
+          minimum: 0
+        growth:
+          type: number
+          format: float
+          description: 前期比成長率（%）
+        chart_data:
+          type: array
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                format: date
+              amount:
+                type: integer
+                
+    OrderStats:
+      type: object
+      properties:
+        total:
+          type: integer
+          minimum: 0
+        pending:
+          type: integer
+          minimum: 0
+        processing:
+          type: integer
+          minimum: 0
+        completed:
+          type: integer
+          minimum: 0
+        average_value:
+          type: integer
+          minimum: 0
+          
+    UserStats:
+      type: object
+      properties:
+        total:
+          type: integer
+          minimum: 0
+        new_users:
+          type: integer
+          minimum: 0
+        active_users:
+          type: integer
+          minimum: 0
+          
+    ShopStats:
+      type: object
+      properties:
+        total:
+          type: integer
+          minimum: 0
+        active:
+          type: integer
+          minimum: 0
+        pending_approval:
+          type: integer
+          minimum: 0
