@@ -1,0 +1,80 @@
+/auth/signup:
+  post:
+    tags:
+      - auth
+    summary: ショップオーナー登録
+    description: 新しいショップオーナーアカウントを作成します。ショップ名、メールアドレス、パスワードが必要です。
+    operationId: shopSignup
+    security: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/auth.yaml#/components/schemas/ShopSignupRequest'
+    responses:
+      '201':
+        description: 登録成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/auth.yaml#/components/schemas/ShopAuthResponse'
+      '400':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
+      '409':
+        description: メールアドレスが既に使用されています
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  example: "このメールアドレスは既に使用されています"
+
+/auth/login:
+  post:
+    tags:
+      - auth
+    summary: ショップログイン
+    description: ショップのメールアドレスとパスワードでログインします。
+    operationId: shopLogin
+    security: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/auth.yaml#/components/schemas/ShopLoginRequest'
+    responses:
+      '200':
+        description: ログイン成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/auth.yaml#/components/schemas/ShopAuthResponse'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '400':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
+
+/auth/logout:
+  post:
+    tags:
+      - auth
+    summary: ログアウト
+    description: 現在のセッションからログアウトします。
+    operationId: logout
+    responses:
+      '200':
+        description: ログアウト成功
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "ログアウトしました"
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
