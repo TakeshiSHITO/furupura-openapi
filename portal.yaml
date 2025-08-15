@@ -1,0 +1,57 @@
+openapi: 3.0.0
+info:
+  title: Furupura API Portal
+  version: 1.0.0
+  description: |
+    # Furupura API Documentation Portal
+    
+    Furupuraプラットフォームの包括的なAPIドキュメントです。
+    
+    ## 利用可能なAPI
+    
+    ### 🛍️ Shop API
+    ショップオーナー向けのAPI。商品管理、注文処理、店舗設定などの機能を提供します。
+    - [Shop API Documentation](./shop/index.html)
+    
+    ### 👤 User API  
+    エンドユーザー向けのAPI。商品検索、カート管理、注文などの機能を提供します。
+    - [User API Documentation](./user/index.html)
+    
+    ### 🔧 Admin API
+    システム管理者向けのAPI。プラットフォーム全体の管理機能を提供します。
+    - [Admin API Documentation](./admin/index.html)
+
+servers:
+  - url: https://api.furupura.com
+    description: Production server
+  - url: https://staging-api.furupura.com
+    description: Staging server
+
+paths:
+  /api-status:
+    get:
+      summary: API Status Check
+      description: すべてのAPIサービスのステータスを確認
+      responses:
+        '200':
+          description: API Status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: operational
+                  services:
+                    type: object
+                    properties:
+                      shop:
+                        type: string
+                        example: operational
+                      user:
+                        type: string
+                        example: operational
+                      admin:
+                        type: string
+                        example: operational

@@ -11,9 +11,12 @@ rules:
   info-license: off
   
 apis:
-  shop:
+  shop@latest:
     root: contexts/shop/openapi.yaml
-  user:
+    output: docs/shop-api.html
+  user@latest:
     root: contexts/user/openapi.yaml
-  admin:
+    output: docs/user-api.html
+  admin@latest:
     root: contexts/admin/openapi.yaml
+    output: docs/admin-api.html

@@ -116,14 +116,27 @@ pnpm run validate:all    # 全API仕様を検証
 
 # プレビュー
 pnpm run preview:shop    # ブラウザでAPIドキュメントを確認
+pnpm run docs:preview    # Redoclyの開発サーバーでプレビュー
 
 # ビルド
-pnpm run bundle:all      # 単一ファイルに統合
-pnpm run docs:build      # HTMLドキュメント生成
+pnpm run bundle:all      # 単一ファイルに統合（YAML形式）
+pnpm run docs:build      # 個別のHTMLドキュメント生成
+pnpm run docs:portal     # ポータルページ（index.html）生成
+pnpm run docs:all        # すべてのドキュメントを一括生成
 
 # フォーマット
 pnpm exec prettier --write .  # 手動でフォーマット
 ```
+
+### 📦 bundle vs docs の違い
+
+| コマンド | 出力形式 | 用途 | 出力先 |
+|---------|---------|------|--------|
+| `bundle:*` | YAML/JSON | APIクライアント生成、CI/CD統合、配布用 | `bundled/*.yaml` |
+| `docs:*` | HTML | ブラウザ閲覧用、GitHub Pages公開用 | `docs/*.html` |
+
+- **bundle**: 分割されたOpenAPIファイルを1つのYAMLファイルに統合。機械が読むための仕様書
+- **docs**: OpenAPI仕様からインタラクティブなHTMLドキュメントを生成。人間が読むためのWebページ
 
 ## ⚠️ 注意事項
 
@@ -199,3 +212,16 @@ pnpm run bundle:all
 **https://furupura.github.io/furupura-openapi/**
 
 （mainブランチへのプッシュで自動更新されます）
+
+### 📄 ポータルページについて
+
+`docs/index.html`は、すべてのAPIドキュメントへのエントリーポイントとなるポータルページです。
+
+- **生成方法**: `pnpm run docs:portal` または `pnpm run docs:all`
+- **設定ファイル**: `portal.yaml` - ポータルページ用のOpenAPI仕様
+- **内容**: 
+  - 各API（Shop/User/Admin）へのナビゲーション
+  - APIサービス全体のステータスチェックエンドポイント
+  - プラットフォーム概要説明
+
+GitHub Pagesで公開すると、訪問者は最初にこのポータルページを見て、必要なAPIドキュメントへ移動できます。

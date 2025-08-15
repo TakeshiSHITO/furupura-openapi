@@ -16,6 +16,9 @@
     "preview:admin": "npx open-cli http://localhost:8080 && python3 -m http.server 8080 --directory docs/admin",
     "docs:build": "pnpm run bundle:all && npm run docs:build:html",
     "docs:build:html": "mkdir -p docs && npx @redocly/cli build-docs bundled/shop.openapi.yaml -o docs/shop/index.html && npx @redocly/cli build-docs bundled/user.openapi.yaml -o docs/user/index.html && npx @redocly/cli build-docs bundled/admin.openapi.yaml -o docs/admin/index.html",
+    "docs:preview": "npx @redocly/cli preview",
+    "docs:portal": "npx @redocly/cli build-docs portal.yaml -o docs/index.html",
+    "docs:all": "pnpm run docs:build && pnpm run docs:portal",
     "prepare": "husky"
   },
   "devDependencies": {
