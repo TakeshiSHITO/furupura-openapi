@@ -1,6 +1,11 @@
 # Furupura OpenAPI Definitions
 
 ふるぷらAPIの仕様書リポジトリです。
+最新のAPIドキュメントは以下で公開されています：
+
+**https://takeshishito.github.io/furupura-openapi/**
+
+（mainブランチへのプッシュで自動更新されます）
 
 ## 🚀 クイックスタート
 
@@ -204,14 +209,6 @@ pnpm run bundle:all
 - **参照・学習目的**での利用は自由です
 - **商用利用**や**派生物の作成**は禁止されています
 - 詳細は[LICENSE](./LICENSE)ファイルをご確認ください
-
-## 🌐 APIドキュメント
-
-最新のAPIドキュメントは以下で公開されています：
-
-**https://takeshishito.github.io/furupura-openapi/**
-
-（mainブランチへのプッシュで自動更新されます）
 
 ### 📄 ポータルページについて
 
