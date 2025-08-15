@@ -209,7 +209,7 @@ pnpm run bundle:all
 
 最新のAPIドキュメントは以下で公開されています：
 
-**https://furupura.github.io/furupura-openapi/**
+**https://takeshishito.github.io/furupura-openapi/**
 
 （mainブランチへのプッシュで自動更新されます）
 
