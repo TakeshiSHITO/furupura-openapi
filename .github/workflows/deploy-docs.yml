@@ -16,6 +16,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      STORE_PATH: ~/.pnpm-store
     steps:
       - uses: actions/checkout@v4
 
@@ -28,8 +30,24 @@ jobs:
           node-version: '20'
           cache: 'pnpm'
 
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Cache Redocly
+        uses: actions/cache@v4
+        with:
+          path: .redocly-cache
+          key: ${{ runner.os }}-redocly-${{ hashFiles('contexts/**/*.yaml', 'redocly.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-redocly-
+
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Validate OpenAPI specs
         run: pnpm run validate:all
