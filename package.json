@@ -26,7 +26,13 @@
   },
   "packageManager": "pnpm@9.0.0",
   "lint-staged": {
-    "contexts/{admin,shop,user}/openapi.yaml": [
+    "contexts/admin/openapi.yaml": [
+      "pnpm run validate:all"
+    ],
+    "contexts/shop/openapi.yaml": [
+      "pnpm run validate:all"
+    ],
+    "contexts/user/openapi.yaml": [
       "pnpm run validate:all"
     ],
     "*.{js,json,md}": [

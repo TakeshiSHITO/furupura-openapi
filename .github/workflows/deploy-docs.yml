@@ -35,7 +35,7 @@ jobs:
         run: pnpm run validate:all
 
       - name: Build documentation
-        run: pnpm run docs:all
+        run: pnpm run docs:build
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
