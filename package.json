@@ -13,6 +13,7 @@
     "validate:all": "pnpm run validate:shop && pnpm run validate:user && pnpm run validate:admin",
     "docs:preview": "npx @redocly/cli preview-docs portal.yaml",
     "docs:build": "pnpm run bundle:all && mkdir -p docs/shop docs/user docs/admin && npx @redocly/cli build-docs bundled/shop.openapi.yaml -o docs/shop/index.html && npx @redocly/cli build-docs bundled/user.openapi.yaml -o docs/user/index.html && npx @redocly/cli build-docs bundled/admin.openapi.yaml -o docs/admin/index.html && npx @redocly/cli build-docs portal.yaml -o docs/index.html",
+    "commit:auto": "git add . && git commit --amend --no-edit || git commit -m 'temp commit'",
     "prepare": "husky"
   },
   "devDependencies": {
