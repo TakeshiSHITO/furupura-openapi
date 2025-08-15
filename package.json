@@ -11,7 +11,6 @@
     "validate:user": "redocly lint contexts/user/openapi.yaml",
     "validate:admin": "redocly lint contexts/admin/openapi.yaml",
     "validate:all": "run-p validate:shop validate:user validate:admin",
-    "docs:preview": "redocly preview-docs portal.yaml",
     "docs:build": "pnpm run bundle:all && mkdir -p docs/shop docs/user docs/admin && run-p docs:build:shop docs:build:user docs:build:admin docs:build:portal",
     "docs:build:shop": "redocly build-docs bundled/shop.openapi.yaml -o docs/shop/index.html",
     "docs:build:user": "redocly build-docs bundled/user.openapi.yaml -o docs/user/index.html",

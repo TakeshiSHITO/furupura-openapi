@@ -16,11 +16,17 @@ nvm use
 # 2. 依存関係をインストール
 pnpm install
 
-# 3. API仕様書をプレビュー
-pnpm run preview:shop   # ショップオーナー向けAPI
-pnpm run preview:user   # ユーザー向けAPI
-pnpm run preview:admin  # 管理者向けAPI
-```
+# 3. OpenAPI仕様の検証
+pnpm run validate:all
+
+# 4. API仕様書をビルド
+pnpm run docs:build
+
+# 5. 生成されたドキュメントをブラウザで確認
+open docs/index.html        # ポータルページ（全API概要）
+open docs/shop/index.html   # ショップオーナー向けAPI
+open docs/user/index.html   # ユーザー向けAPI
+open docs/admin/index.html  # 管理者向けAPI
 
 ## 📝 開発ルール
 
@@ -37,10 +43,12 @@ pnpm run preview:admin  # 管理者向けAPI
 **必ず以下の形式で記述してください：**
 
 ```
+
 <type>: <subject>
 
 [optional body]
-```
+
+````
 
 **使用可能なtype：**
 
@@ -61,7 +69,7 @@ pnpm run preview:admin  # 管理者向けAPI
 git commit -m "feat: カート機能のAPIを追加"
 git commit -m "fix: 認証エラーレスポンスを修正"
 git commit -m "docs: READMEにセットアップ手順を追加"
-```
+````
 
 ## 🛠️ 開発フロー
 
@@ -96,7 +104,7 @@ pnpm run validate:all
 
 # 3. ドキュメントをローカルで確認
 pnpm run docs:build
-pnpm run preview:shop
+# ブラウザで docs/shop/index.html を開いて確認
 ```
 
 ## 📁 ディレクトリ構成
@@ -120,8 +128,12 @@ contexts/
 pnpm run validate:all    # 全API仕様を検証
 
 # プレビュー
-pnpm run preview:shop    # ブラウザでAPIドキュメントを確認
-pnpm run docs:preview    # Redoclyの開発サーバーでプレビュー
+pnpm run docs:build      # 静的HTMLドキュメントを生成
+# 生成されたHTMLファイルをブラウザで開く:
+# - docs/index.html (ポータルページ)
+# - docs/shop/index.html (ショップAPI)
+# - docs/user/index.html (ユーザーAPI)
+# - docs/admin/index.html (管理者API)
 
 # ビルド
 pnpm run bundle:all      # 単一ファイルに統合（YAML形式）
