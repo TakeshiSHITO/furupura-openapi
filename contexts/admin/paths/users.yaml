@@ -45,7 +45,7 @@
         $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
       '403':
         $ref: '../../../shared/responses/common.yaml#/components/responses/Forbidden'
-        
+
 /users/{userId}:
   get:
     tags:
@@ -68,7 +68,7 @@
               $ref: '../schemas/user.yaml#/components/schemas/UserDetail'
       '404':
         $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
-        
+
   patch:
     tags:
       - users

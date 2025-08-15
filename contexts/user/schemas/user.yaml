@@ -27,7 +27,7 @@ components:
         updated_at:
           type: string
           format: date-time
-          
+
     UpdateProfileRequest:
       type: object
       properties:
@@ -37,7 +37,7 @@ components:
         phone:
           type: string
           pattern: '^\d{10,11}$'
-          
+
     UserAddress:
       allOf:
         - $ref: '../../../shared/schemas/common.yaml#/components/schemas/Address'

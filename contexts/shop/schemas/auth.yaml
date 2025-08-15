@@ -20,7 +20,7 @@ components:
           format: password
           minLength: 8
           description: パスワード（8文字以上）
-          
+
     ShopLoginRequest:
       type: object
       required:
@@ -35,7 +35,7 @@ components:
           type: string
           format: password
           description: パスワード
-          
+
     ShopAuthResponse:
       type: object
       required:

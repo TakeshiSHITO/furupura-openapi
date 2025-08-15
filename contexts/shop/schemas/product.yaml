@@ -45,7 +45,7 @@ components:
         updated_at:
           type: string
           format: date-time
-          
+
     ProductCreateRequest:
       type: object
       required:

@@ -41,7 +41,7 @@ export default async function ProductsPage() {
     page: 1,
     perPage: 20,
   });
-  
+
   return (
     <div>
       {data.data.map(product => (
@@ -123,7 +123,7 @@ export const useProductsStore = defineStore('products', {
     products: [],
     loading: false,
   }),
-  
+
   actions: {
     async fetchProducts() {
       this.loading = true;
@@ -151,27 +151,27 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          
+
       - name: Download OpenAPI spec
         run: |
           curl -L "https://github.com/furupura/furupura-openapi/releases/download/${{ github.event.client_payload.version }}/user.openapi.yaml" \
                -o openapi.yaml
-               
+
       - name: Generate client
         run: |
           npx @openapitools/openapi-generator-cli generate \
             -i openapi.yaml \
             -g typescript-axios \
             -o src/api
-            
+
       - name: Create PR
         uses: peter-evans/create-pull-request@v5
         with:
@@ -188,21 +188,21 @@ export class FurupuraSDK {
   private shopApi: ShopApi;
   private userApi: UserApi;
   private adminApi: AdminApi;
-  
+
   constructor(config: SDKConfig) {
     this.shopApi = new ShopApi(config.shopApiKey);
     this.userApi = new UserApi(config.userApiKey);
     this.adminApi = new AdminApi(config.adminApiKey);
   }
-  
+
   get shop() {
     return this.shopApi;
   }
-  
+
   get user() {
     return this.userApi;
   }
-  
+
   get admin() {
     return this.adminApi;
   }

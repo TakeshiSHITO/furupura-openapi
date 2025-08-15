@@ -9,7 +9,7 @@ components:
           example:
             code: BAD_REQUEST
             message: リクエストが不正です
-            
+
     Unauthorized:
       description: Unauthorized
       content:
@@ -19,7 +19,7 @@ components:
           example:
             code: UNAUTHORIZED
             message: 認証が必要です
-            
+
     Forbidden:
       description: Forbidden
       content:
@@ -29,7 +29,7 @@ components:
           example:
             code: FORBIDDEN
             message: アクセス権限がありません
-            
+
     NotFound:
       description: Not Found
       content:
@@ -39,7 +39,7 @@ components:
           example:
             code: NOT_FOUND
             message: リソースが見つかりません
-            
+
     InternalServerError:
       description: Internal Server Error
       content:

@@ -46,7 +46,7 @@ components:
         updated_at:
           type: string
           format: date-time
-          
+
     OrderItem:
       type: object
       required:

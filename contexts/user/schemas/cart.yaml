@@ -19,7 +19,7 @@ components:
         estimated_tax:
           type: integer
           minimum: 0
-          
+
     CartItem:
       type: object
       required:
@@ -40,7 +40,7 @@ components:
         subtotal:
           type: integer
           minimum: 0
-          
+
     AddToCartRequest:
       type: object
       required:

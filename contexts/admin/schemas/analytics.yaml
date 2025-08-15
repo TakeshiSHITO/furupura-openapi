@@ -24,7 +24,7 @@ components:
           $ref: '#/components/schemas/UserStats'
         shops:
           $ref: '#/components/schemas/ShopStats'
-          
+
     SalesStats:
       type: object
       properties:
@@ -45,7 +45,7 @@ components:
                 format: date
               amount:
                 type: integer
-                
+
     OrderStats:
       type: object
       properties:
@@ -64,7 +64,7 @@ components:
         average_value:
           type: integer
           minimum: 0
-          
+
     UserStats:
       type: object
       properties:
@@ -77,7 +77,7 @@ components:
         active_users:
           type: integer
           minimum: 0
-          
+
     ShopStats:
       type: object
       properties:

@@ -34,7 +34,7 @@ components:
         updated_at:
           type: string
           format: date-time
-          
+
     BusinessInfo:
       type: object
       properties:

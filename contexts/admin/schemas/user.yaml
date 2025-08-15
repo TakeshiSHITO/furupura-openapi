@@ -30,7 +30,7 @@ components:
         last_login_at:
           type: string
           format: date-time
-          
+
     UserDetail:
       allOf:
         - $ref: '#/components/schemas/User'
@@ -49,7 +49,7 @@ components:
             notes:
               type: string
               description: 管理者用メモ
-              
+
     UpdateUserRequest:
       type: object
       properties:

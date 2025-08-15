@@ -8,7 +8,7 @@ components:
         type: integer
         minimum: 1
         default: 1
-        
+
     PerPageParam:
       name: per_page
       in: query
@@ -18,7 +18,7 @@ components:
         minimum: 1
         maximum: 100
         default: 20
-        
+
     SortParam:
       name: sort
       in: query
@@ -29,14 +29,14 @@ components:
           - asc
           - desc
         default: desc
-        
+
     OrderByParam:
       name: order_by
       in: query
       description: ソートキー
       schema:
         type: string
-        
+
     SearchParam:
       name: q
       in: query

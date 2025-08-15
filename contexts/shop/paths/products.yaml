@@ -39,7 +39,7 @@
         $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
       '401':
         $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
-        
+
   post:
     tags:
       - products

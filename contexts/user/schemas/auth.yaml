@@ -20,7 +20,7 @@ components:
         phone:
           type: string
           pattern: '^\d{10,11}$'
-          
+
     LoginRequest:
       type: object
       required:
@@ -33,7 +33,7 @@ components:
         password:
           type: string
           format: password
-          
+
     AuthResponse:
       type: object
       required:

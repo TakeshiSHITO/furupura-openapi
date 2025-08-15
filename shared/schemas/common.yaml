@@ -15,7 +15,7 @@ components:
         details:
           type: object
           description: 詳細情報
-          
+
     Pagination:
       type: object
       properties:
@@ -34,7 +34,7 @@ components:
         total_pages:
           type: integer
           minimum: 0
-          
+
     Timestamp:
       type: object
       properties:
@@ -44,7 +44,7 @@ components:
         updated_at:
           type: string
           format: date-time
-          
+
     Address:
       type: object
       required:

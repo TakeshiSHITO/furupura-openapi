@@ -30,7 +30,7 @@
               properties:
                 error:
                   type: string
-                  example: "このメールアドレスは既に使用されています"
+                  example: 'このメールアドレスは既に使用されています'
 
 /auth/login:
   post:
@@ -75,6 +75,6 @@
               properties:
                 message:
                   type: string
-                  example: "ログアウトしました"
+                  example: 'ログアウトしました'
       '401':
         $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'

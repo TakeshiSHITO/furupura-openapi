@@ -16,7 +16,7 @@ components:
           type: string
           pattern: '^\d{6}$'
           description: 二要素認証コード
-          
+
     AdminAuthResponse:
       type: object
       required:
@@ -33,7 +33,7 @@ components:
           type: integer
         admin:
           $ref: '#/components/schemas/AdminProfile'
-          
+
     AdminProfile:
       type: object
       required:

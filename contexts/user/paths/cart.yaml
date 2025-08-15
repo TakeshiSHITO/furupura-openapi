@@ -14,7 +14,7 @@
               $ref: '../schemas/cart.yaml#/components/schemas/Cart'
       '401':
         $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
-        
+
   post:
     tags:
       - cart

@@ -21,7 +21,7 @@
               $ref: '../schemas/auth.yaml#/components/schemas/AuthResponse'
       '400':
         $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
-        
+
 /auth/login:
   post:
     tags:
