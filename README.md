@@ -130,10 +130,10 @@ pnpm exec prettier --write .  # 手動でフォーマット
 
 ### 📦 bundle vs docs の違い
 
-| コマンド | 出力形式 | 用途 | 出力先 |
-|---------|---------|------|--------|
+| コマンド   | 出力形式  | 用途                                   | 出力先           |
+| ---------- | --------- | -------------------------------------- | ---------------- |
 | `bundle:*` | YAML/JSON | APIクライアント生成、CI/CD統合、配布用 | `bundled/*.yaml` |
-| `docs:*` | HTML | ブラウザ閲覧用、GitHub Pages公開用 | `docs/*.html` |
+| `docs:*`   | HTML      | ブラウザ閲覧用、GitHub Pages公開用     | `docs/*.html`    |
 
 - **bundle**: 分割されたOpenAPIファイルを1つのYAMLファイルに統合。機械が読むための仕様書
 - **docs**: OpenAPI仕様からインタラクティブなHTMLドキュメントを生成。人間が読むためのWebページ
@@ -219,7 +219,7 @@ pnpm run bundle:all
 
 - **生成方法**: `pnpm run docs:portal` または `pnpm run docs:all`
 - **設定ファイル**: `portal.yaml` - ポータルページ用のOpenAPI仕様
-- **内容**: 
+- **内容**:
   - 各API（Shop/User/Admin）へのナビゲーション
   - APIサービス全体のステータスチェックエンドポイント
   - プラットフォーム概要説明

@@ -4,19 +4,19 @@ info:
   version: 1.0.0
   description: |
     # Furupura API Documentation Portal
-    
+
     Furupuraプラットフォームの包括的なAPIドキュメントです。
-    
+
     ## 利用可能なAPI
-    
+
     ### 🛍️ Shop API
     ショップオーナー向けのAPI。商品管理、注文処理、店舗設定などの機能を提供します。
     - [Shop API Documentation](./shop/index.html)
-    
+
     ### 👤 User API  
     エンドユーザー向けのAPI。商品検索、カート管理、注文などの機能を提供します。
     - [User API Documentation](./user/index.html)
-    
+
     ### 🔧 Admin API
     システム管理者向けのAPI。プラットフォーム全体の管理機能を提供します。
     - [Admin API Documentation](./admin/index.html)

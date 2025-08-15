@@ -9,7 +9,7 @@ rules:
   no-server-example.com: error
   no-unused-components: error
   info-license: off
-  
+
 apis:
   shop@latest:
     root: contexts/shop/openapi.yaml
