@@ -1,239 +1,198 @@
 # Furupura OpenAPI Definitions
 
-ふるぷらAPIの契約定義リポジトリです。境界コンテキストごとにOpenAPI定義を分割管理しています。
+ふるぷらAPIの仕様書リポジトリです。
 
-## 構造
-
-```
-furupura-openapi/
-├── contexts/           # 境界コンテキスト別定義
-│   ├── shop/          # ショップ向けAPI
-│   │   ├── openapi.yaml    # メイン定義（info, servers, tags）
-│   │   ├── paths/          # エンドポイント定義（分割管理）
-│   │   │   ├── products.yaml
-│   │   │   └── orders.yaml
-│   │   └── schemas/        # ショップ固有スキーマ
-│   ├── user/          # ユーザー向けAPI
-│   │   ├── openapi.yaml    # メイン定義
-│   │   ├── paths/          # エンドポイント定義（分割管理）
-│   │   │   ├── auth.yaml
-│   │   │   ├── profile.yaml
-│   │   │   ├── browsing.yaml
-│   │   │   └── cart.yaml
-│   │   └── schemas/        # ユーザー固有スキーマ
-│   └── admin/         # 管理者向けAPI
-│       ├── openapi.yaml    # メイン定義
-│       ├── paths/          # エンドポイント定義（分割管理）
-│       │   ├── auth.yaml
-│       │   ├── users.yaml
-│       │   ├── shops.yaml
-│       │   └── analytics.yaml
-│       └── schemas/        # 管理者固有スキーマ
-├── shared/            # 共通コンポーネント
-│   ├── schemas/       # 共通スキーマ
-│   ├── parameters/    # 共通パラメータ
-│   └── responses/     # 共通レスポンス
-├── bundled/           # ビルド済みファイル（自動生成）
-│   ├── shop.openapi.yaml
-│   ├── user.openapi.yaml
-│   └── admin.openapi.yaml
-├── docs/              # HTMLドキュメント（自動生成）
-│   ├── shop/
-│   ├── user/
-│   └── admin/
-└── scripts/           # ユーティリティスクリプト
-```
-
-### ファイル分割の方針
-
-OpenAPI定義は保守性を高めるため、以下の方針で分割管理しています：
-
-1. **メイン定義ファイル** (`openapi.yaml`)
-   - API全体の情報（info, servers, tags）
-   - パスへの参照（$ref使用）
-   - セキュリティ設定
-
-2. **パス定義ファイル** (`paths/*.yaml`)
-   - 機能グループごとにファイル分割
-   - 各ファイルに関連するエンドポイントをまとめる
-   - 例：認証系、プロフィール系、商品系など
-
-3. **スキーマ定義ファイル** (`schemas/*.yaml`)
-   - データモデルごとにファイル分割
-   - 再利用可能なコンポーネントとして定義
-
-## セットアップ
+## 🚀 クイックスタート
 
 ```bash
-# 依存関係のインストール
+# 1. Node.js v20を使用（.nvmrcで指定済み）
+nvm use
+
+# 2. 依存関係をインストール
 pnpm install
+
+# 3. API仕様書をプレビュー
+pnpm run preview:shop   # ショップオーナー向けAPI
+pnpm run preview:user   # ユーザー向けAPI
+pnpm run preview:admin  # 管理者向けAPI
 ```
 
-## 開発
+## 📝 開発ルール
 
-### APIドキュメントのプレビュー
+### コミット前の自動チェック
 
-```bash
-# ショップAPI
-pnpm run preview:shop
+**Huskyにより自動実行されます：**
+- OpenAPI仕様の検証（redocly）
+- コードフォーマット（Prettier）
+- コミットメッセージの検証（Commitlint）
 
-# ユーザーAPI
-pnpm run preview:user
+### コミットメッセージ規約
 
-# 管理者API
-pnpm run preview:admin
+**必ず以下の形式で記述してください：**
+
+```
+<type>: <subject>
+
+[optional body]
 ```
 
-### 検証
+**使用可能なtype：**
+- `feat`: 新機能追加
+- `fix`: バグ修正
+- `docs`: ドキュメントのみの変更
+- `style`: フォーマットの修正（コードの動作に影響なし）
+- `refactor`: リファクタリング
+- `perf`: パフォーマンス改善
+- `test`: テストの追加・修正
+- `chore`: ビルドプロセスやツールの変更
+- `ci`: CI/CD設定の変更
+- `revert`: 以前のコミットを取り消し
+
+**例：**
+```bash
+git commit -m "feat: カート機能のAPIを追加"
+git commit -m "fix: 認証エラーレスポンスを修正"
+git commit -m "docs: READMEにセットアップ手順を追加"
+```
+
+## 🛠️ 開発フロー
+
+### 1. 新しいエンドポイントを追加する場合
 
 ```bash
-# 個別検証
-pnpm run validate:shop
-pnpm run validate:user
-pnpm run validate:admin
+# 1. ブランチを作成
+git checkout -b feat/new-endpoint
 
-# 全て検証
+# 2. 該当するpathsファイルを編集
+# 例: contexts/user/paths/cart.yaml
+
+# 3. 検証を実行
 pnpm run validate:all
+
+# 4. コミット（自動でフォーマット&検証される）
+git add .
+git commit -m "feat: カートアイテム削除APIを追加"
+
+# 5. プッシュ
+git push origin feat/new-endpoint
 ```
 
-### バンドル
+### 2. スキーマを修正する場合
 
 ```bash
-# 個別バンドル
-pnpm run bundle:shop
-pnpm run bundle:user
-pnpm run bundle:admin
+# 1. 該当するschemasファイルを編集
+# 例: contexts/shop/schemas/product.yaml
 
-# 全てバンドル
-pnpm run bundle:all
+# 2. 影響を受ける全APIを検証
+pnpm run validate:all
+
+# 3. ドキュメントをローカルで確認
+pnpm run docs:build
+pnpm run preview:shop
 ```
 
-## クライアントコード生成
+## 📁 ディレクトリ構成
 
-### 方法1: スクリプトを使用
+```
+contexts/
+├── shop/          # ショップオーナー向けAPI
+├── user/          # ユーザー向けAPI
+└── admin/         # 管理者向けAPI
+
+各コンテキスト内：
+├── openapi.yaml   # メイン定義
+├── paths/         # エンドポイント定義
+└── schemas/       # データモデル定義
+```
+
+## 🔧 よく使うコマンド
 
 ```bash
-# TypeScript (axios)
-./scripts/generate-client.sh shop typescript-axios ./generated/shop-client
+# 検証
+pnpm run validate:all    # 全API仕様を検証
 
-# Swift
-./scripts/generate-client.sh user swift5 ./generated/user-ios-client
+# プレビュー
+pnpm run preview:shop    # ブラウザでAPIドキュメントを確認
 
-# Kotlin
-./scripts/generate-client.sh admin kotlin ./generated/admin-android-client
+# ビルド
+pnpm run bundle:all      # 単一ファイルに統合
+pnpm run docs:build      # HTMLドキュメント生成
+
+# フォーマット
+pnpm exec prettier --write .  # 手動でフォーマット
 ```
 
-### 方法2: 各クライアントのCIで実行
+## ⚠️ 注意事項
+
+### 破壊的変更を行う場合
+
+1. **必ずチームに相談**してから実施
+2. 影響を受けるクライアントを明記
+3. 移行ガイドを作成
+
+### $refパスの記述
 
 ```yaml
-# .github/workflows/generate-client.yml
-- name: Download OpenAPI spec
-  run: |
-    curl -L https://github.com/furupura/furupura-openapi/releases/latest/download/shop.openapi.yaml \
-         -o openapi.yaml
+# ❌ 絶対パスは使わない
+$ref: '/shared/schemas/common.yaml#/Error'
 
-- name: Generate client
-  run: |
-    npx @openapitools/openapi-generator-cli generate \
-      -i openapi.yaml \
-      -g typescript-axios \
-      -o ./src/api
+# ✅ 相対パスを使用
+$ref: '../../shared/schemas/common.yaml#/components/schemas/Error'
 ```
 
-## CI/CD
+## 🔄 自動アップデート（Dependabot）
 
-### プルリクエスト時
-- 全API定義の検証
-- バンドルファイルの生成
+毎週月曜日の朝9時（JST）に依存関係の更新をチェックし、PRを自動作成します。
 
-### リリース時（タグプッシュ時）
-1. API定義の検証
-2. バンドルファイルの生成
-3. GitHubリリースの作成
-4. クライアントリポジトリへの通知
+### 対応方法
 
-## バージョニング
+1. **Dependabot PR**には`dependencies`ラベルが付きます
+2. 変更内容を確認し、問題なければマージ
+3. 破壊的変更がある場合は、影響を確認してから対応
 
-セマンティックバージョニングを採用：
-- `v1.0.0` - 破壊的変更
-- `v1.1.0` - 後方互換性のある機能追加
-- `v1.1.1` - バグ修正
+## 🚨 トラブルシューティング
 
-## ワークフロー
-
-1. **API変更の提案**
-   ```bash
-   git checkout -b feature/add-new-endpoint
-   # OpenAPI定義を編集（適切なpathsファイルを修正）
-   # 例: contexts/user/paths/cart.yaml に新エンドポイント追加
-   pnpm run validate:all
-   pnpm run bundle:all
-   ```
-
-2. **プルリクエスト作成**
-   - 変更内容の説明
-   - 影響を受けるクライアントの明記
-   - 破壊的変更の有無
-
-3. **レビュー＆マージ**
-   - API設計のレビュー
-   - 自動検証の確認
-   - マージ
-
-4. **リリース**
-   ```bash
-   git tag v1.1.0
-   git push origin v1.1.0
-   ```
-
-## 開発のヒント
-
-### 新しいエンドポイントの追加
-
-1. 適切な`paths/*.yaml`ファイルを選択または作成
-2. エンドポイント定義を追加
-3. メインの`openapi.yaml`に参照を追加（新規ファイルの場合）
-4. バリデーションとバンドルを実行
+### コミットが失敗する場合
 
 ```bash
-# 例：ユーザーAPIに新機能追加
-echo "新しいエンドポイント定義" >> contexts/user/paths/new-feature.yaml
-# contexts/user/openapi.yamlのpathsセクションに参照追加
-pnpm run validate:user
-pnpm run bundle:user
+# 手動で検証を実行
+pnpm run validate:all
+
+# フォーマットを修正
+pnpm exec prettier --write .
+
+# コミットメッセージを確認
+# 正しい形式: "feat: 機能を追加"
 ```
 
-## 各コンテキストの特徴
+### バンドルエラーが発生する場合
 
-### Shop API (`/shop/v1`)
-- ショップオーナー向け機能
-- 商品管理、注文管理、在庫管理
-- JWT認証必須
-
-### User API (`/user/v1`)
-- エンドユーザー向け機能
-- 商品閲覧、カート、購入
-- 一部エンドポイントは認証不要
-
-### Admin API (`/admin/v1`)
-- システム管理者向け機能
-- ユーザー管理、ショップ管理、分析
-- 二要素認証対応
-
-## トラブルシューティング
-
-### バンドルエラー
 ```bash
-# キャッシュクリア
+# キャッシュをクリア
 rm -rf .redocly-cache
 pnpm run bundle:all
 ```
 
-### 循環参照エラー
-共通コンポーネントへの参照パスを確認：
-- 相対パス: `../../shared/schemas/common.yaml#/components/schemas/Error`
-- 絶対パスは使用しない
+## 🤝 コントリビューション
 
-## ライセンス
+1. このリポジトリをフォーク
+2. フィーチャーブランチを作成（`git checkout -b feat/amazing-feature`）
+3. 変更をコミット（`git commit -m 'feat: 素晴らしい機能を追加'`）
+4. ブランチにプッシュ（`git push origin feat/amazing-feature`）
+5. プルリクエストを作成
 
-MIT
+## 📄 ライセンス
+
+このプロジェクトは独自のライセンスの下で公開されています。
+
+- **参照・学習目的**での利用は自由です
+- **商用利用**や**派生物の作成**は禁止されています
+- 詳細は[LICENSE](./LICENSE)ファイルをご確認ください
+
+## 🌐 APIドキュメント
+
+最新のAPIドキュメントは以下で公開されています：
+
+**https://furupura.github.io/furupura-openapi/**
+
+（mainブランチへのプッシュで自動更新されます）

@@ -1,0 +1,35 @@
+Copyright (c) 2024 Furupura Project
+
+This software and associated documentation files (the "Software") are provided
+under the following conditions:
+
+1. PERMISSIONS
+   - Permission is hereby granted to use this Software for reference purposes only.
+   - You may view and study the Software for educational purposes.
+
+2. RESTRICTIONS
+   - You may NOT distribute, sublicense, or sell copies of the Software.
+   - You may NOT modify, merge, or create derivative works based on the Software.
+   - You may NOT use the Software for commercial purposes without explicit written
+     permission from the copyright holders.
+   - You may NOT remove or alter any copyright notices or this license from the Software.
+
+3. API USAGE
+   - The API specifications defined in this repository may be used to develop
+     client applications that interact with the official Furupura services only.
+   - You may NOT use these specifications to create competing services.
+
+4. CONTRIBUTIONS
+   - By contributing to this project, you agree to assign all rights to your
+     contributions to the Furupura Project.
+
+5. NO WARRANTY
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+   SOFTWARE.
+
+For commercial licensing or other permissions, please contact: support@furupura.jp

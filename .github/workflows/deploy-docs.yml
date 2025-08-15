@@ -1,0 +1,173 @@
+name: Deploy API Documentation
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.0.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate all APIs
+        run: pnpm run validate:all
+
+      - name: Build documentation
+        run: pnpm run docs:build
+
+      - name: Create index.html
+        run: |
+          cat > docs/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html lang="ja">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Furupura API Documentation</title>
+            <style>
+              body {
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 2rem;
+                background-color: #f5f5f5;
+              }
+              .container {
+                background: white;
+                padding: 2rem;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+              }
+              h1 {
+                color: #333;
+                border-bottom: 2px solid #007bff;
+                padding-bottom: 0.5rem;
+              }
+              .api-links {
+                display: grid;
+                gap: 1rem;
+                margin-top: 2rem;
+              }
+              .api-card {
+                display: block;
+                padding: 1.5rem;
+                background: #f8f9fa;
+                border: 1px solid #dee2e6;
+                border-radius: 4px;
+                text-decoration: none;
+                color: #333;
+                transition: all 0.3s ease;
+              }
+              .api-card:hover {
+                background: #007bff;
+                color: white;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+              }
+              .api-card h2 {
+                margin: 0 0 0.5rem 0;
+                font-size: 1.5rem;
+              }
+              .api-card p {
+                margin: 0;
+                opacity: 0.8;
+              }
+              .footer {
+                margin-top: 3rem;
+                padding-top: 2rem;
+                border-top: 1px solid #dee2e6;
+                text-align: center;
+                color: #6c757d;
+              }
+              .license-notice {
+                background: #fff3cd;
+                border: 1px solid #ffeaa7;
+                padding: 1rem;
+                border-radius: 4px;
+                margin-bottom: 2rem;
+                color: #856404;
+              }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <h1>Furupura API Documentation</h1>
+              
+              <div class="license-notice">
+                <strong>⚠️ ライセンスに関する重要な通知</strong><br>
+                このAPIドキュメントは参照目的でのみ公開されています。
+                商用利用や派生物の作成は禁止されています。
+                詳細は<a href="https://github.com/furupura/furupura-openapi/blob/main/LICENSE">LICENSE</a>をご確認ください。
+              </div>
+
+              <p>ふるさと納税プラットフォーム「ふるぷら」のAPI仕様書です。</p>
+              
+              <div class="api-links">
+                <a href="shop/" class="api-card">
+                  <h2>Shop API</h2>
+                  <p>ショップオーナー向けのAPI。商品管理、注文管理、在庫管理などの機能を提供。</p>
+                </a>
+                
+                <a href="user/" class="api-card">
+                  <h2>User API</h2>
+                  <p>エンドユーザー向けのAPI。商品検索、カート機能、注文処理などの機能を提供。</p>
+                </a>
+                
+                <a href="admin/" class="api-card">
+                  <h2>Admin API</h2>
+                  <p>システム管理者向けのAPI。ユーザー管理、ショップ管理、分析機能などを提供。</p>
+                </a>
+              </div>
+              
+              <div class="footer">
+                <p>&copy; 2024 Furupura Project. All rights reserved.</p>
+                <p>
+                  <a href="https://github.com/furupura/furupura-openapi">GitHub Repository</a>
+                </p>
+              </div>
+            </div>
+          </body>
+          </html>
+          EOF
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./docs
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
