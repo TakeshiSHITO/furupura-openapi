@@ -2,41 +2,41 @@ name: CI
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
 
 jobs:
   validate:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - uses: actions/checkout@v4
-    
-    - uses: pnpm/action-setup@v4
-      with:
-        version: 9.0.0
-    
-    - uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-        cache: 'pnpm'
-    
-    - name: Install dependencies
-      run: pnpm install --frozen-lockfile
-    
-    - name: Validate OpenAPI specs
-      run: pnpm run validate:all
-    
-    - name: Check code formatting
-      run: pnpm exec prettier --check '**/*.{js,json,md,yaml,yml}'
-    
-    - name: Build documentation
-      run: pnpm run docs:build
-    
-    - name: Upload documentation artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: api-docs
-        path: docs/
-        retention-days: 7
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.0.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate OpenAPI specs
+        run: pnpm run validate:all
+
+      - name: Check code formatting
+        run: pnpm exec prettier --check '**/*.{js,json,md,yaml,yml}'
+
+      - name: Build documentation
+        run: pnpm run docs:build
+
+      - name: Upload documentation artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-docs
+          path: docs/
+          retention-days: 7

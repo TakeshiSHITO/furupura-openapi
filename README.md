@@ -22,6 +22,7 @@ pnpm run preview:admin  # 管理者向けAPI
 ### コミット前の自動チェック
 
 **Huskyにより自動実行されます：**
+
 - OpenAPI仕様の検証（redocly）
 - コードフォーマット（Prettier）
 - コミットメッセージの検証（Commitlint）
@@ -37,6 +38,7 @@ pnpm run preview:admin  # 管理者向けAPI
 ```
 
 **使用可能なtype：**
+
 - `feat`: 新機能追加
 - `fix`: バグ修正
 - `docs`: ドキュメントのみの変更
@@ -49,6 +51,7 @@ pnpm run preview:admin  # 管理者向けAPI
 - `revert`: 以前のコミットを取り消し
 
 **例：**
+
 ```bash
 git commit -m "feat: カート機能のAPIを追加"
 git commit -m "fix: 認証エラーレスポンスを修正"

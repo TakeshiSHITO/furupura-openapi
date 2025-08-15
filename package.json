@@ -21,7 +21,7 @@
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
-    "@redocly/cli": "^2.0.2",
+    "@redocly/cli": "^2.0.5",
     "@redocly/openapi-core": "^2.0.2",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.5",
@@ -29,10 +29,13 @@
   },
   "packageManager": "pnpm@9.0.0",
   "lint-staged": {
-    "*.{yaml,yml}": [
+    "contexts/**/*.{yaml,yml}": [
       "pnpm run validate:all"
     ],
     "*.{js,json,md}": [
+      "prettier --write"
+    ],
+    "*.{yaml,yml}": [
       "prettier --write"
     ]
   }
