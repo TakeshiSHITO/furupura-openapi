@@ -27,18 +27,123 @@ tags:
     description: カート管理
   - name: checkout
     description: 購入手続き
+  - name: favorites
+    description: お気に入り管理
+  - name: payment
+    description: 支払い方法管理
+  - name: points
+    description: ポイント管理
+  - name: coupons
+    description: クーポン管理
+  - name: notifications
+    description: 通知管理
+  - name: reviews
+    description: レビュー・評価
+  - name: wishlist
+    description: ウィッシュリスト
+  - name: activity
+    description: アクティビティ追跡
+  - name: preferences
+    description: ユーザー設定
+  - name: referral
+    description: 紹介プログラム
+  - name: sessions
+    description: セッション管理
 
 paths:
+  # 認証
   /auth/signup:
     $ref: './paths/auth.yaml#/~1auth~1signup'
   /auth/login:
     $ref: './paths/auth.yaml#/~1auth~1login'
+
+  # プロフィール
   /profile:
     $ref: './paths/profile.yaml#/~1profile'
+
+  # 商品閲覧
   /products:
     $ref: './paths/browsing.yaml#/~1products'
+
+  # カート
   /cart:
     $ref: './paths/cart.yaml#/~1cart'
+
+  # お気に入り
+  /favorites:
+    $ref: './paths/favorites.yaml#/~1favorites'
+  /favorites/{product_id}:
+    $ref: './paths/favorites.yaml#/~1favorites~1{product_id}'
+  /favorites/check:
+    $ref: './paths/favorites.yaml#/~1favorites~1check'
+
+  # 支払い方法
+  /payment-methods:
+    $ref: './paths/payment.yaml#/~1payment-methods'
+  /payment-methods/{payment_method_id}:
+    $ref: './paths/payment.yaml#/~1payment-methods~1{payment_method_id}'
+  /payment-methods/{payment_method_id}/set-default:
+    $ref: './paths/payment.yaml#/~1payment-methods~1{payment_method_id}~1set-default'
+
+  # ポイント・クーポン
+  /points:
+    $ref: './paths/points.yaml#/~1points'
+  /points/transactions:
+    $ref: './paths/points.yaml#/~1points~1transactions'
+  /points/use:
+    $ref: './paths/points.yaml#/~1points~1use'
+  /coupons:
+    $ref: './paths/points.yaml#/~1coupons'
+  /coupons/apply:
+    $ref: './paths/points.yaml#/~1coupons~1apply'
+  /coupons/{coupon_id}/use:
+    $ref: './paths/points.yaml#/~1coupons~1{coupon_id}~1use'
+
+  # 通知
+  /notifications/settings:
+    $ref: './paths/notifications.yaml#/~1notifications~1settings'
+  /notifications:
+    $ref: './paths/notifications.yaml#/~1notifications'
+  /notifications/{notification_id}:
+    $ref: './paths/notifications.yaml#/~1notifications~1{notification_id}'
+  /notifications/mark-read:
+    $ref: './paths/notifications.yaml#/~1notifications~1mark-read'
+  /notifications/mark-all-read:
+    $ref: './paths/notifications.yaml#/~1notifications~1mark-all-read'
+
+  # レビュー
+  /products/{product_id}/reviews:
+    $ref: './paths/reviews.yaml#/~1products~1{product_id}~1reviews'
+  /reviews/{review_id}:
+    $ref: './paths/reviews.yaml#/~1reviews~1{review_id}'
+  /reviews/{review_id}/helpful:
+    $ref: './paths/reviews.yaml#/~1reviews~1{review_id}~1helpful'
+  /my-reviews:
+    $ref: './paths/reviews.yaml#/~1my-reviews'
+
+  # ウィッシュリスト
+  /wishlists:
+    $ref: './paths/wishlist.yaml#/~1wishlists'
+  /wishlists/{wishlist_id}:
+    $ref: './paths/wishlist.yaml#/~1wishlists~1{wishlist_id}'
+  /wishlists/{wishlist_id}/items:
+    $ref: './paths/wishlist.yaml#/~1wishlists~1{wishlist_id}~1items'
+  /wishlists/{wishlist_id}/items/{item_id}:
+    $ref: './paths/wishlist.yaml#/~1wishlists~1{wishlist_id}~1items~1{item_id}'
+  /browsing-history:
+    $ref: './paths/wishlist.yaml#/~1browsing-history'
+
+  # アクティビティ・設定
+  /activities:
+    $ref: './paths/activity.yaml#/~1activities'
+  /preferences:
+    $ref: './paths/activity.yaml#/~1preferences'
+  /referral:
+    $ref: './paths/activity.yaml#/~1referral'
+  /referral/apply:
+    $ref: './paths/activity.yaml#/~1referral~1apply'
+  /sessions:
+    $ref: './paths/activity.yaml#/~1sessions'
 
 components:
   securitySchemes:
