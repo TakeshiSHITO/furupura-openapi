@@ -1,0 +1,285 @@
+components:
+  schemas:
+    WishlistItem:
+      type: object
+      required:
+        - id
+        - user_id
+        - product_id
+        - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ウィッシュリストアイテムID
+        user_id:
+          type: string
+          format: uuid
+          description: ユーザーID
+        product_id:
+          type: string
+          format: uuid
+          description: 商品ID
+        product:
+          $ref: './product.yaml#/components/schemas/PublicProduct'
+        priority:
+          type: integer
+          minimum: 1
+          maximum: 5
+          default: 3
+          description: 優先度（1:低 - 5:高）
+        notes:
+          type: string
+          maxLength: 500
+          description: メモ
+        target_price:
+          type: number
+          minimum: 0
+          description: 希望価格（価格アラート用）
+        notify_on_sale:
+          type: boolean
+          default: false
+          description: セール通知を受け取る
+        notify_on_restock:
+          type: boolean
+          default: false
+          description: 在庫復活通知を受け取る
+        added_from:
+          type: string
+          enum:
+            - product_page
+            - search_results
+            - recommendations
+            - cart
+            - shared_link
+          description: 追加元
+        shared_with:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: 共有相手のユーザーID
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    Wishlist:
+      type: object
+      required:
+        - id
+        - user_id
+        - name
+        - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ウィッシュリストID
+        user_id:
+          type: string
+          format: uuid
+          description: ユーザーID
+        name:
+          type: string
+          maxLength: 100
+          description: リスト名
+        description:
+          type: string
+          maxLength: 500
+          description: リスト説明
+        visibility:
+          type: string
+          enum:
+            - private
+            - friends
+            - public
+          default: private
+          description: 公開設定
+        is_default:
+          type: boolean
+          default: false
+          description: デフォルトリストフラグ
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/WishlistItem'
+        item_count:
+          type: integer
+          minimum: 0
+          description: アイテム数
+        total_value:
+          type: number
+          minimum: 0
+          description: 合計金額
+        share_url:
+          type: string
+          format: uri
+          description: 共有URL
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    CreateWishlistRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+          maxLength: 500
+        visibility:
+          type: string
+          enum:
+            - private
+            - friends
+            - public
+          default: private
+
+    UpdateWishlistRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+          maxLength: 500
+        visibility:
+          type: string
+          enum:
+            - private
+            - friends
+            - public
+
+    AddToWishlistRequest:
+      type: object
+      required:
+        - product_id
+      properties:
+        product_id:
+          type: string
+          format: uuid
+        wishlist_id:
+          type: string
+          format: uuid
+          description: 追加先リストID（省略時はデフォルトリスト）
+        priority:
+          type: integer
+          minimum: 1
+          maximum: 5
+        notes:
+          type: string
+          maxLength: 500
+        target_price:
+          type: number
+          minimum: 0
+        notify_on_sale:
+          type: boolean
+        notify_on_restock:
+          type: boolean
+
+    UpdateWishlistItemRequest:
+      type: object
+      properties:
+        priority:
+          type: integer
+          minimum: 1
+          maximum: 5
+        notes:
+          type: string
+          maxLength: 500
+        target_price:
+          type: number
+          minimum: 0
+        notify_on_sale:
+          type: boolean
+        notify_on_restock:
+          type: boolean
+
+    MoveWishlistItemRequest:
+      type: object
+      required:
+        - from_wishlist_id
+        - to_wishlist_id
+        - item_id
+      properties:
+        from_wishlist_id:
+          type: string
+          format: uuid
+        to_wishlist_id:
+          type: string
+          format: uuid
+        item_id:
+          type: string
+          format: uuid
+
+    BrowsingHistory:
+      type: object
+      required:
+        - id
+        - user_id
+        - product_id
+        - viewed_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        product_id:
+          type: string
+          format: uuid
+        product:
+          $ref: './product.yaml#/components/schemas/PublicProduct'
+        view_count:
+          type: integer
+          minimum: 1
+          default: 1
+          description: 閲覧回数
+        total_duration_seconds:
+          type: integer
+          minimum: 0
+          description: 累計閲覧時間（秒）
+        last_viewed_at:
+          type: string
+          format: date-time
+          description: 最終閲覧日時
+        viewed_at:
+          type: string
+          format: date-time
+          description: 初回閲覧日時
+        source:
+          type: string
+          enum:
+            - search
+            - category
+            - recommendation
+            - direct
+            - external
+            - advertisement
+          description: 流入元
+
+    RecentlyViewedProducts:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/BrowsingHistory'
+        total_count:
+          type: integer
+        categories_viewed:
+          type: array
+          items:
+            type: string
+          description: 閲覧したカテゴリー

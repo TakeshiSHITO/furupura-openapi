@@ -1,0 +1,177 @@
+/points:
+  get:
+    tags:
+      - points
+    summary: ポイント残高取得
+    description: ユーザーの現在のポイント残高を取得します。
+    operationId: getPointBalance
+    responses:
+      '200':
+        description: ポイント残高
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/points.yaml#/components/schemas/UserPoints'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+
+/points/transactions:
+  get:
+    tags:
+      - points
+    summary: ポイント取引履歴取得
+    description: ポイントの獲得・使用履歴を取得します。
+    operationId: getPointTransactions
+    parameters:
+      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PageParam'
+      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PerPageParam'
+      - name: type
+        in: query
+        schema:
+          type: string
+          enum:
+            - earned
+            - used
+            - expired
+            - adjusted
+        description: 取引種別でフィルタ
+      - name: from_date
+        in: query
+        schema:
+          type: string
+          format: date
+        description: 開始日
+      - name: to_date
+        in: query
+        schema:
+          type: string
+          format: date
+        description: 終了日
+    responses:
+      '200':
+        description: ポイント取引履歴
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '../schemas/points.yaml#/components/schemas/PointTransaction'
+                pagination:
+                  $ref: '../../../shared/schemas/common.yaml#/components/schemas/Pagination'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+
+/points/use:
+  post:
+    tags:
+      - points
+    summary: ポイント使用
+    description: 注文時にポイントを使用します。
+    operationId: usePoints
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/points.yaml#/components/schemas/UsePointsRequest'
+    responses:
+      '200':
+        description: 使用成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/points.yaml#/components/schemas/PointTransaction'
+      '400':
+        description: ポイント不足または無効なリクエスト
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+
+/coupons:
+  get:
+    tags:
+      - coupons
+    summary: 利用可能クーポン一覧取得
+    description: ユーザーが利用可能なクーポン一覧を取得します。
+    operationId: getAvailableCoupons
+    parameters:
+      - name: status
+        in: query
+        schema:
+          type: string
+          enum:
+            - available
+            - used
+            - expired
+          default: available
+    responses:
+      '200':
+        description: クーポン一覧
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '../schemas/points.yaml#/components/schemas/UserCoupon'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+
+/coupons/apply:
+  post:
+    tags:
+      - coupons
+    summary: クーポン適用
+    description: クーポンコードを入力して適用します。
+    operationId: applyCoupon
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/points.yaml#/components/schemas/ApplyCouponRequest'
+    responses:
+      '200':
+        description: 適用成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/points.yaml#/components/schemas/UserCoupon'
+      '400':
+        description: 無効なクーポンコード
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '409':
+        description: すでに使用済みまたは期限切れ
+
+/coupons/{coupon_id}/use:
+  post:
+    tags:
+      - coupons
+    summary: クーポン使用
+    description: 保有しているクーポンを使用します。
+    operationId: useCoupon
+    parameters:
+      - name: coupon_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    responses:
+      '200':
+        description: 使用成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/points.yaml#/components/schemas/UserCoupon'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+      '409':
+        description: すでに使用済みまたは期限切れ

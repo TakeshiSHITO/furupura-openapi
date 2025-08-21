@@ -1,0 +1,241 @@
+/activities:
+  get:
+    tags:
+      - activity
+    summary: アクティビティ履歴取得
+    description: ユーザーのアクティビティ履歴を取得します。
+    operationId: getActivities
+    parameters:
+      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PageParam'
+      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PerPageParam'
+      - name: type
+        in: query
+        schema:
+          type: string
+          enum:
+            - login
+            - logout
+            - search
+            - view_product
+            - view_category
+            - add_to_cart
+            - remove_from_cart
+            - add_to_favorite
+            - remove_from_favorite
+            - add_to_wishlist
+            - remove_from_wishlist
+            - purchase
+            - cancel_order
+            - review
+            - share
+            - apply_coupon
+            - change_settings
+        description: アクティビティタイプでフィルタ
+      - name: from_date
+        in: query
+        schema:
+          type: string
+          format: date-time
+        description: 開始日時
+      - name: to_date
+        in: query
+        schema:
+          type: string
+          format: date-time
+        description: 終了日時
+    responses:
+      '200':
+        description: アクティビティ履歴
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '../schemas/activity.yaml#/components/schemas/UserActivity'
+                pagination:
+                  $ref: '../../../shared/schemas/common.yaml#/components/schemas/Pagination'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+
+  post:
+    tags:
+      - activity
+    summary: アクティビティ記録
+    description: ユーザーアクティビティを記録します。
+    operationId: trackActivity
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - type
+            properties:
+              type:
+                type: string
+                enum:
+                  - search
+                  - view_product
+                  - view_category
+                  - share
+              target_type:
+                type: string
+              target_id:
+                type: string
+              metadata:
+                type: object
+                additionalProperties: true
+    responses:
+      '201':
+        description: 記録成功
+      '400':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+
+/preferences:
+  get:
+    tags:
+      - preferences
+    summary: ユーザー設定取得
+    description: ユーザーの各種設定を取得します。
+    operationId: getPreferences
+    responses:
+      '200':
+        description: ユーザー設定
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/activity.yaml#/components/schemas/UserPreferences'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+
+  put:
+    tags:
+      - preferences
+    summary: ユーザー設定更新
+    description: ユーザーの各種設定を更新します。
+    operationId: updatePreferences
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/activity.yaml#/components/schemas/UserPreferences'
+    responses:
+      '200':
+        description: 更新成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/activity.yaml#/components/schemas/UserPreferences'
+      '400':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+
+/referral:
+  get:
+    tags:
+      - referral
+    summary: 紹介情報取得
+    description: ユーザーの紹介コードと紹介実績を取得します。
+    operationId: getReferralInfo
+    responses:
+      '200':
+        description: 紹介情報
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                referral_code:
+                  type: string
+                  description: 自分の紹介コード
+                referral_link:
+                  type: string
+                  format: uri
+                  description: 紹介リンク
+                referred_count:
+                  type: integer
+                  description: 紹介人数
+                total_rewards:
+                  type: number
+                  description: 累計報酬
+                referrals:
+                  type: array
+                  items:
+                    $ref: '../schemas/activity.yaml#/components/schemas/UserReferral'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+
+/referral/apply:
+  post:
+    tags:
+      - referral
+    summary: 紹介コード適用
+    description: 他のユーザーの紹介コードを適用します。
+    operationId: applyReferralCode
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - referral_code
+            properties:
+              referral_code:
+                type: string
+                description: 適用する紹介コード
+    responses:
+      '200':
+        description: 適用成功
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reward:
+                  type: number
+                  description: 獲得報酬
+                message:
+                  type: string
+                  description: 成功メッセージ
+      '400':
+        description: 無効な紹介コード
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '409':
+        description: すでに紹介コードを適用済み
+
+/sessions:
+  get:
+    tags:
+      - sessions
+    summary: セッション履歴取得
+    description: ユーザーのセッション履歴を取得します。
+    operationId: getSessions
+    parameters:
+      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PageParam'
+      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PerPageParam'
+    responses:
+      '200':
+        description: セッション履歴
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '../schemas/activity.yaml#/components/schemas/UserSession'
+                pagination:
+                  $ref: '../../../shared/schemas/common.yaml#/components/schemas/Pagination'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'

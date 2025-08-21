@@ -1,0 +1,63 @@
+components:
+  schemas:
+    Favorite:
+      type: object
+      required:
+        - id
+        - user_id
+        - product_id
+        - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: お気に入りID
+        user_id:
+          type: string
+          format: uuid
+          description: ユーザーID
+        product_id:
+          type: string
+          format: uuid
+          description: 商品ID
+        created_at:
+          type: string
+          format: date-time
+          description: 追加日時
+
+    FavoriteList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Favorite'
+        total:
+          type: integer
+          description: 総数
+        page:
+          type: integer
+          description: 現在のページ
+        per_page:
+          type: integer
+          description: 1ページあたりの件数
+
+    AddFavoriteRequest:
+      type: object
+      required:
+        - product_id
+      properties:
+        product_id:
+          type: string
+          format: uuid
+          description: 商品ID
+
+    RemoveFavoriteRequest:
+      type: object
+      required:
+        - product_id
+      properties:
+        product_id:
+          type: string
+          format: uuid
+          description: 商品ID

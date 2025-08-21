@@ -23,12 +23,19 @@ components:
     CartItem:
       type: object
       required:
+        - id
         - product_id
         - quantity
         - price
+        - added_at
       properties:
+        id:
+          type: string
+          format: uuid
+          description: カートアイテムID
         product_id:
           type: string
+          format: uuid
         product:
           $ref: './product.yaml#/components/schemas/PublicProduct'
         quantity:
@@ -37,9 +44,24 @@ components:
         price:
           type: integer
           minimum: 0
+          description: 商品単価
         subtotal:
           type: integer
           minimum: 0
+          description: 小計
+        selected_options:
+          type: object
+          additionalProperties:
+            type: string
+          description: 選択されたオプション（サイズ、カラーなど）
+        added_at:
+          type: string
+          format: date-time
+          description: カート追加日時
+        updated_at:
+          type: string
+          format: date-time
+          description: 更新日時
 
     AddToCartRequest:
       type: object
@@ -49,6 +71,23 @@ components:
       properties:
         product_id:
           type: string
+          format: uuid
         quantity:
           type: integer
           minimum: 1
+        selected_options:
+          type: object
+          additionalProperties:
+            type: string
+          description: 選択するオプション
+
+    UpdateCartItemRequest:
+      type: object
+      properties:
+        quantity:
+          type: integer
+          minimum: 1
+        selected_options:
+          type: object
+          additionalProperties:
+            type: string

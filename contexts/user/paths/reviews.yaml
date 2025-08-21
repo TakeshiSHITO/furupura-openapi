@@ -1,0 +1,228 @@
+/products/{product_id}/reviews:
+  get:
+    tags:
+      - reviews
+    summary: 商品レビュー一覧取得
+    description: 指定商品のレビュー一覧を取得します。
+    operationId: getProductReviews
+    security: []
+    parameters:
+      - name: product_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PageParam'
+      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PerPageParam'
+      - name: rating
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 5
+        description: 評価でフィルタ
+      - name: verified_only
+        in: query
+        schema:
+          type: boolean
+          default: false
+        description: 購入確認済みのみ
+      - name: sort
+        in: query
+        schema:
+          type: string
+          enum:
+            - newest
+            - oldest
+            - rating_high
+            - rating_low
+            - helpful
+          default: helpful
+    responses:
+      '200':
+        description: レビュー一覧
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '../schemas/reviews.yaml#/components/schemas/ProductReview'
+                pagination:
+                  $ref: '../../../shared/schemas/common.yaml#/components/schemas/Pagination'
+                summary:
+                  $ref: '../schemas/reviews.yaml#/components/schemas/ReviewSummary'
+
+  post:
+    tags:
+      - reviews
+    summary: レビュー投稿
+    description: 商品にレビューを投稿します。
+    operationId: createReview
+    parameters:
+      - name: product_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/reviews.yaml#/components/schemas/CreateReviewRequest'
+    responses:
+      '201':
+        description: 投稿成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/reviews.yaml#/components/schemas/ProductReview'
+      '400':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '409':
+        description: すでにレビュー済み
+
+/reviews/{review_id}:
+  get:
+    tags:
+      - reviews
+    summary: レビュー詳細取得
+    description: 指定したレビューの詳細を取得します。
+    operationId: getReview
+    security: []
+    parameters:
+      - name: review_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    responses:
+      '200':
+        description: レビュー詳細
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/reviews.yaml#/components/schemas/ProductReview'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+
+  patch:
+    tags:
+      - reviews
+    summary: レビュー更新
+    description: 自分が投稿したレビューを更新します。
+    operationId: updateReview
+    parameters:
+      - name: review_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/reviews.yaml#/components/schemas/UpdateReviewRequest'
+    responses:
+      '200':
+        description: 更新成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/reviews.yaml#/components/schemas/ProductReview'
+      '400':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '403':
+        description: 他人のレビューは編集できません
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+
+  delete:
+    tags:
+      - reviews
+    summary: レビュー削除
+    description: 自分が投稿したレビューを削除します。
+    operationId: deleteReview
+    parameters:
+      - name: review_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    responses:
+      '204':
+        description: 削除成功
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '403':
+        description: 他人のレビューは削除できません
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+
+/reviews/{review_id}/helpful:
+  post:
+    tags:
+      - reviews
+    summary: レビューの役立ち評価
+    description: レビューが役立ったかどうかを評価します。
+    operationId: markReviewHelpful
+    parameters:
+      - name: review_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/reviews.yaml#/components/schemas/ReviewHelpfulnessRequest'
+    responses:
+      '200':
+        description: 評価成功
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+
+/my-reviews:
+  get:
+    tags:
+      - reviews
+    summary: 自分のレビュー一覧取得
+    description: 自分が投稿したレビュー一覧を取得します。
+    operationId: getMyReviews
+    parameters:
+      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PageParam'
+      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PerPageParam'
+    responses:
+      '200':
+        description: レビュー一覧
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '../schemas/reviews.yaml#/components/schemas/ProductReview'
+                pagination:
+                  $ref: '../../../shared/schemas/common.yaml#/components/schemas/Pagination'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'

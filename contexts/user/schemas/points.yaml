@@ -1,0 +1,241 @@
+components:
+  schemas:
+    UserPoints:
+      type: object
+      required:
+        - user_id
+        - balance
+        - total_earned
+        - total_used
+      properties:
+        user_id:
+          type: string
+          format: uuid
+          description: ユーザーID
+        balance:
+          type: integer
+          minimum: 0
+          description: 現在のポイント残高
+        total_earned:
+          type: integer
+          minimum: 0
+          description: 累計獲得ポイント
+        total_used:
+          type: integer
+          minimum: 0
+          description: 累計使用ポイント
+        expiring_soon:
+          type: integer
+          minimum: 0
+          description: 30日以内に失効するポイント
+        next_expiry_date:
+          type: string
+          format: date
+          description: 次回失効日
+
+    PointTransaction:
+      type: object
+      required:
+        - id
+        - user_id
+        - type
+        - amount
+        - balance_after
+        - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum:
+            - earned
+            - used
+            - expired
+            - adjusted
+          description: 取引種別
+        amount:
+          type: integer
+          description: ポイント数（獲得は正、使用は負）
+        balance_after:
+          type: integer
+          minimum: 0
+          description: 取引後残高
+        source:
+          type: string
+          enum:
+            - purchase
+            - campaign
+            - referral
+            - review
+            - birthday
+            - membership
+            - admin
+          description: ポイント発生源
+        reference_id:
+          type: string
+          description: 関連ID（注文ID、キャンペーンIDなど）
+        description:
+          type: string
+          description: 取引詳細
+        expires_at:
+          type: string
+          format: date
+          description: ポイント失効日（獲得時のみ）
+        created_at:
+          type: string
+          format: date-time
+
+    Coupon:
+      type: object
+      required:
+        - id
+        - code
+        - type
+        - value
+        - is_active
+      properties:
+        id:
+          type: string
+          format: uuid
+        code:
+          type: string
+          description: クーポンコード
+        name:
+          type: string
+          description: クーポン名
+        description:
+          type: string
+          description: クーポン説明
+        type:
+          type: string
+          enum:
+            - percentage
+            - fixed_amount
+            - free_shipping
+            - buy_x_get_y
+          description: クーポン種別
+        value:
+          type: number
+          description: 割引値（％または金額）
+        min_purchase_amount:
+          type: number
+          minimum: 0
+          description: 最小購入金額
+        max_discount_amount:
+          type: number
+          minimum: 0
+          description: 最大割引金額
+        applicable_products:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: 適用可能商品ID
+        applicable_categories:
+          type: array
+          items:
+            type: string
+          description: 適用可能カテゴリー
+        excluded_products:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: 除外商品ID
+        valid_from:
+          type: string
+          format: date-time
+          description: 有効期間開始
+        valid_until:
+          type: string
+          format: date-time
+          description: 有効期間終了
+        usage_limit_per_user:
+          type: integer
+          minimum: 1
+          description: ユーザーごとの使用回数制限
+        total_usage_limit:
+          type: integer
+          minimum: 1
+          description: 全体使用回数制限
+        used_count:
+          type: integer
+          default: 0
+          description: 使用済み回数
+        is_active:
+          type: boolean
+          description: 有効フラグ
+        is_public:
+          type: boolean
+          default: true
+          description: 公開フラグ
+        terms_and_conditions:
+          type: string
+          description: 利用規約
+
+    UserCoupon:
+      type: object
+      required:
+        - id
+        - user_id
+        - coupon_id
+        - status
+        - acquired_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        coupon_id:
+          type: string
+          format: uuid
+        coupon:
+          $ref: '#/components/schemas/Coupon'
+        status:
+          type: string
+          enum:
+            - available
+            - used
+            - expired
+          description: クーポン状態
+        used_at:
+          type: string
+          format: date-time
+          description: 使用日時
+        used_order_id:
+          type: string
+          format: uuid
+          description: 使用した注文ID
+        acquired_at:
+          type: string
+          format: date-time
+          description: 取得日時
+        expires_at:
+          type: string
+          format: date-time
+          description: 失効日時
+
+    ApplyCouponRequest:
+      type: object
+      required:
+        - coupon_code
+      properties:
+        coupon_code:
+          type: string
+          description: 適用するクーポンコード
+
+    UsePointsRequest:
+      type: object
+      required:
+        - points
+      properties:
+        points:
+          type: integer
+          minimum: 1
+          description: 使用するポイント数

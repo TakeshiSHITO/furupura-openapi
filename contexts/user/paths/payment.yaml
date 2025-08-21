@@ -1,0 +1,159 @@
+/payment-methods:
+  get:
+    tags:
+      - payment
+    summary: 支払い方法一覧取得
+    description: ユーザーの登録済み支払い方法一覧を取得します。
+    operationId: getPaymentMethods
+    parameters:
+      - name: is_active
+        in: query
+        schema:
+          type: boolean
+        description: 有効な支払い方法のみ取得
+    responses:
+      '200':
+        description: 支払い方法一覧
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '../schemas/payment.yaml#/components/schemas/PaymentMethod'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+
+  post:
+    tags:
+      - payment
+    summary: 支払い方法追加
+    description: 新しい支払い方法を追加します。
+    operationId: addPaymentMethod
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/payment.yaml#/components/schemas/AddPaymentMethodRequest'
+    responses:
+      '201':
+        description: 追加成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/payment.yaml#/components/schemas/PaymentMethod'
+      '400':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+
+/payment-methods/{payment_method_id}:
+  get:
+    tags:
+      - payment
+    summary: 支払い方法詳細取得
+    description: 指定した支払い方法の詳細を取得します。
+    operationId: getPaymentMethod
+    parameters:
+      - name: payment_method_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    responses:
+      '200':
+        description: 支払い方法詳細
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/payment.yaml#/components/schemas/PaymentMethod'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+
+  patch:
+    tags:
+      - payment
+    summary: 支払い方法更新
+    description: 支払い方法の情報を更新します。
+    operationId: updatePaymentMethod
+    parameters:
+      - name: payment_method_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/payment.yaml#/components/schemas/UpdatePaymentMethodRequest'
+    responses:
+      '200':
+        description: 更新成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/payment.yaml#/components/schemas/PaymentMethod'
+      '400':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+
+  delete:
+    tags:
+      - payment
+    summary: 支払い方法削除
+    description: 支払い方法を削除します。
+    operationId: deletePaymentMethod
+    parameters:
+      - name: payment_method_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    responses:
+      '204':
+        description: 削除成功
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+      '409':
+        description: デフォルト支払い方法は削除できません
+
+/payment-methods/{payment_method_id}/set-default:
+  post:
+    tags:
+      - payment
+    summary: デフォルト支払い方法設定
+    description: 指定した支払い方法をデフォルトに設定します。
+    operationId: setDefaultPaymentMethod
+    parameters:
+      - name: payment_method_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    responses:
+      '200':
+        description: 設定成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/payment.yaml#/components/schemas/PaymentMethod'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'

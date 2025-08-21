@@ -1,0 +1,116 @@
+/favorites:
+  get:
+    tags:
+      - favorites
+    summary: お気に入り一覧取得
+    description: ユーザーのお気に入り商品一覧を取得します。
+    operationId: getFavorites
+    parameters:
+      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PageParam'
+      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PerPageParam'
+      - name: sort
+        in: query
+        schema:
+          type: string
+          enum:
+            - created_at_desc
+            - created_at_asc
+            - product_name
+            - price_low
+            - price_high
+          default: created_at_desc
+    responses:
+      '200':
+        description: お気に入り一覧
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '../schemas/favorites.yaml#/components/schemas/Favorite'
+                pagination:
+                  $ref: '../../../shared/schemas/common.yaml#/components/schemas/Pagination'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+
+  post:
+    tags:
+      - favorites
+    summary: お気に入り追加
+    description: 商品をお気に入りに追加します。
+    operationId: addFavorite
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/favorites.yaml#/components/schemas/AddFavoriteRequest'
+    responses:
+      '201':
+        description: 追加成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/favorites.yaml#/components/schemas/Favorite'
+      '400':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '409':
+        description: すでにお気に入りに追加済み
+
+/favorites/{product_id}:
+  delete:
+    tags:
+      - favorites
+    summary: お気に入り削除
+    description: 商品をお気に入りから削除します。
+    operationId: removeFavorite
+    parameters:
+      - name: product_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    responses:
+      '204':
+        description: 削除成功
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+
+/favorites/check:
+  post:
+    tags:
+      - favorites
+    summary: お気に入り状態確認
+    description: 複数商品のお気に入り状態を一括確認します。
+    operationId: checkFavorites
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              product_ids:
+                type: array
+                items:
+                  type: string
+                  format: uuid
+    responses:
+      '200':
+        description: お気に入り状態
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: boolean
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'

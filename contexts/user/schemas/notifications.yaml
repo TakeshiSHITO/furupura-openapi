@@ -1,0 +1,249 @@
+components:
+  schemas:
+    NotificationSettings:
+      type: object
+      required:
+        - user_id
+      properties:
+        user_id:
+          type: string
+          format: uuid
+          description: ユーザーID
+        email_notifications:
+          $ref: '#/components/schemas/EmailNotificationSettings'
+        push_notifications:
+          $ref: '#/components/schemas/PushNotificationSettings'
+        sms_notifications:
+          $ref: '#/components/schemas/SmsNotificationSettings'
+        line_notifications:
+          $ref: '#/components/schemas/LineNotificationSettings'
+        quiet_hours:
+          $ref: '#/components/schemas/QuietHours'
+        updated_at:
+          type: string
+          format: date-time
+
+    EmailNotificationSettings:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          default: true
+          description: メール通知の有効/無効
+        order_updates:
+          type: boolean
+          default: true
+          description: 注文状況の更新
+        shipping_updates:
+          type: boolean
+          default: true
+          description: 配送状況の更新
+        promotions:
+          type: boolean
+          default: true
+          description: プロモーション・セール情報
+        price_alerts:
+          type: boolean
+          default: false
+          description: 価格変動アラート
+        stock_alerts:
+          type: boolean
+          default: false
+          description: 在庫復活アラート
+        newsletter:
+          type: boolean
+          default: false
+          description: ニュースレター
+        product_reviews:
+          type: boolean
+          default: true
+          description: 商品レビューの返信
+        points_expiry:
+          type: boolean
+          default: true
+          description: ポイント失効通知
+        account_security:
+          type: boolean
+          default: true
+          description: アカウントセキュリティ通知
+
+    PushNotificationSettings:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          default: false
+          description: プッシュ通知の有効/無効
+        order_updates:
+          type: boolean
+          default: true
+          description: 注文状況の更新
+        shipping_updates:
+          type: boolean
+          default: true
+          description: 配送状況の更新
+        promotions:
+          type: boolean
+          default: false
+          description: プロモーション・セール情報
+        price_alerts:
+          type: boolean
+          default: false
+          description: 価格変動アラート
+        in_app_messages:
+          type: boolean
+          default: true
+          description: アプリ内メッセージ
+        chat_messages:
+          type: boolean
+          default: true
+          description: チャットメッセージ
+
+    SmsNotificationSettings:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          default: false
+          description: SMS通知の有効/無効
+        order_confirmation:
+          type: boolean
+          default: false
+          description: 注文確認
+        shipping_updates:
+          type: boolean
+          default: false
+          description: 配送状況の更新
+        delivery_alerts:
+          type: boolean
+          default: false
+          description: 配達完了通知
+        security_alerts:
+          type: boolean
+          default: true
+          description: セキュリティアラート
+
+    LineNotificationSettings:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          default: false
+          description: LINE通知の有効/無効
+        line_id:
+          type: string
+          description: 連携済みLINE ID
+        order_updates:
+          type: boolean
+          default: true
+          description: 注文状況の更新
+        shipping_updates:
+          type: boolean
+          default: true
+          description: 配送状況の更新
+        promotions:
+          type: boolean
+          default: false
+          description: プロモーション情報
+
+    QuietHours:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          default: false
+          description: 通知制限時間の有効/無効
+        start_time:
+          type: string
+          pattern: '^([01]?[0-9]|2[0-3]):[0-5][0-9]$'
+          example: "22:00"
+          description: 開始時刻
+        end_time:
+          type: string
+          pattern: '^([01]?[0-9]|2[0-3]):[0-5][0-9]$'
+          example: "07:00"
+          description: 終了時刻
+        timezone:
+          type: string
+          default: "Asia/Tokyo"
+          description: タイムゾーン
+
+    Notification:
+      type: object
+      required:
+        - id
+        - user_id
+        - type
+        - title
+        - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum:
+            - order
+            - shipping
+            - promotion
+            - price_alert
+            - stock_alert
+            - points
+            - review
+            - security
+            - system
+          description: 通知タイプ
+        title:
+          type: string
+          description: 通知タイトル
+        message:
+          type: string
+          description: 通知メッセージ
+        action_url:
+          type: string
+          format: uri
+          description: アクションURL
+        image_url:
+          type: string
+          format: uri
+          description: 画像URL
+        is_read:
+          type: boolean
+          default: false
+          description: 既読フラグ
+        read_at:
+          type: string
+          format: date-time
+          description: 既読日時
+        created_at:
+          type: string
+          format: date-time
+
+    UpdateNotificationSettingsRequest:
+      type: object
+      properties:
+        email_notifications:
+          $ref: '#/components/schemas/EmailNotificationSettings'
+        push_notifications:
+          $ref: '#/components/schemas/PushNotificationSettings'
+        sms_notifications:
+          $ref: '#/components/schemas/SmsNotificationSettings'
+        line_notifications:
+          $ref: '#/components/schemas/LineNotificationSettings'
+        quiet_hours:
+          $ref: '#/components/schemas/QuietHours'
+
+    MarkNotificationAsReadRequest:
+      type: object
+      required:
+        - notification_ids
+      properties:
+        notification_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: 既読にする通知ID

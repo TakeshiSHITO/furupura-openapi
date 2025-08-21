@@ -1,0 +1,187 @@
+/notifications/settings:
+  get:
+    tags:
+      - notifications
+    summary: 通知設定取得
+    description: ユーザーの通知設定を取得します。
+    operationId: getNotificationSettings
+    responses:
+      '200':
+        description: 通知設定
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/notifications.yaml#/components/schemas/NotificationSettings'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+
+  put:
+    tags:
+      - notifications
+    summary: 通知設定更新
+    description: ユーザーの通知設定を更新します。
+    operationId: updateNotificationSettings
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/notifications.yaml#/components/schemas/UpdateNotificationSettingsRequest'
+    responses:
+      '200':
+        description: 更新成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/notifications.yaml#/components/schemas/NotificationSettings'
+      '400':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+
+/notifications:
+  get:
+    tags:
+      - notifications
+    summary: 通知一覧取得
+    description: ユーザーへの通知一覧を取得します。
+    operationId: getNotifications
+    parameters:
+      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PageParam'
+      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PerPageParam'
+      - name: type
+        in: query
+        schema:
+          type: string
+          enum:
+            - order
+            - shipping
+            - promotion
+            - price_alert
+            - stock_alert
+            - points
+            - review
+            - security
+            - system
+        description: 通知タイプでフィルタ
+      - name: is_read
+        in: query
+        schema:
+          type: boolean
+        description: 既読/未読でフィルタ
+    responses:
+      '200':
+        description: 通知一覧
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '../schemas/notifications.yaml#/components/schemas/Notification'
+                pagination:
+                  $ref: '../../../shared/schemas/common.yaml#/components/schemas/Pagination'
+                unread_count:
+                  type: integer
+                  description: 未読通知数
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+
+/notifications/{notification_id}:
+  get:
+    tags:
+      - notifications
+    summary: 通知詳細取得
+    description: 指定した通知の詳細を取得します。
+    operationId: getNotification
+    parameters:
+      - name: notification_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    responses:
+      '200':
+        description: 通知詳細
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/notifications.yaml#/components/schemas/Notification'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+
+  delete:
+    tags:
+      - notifications
+    summary: 通知削除
+    description: 指定した通知を削除します。
+    operationId: deleteNotification
+    parameters:
+      - name: notification_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    responses:
+      '204':
+        description: 削除成功
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+
+/notifications/mark-read:
+  post:
+    tags:
+      - notifications
+    summary: 通知を既読にする
+    description: 指定した通知を既読にします。
+    operationId: markNotificationsAsRead
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/notifications.yaml#/components/schemas/MarkNotificationAsReadRequest'
+    responses:
+      '200':
+        description: 既読化成功
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                updated_count:
+                  type: integer
+                  description: 更新された通知数
+      '400':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+
+/notifications/mark-all-read:
+  post:
+    tags:
+      - notifications
+    summary: 全通知を既読にする
+    description: すべての未読通知を既読にします。
+    operationId: markAllNotificationsAsRead
+    responses:
+      '200':
+        description: 既読化成功
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                updated_count:
+                  type: integer
+                  description: 更新された通知数
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'

@@ -10,17 +10,86 @@ components:
         id:
           type: string
           format: uuid
+          description: ユーザーID
         email:
           type: string
           format: email
+          description: メールアドレス
         name:
           type: string
+          description: 氏名
+        nickname:
+          type: string
+          maxLength: 50
+          description: ニックネーム
         phone:
           type: string
+          description: 電話番号
+        avatar_url:
+          type: string
+          format: uri
+          description: アバター画像URL
+        birth_date:
+          type: string
+          format: date
+          description: 生年月日
+        gender:
+          type: string
+          enum:
+            - male
+            - female
+            - other
+            - prefer_not_to_say
+          description: 性別
         addresses:
           type: array
           items:
             $ref: '#/components/schemas/UserAddress'
+          description: 住所リスト
+        tier:
+          type: string
+          enum:
+            - bronze
+            - silver
+            - gold
+            - platinum
+            - diamond
+          default: bronze
+          description: 会員ランク
+        tier_points:
+          type: integer
+          minimum: 0
+          description: ランクポイント
+        total_purchases:
+          type: number
+          minimum: 0
+          default: 0
+          description: 累計購入金額
+        purchase_count:
+          type: integer
+          minimum: 0
+          default: 0
+          description: 購入回数
+        member_since:
+          type: string
+          format: date-time
+          description: 会員登録日
+        last_login:
+          type: string
+          format: date-time
+          description: 最終ログイン日時
+        is_email_verified:
+          type: boolean
+          default: false
+          description: メール確認済みフラグ
+        is_phone_verified:
+          type: boolean
+          default: false
+          description: 電話番号確認済みフラグ
+        is_identity_verified:
+          type: boolean
+          default: false
+          description: 本人確認済みフラグ
         created_at:
           type: string
           format: date-time
