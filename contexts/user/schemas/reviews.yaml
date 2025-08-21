@@ -229,15 +229,15 @@ components:
         rating_distribution:
           type: object
           properties:
-            "1":
+            '1':
               type: integer
-            "2":
+            '2':
               type: integer
-            "3":
+            '3':
               type: integer
-            "4":
+            '4':
               type: integer
-            "5":
+            '5':
               type: integer
           description: 評価分布
         recommendation_rate:

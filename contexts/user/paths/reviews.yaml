@@ -55,6 +55,10 @@
                   $ref: '../../../shared/schemas/common.yaml#/components/schemas/Pagination'
                 summary:
                   $ref: '../schemas/reviews.yaml#/components/schemas/ReviewSummary'
+      '400':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
 
   post:
     tags:

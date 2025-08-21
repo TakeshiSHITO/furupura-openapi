@@ -156,16 +156,16 @@ components:
         start_time:
           type: string
           pattern: '^([01]?[0-9]|2[0-3]):[0-5][0-9]$'
-          example: "22:00"
+          example: '22:00'
           description: 開始時刻
         end_time:
           type: string
           pattern: '^([01]?[0-9]|2[0-3]):[0-5][0-9]$'
-          example: "07:00"
+          example: '07:00'
           description: 終了時刻
         timezone:
           type: string
-          default: "Asia/Tokyo"
+          default: 'Asia/Tokyo'
           description: タイムゾーン
 
     Notification:
