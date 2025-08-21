@@ -33,8 +33,8 @@
   },
   "packageManager": "pnpm@9.0.0",
   "lint-staged": {
-    "contexts/**/*.yaml": [
-      "redocly lint"
+    "contexts/*/openapi.yaml": [
+      "sh -c 'redocly lint \"$0\"'"
     ],
     "!(node_modules|.github)/**/*.{js,json,md,yaml,yml}": [
       "prettier --write"
