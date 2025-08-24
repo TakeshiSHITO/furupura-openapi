@@ -11,7 +11,7 @@
     "validate:user": "redocly lint contexts/user/openapi.yaml",
     "validate:admin": "redocly lint contexts/admin/openapi.yaml",
     "validate": "run-p validate:shop validate:user validate:admin",
-    "build": "pnpm run bundle && mkdir -p docs/shop docs/user docs/admin && run-p build:shop build:user build:admin build:portal",
+    "build": "pnpm run bundle && shx mkdir -p docs/shop docs/user docs/admin && run-p build:shop build:user build:admin build:portal",
     "build:shop": "redocly build-docs bundled/shop.openapi.yaml -o docs/shop/index.html",
     "build:user": "redocly build-docs bundled/user.openapi.yaml -o docs/user/index.html",
     "build:admin": "redocly build-docs bundled/admin.openapi.yaml -o docs/admin/index.html",
@@ -29,7 +29,8 @@
     "husky": "^9.1.7",
     "lint-staged": "^16.1.5",
     "npm-run-all2": "^8.0.4",
-    "prettier": "^3.6.2"
+    "prettier": "^3.6.2",
+    "shx": "^0.4.0"
   },
   "packageManager": "pnpm@9.0.0",
   "lint-staged": {

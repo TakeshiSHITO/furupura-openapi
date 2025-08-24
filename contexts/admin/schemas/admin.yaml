@@ -1,0 +1,21 @@
+components:
+  schemas:
+    AdminProfile:
+      type: object
+      required:
+        - id
+        - name
+        - email
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: 管理者ID
+        name:
+          type: string
+          maxLength: 50
+          description: 管理者名
+        email:
+          type: string
+          format: email
+          description: 管理者のメールアドレス

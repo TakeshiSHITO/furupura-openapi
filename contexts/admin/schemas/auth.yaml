@@ -1,6 +1,6 @@
 components:
   schemas:
-    AdminLoginRequest:
+    LoginRequest:
       type: object
       required:
         - email
@@ -9,21 +9,18 @@ components:
         email:
           type: string
           format: email
+          description: 管理者のメールアドレス
         password:
           type: string
           format: password
-        mfa_code:
-          type: string
-          pattern: '^\d{6}$'
-          description: 二要素認証コード
+          description: パスワード
 
-    AdminAuthResponse:
+    AuthResponse:
       type: object
       required:
         - access_token
         - refresh_token
         - expires_in
-        - admin
       properties:
         access_token:
           type: string
@@ -31,32 +28,6 @@ components:
           type: string
         expires_in:
           type: integer
+          description: アクセストークンの有効期限（秒）
         admin:
-          $ref: '#/components/schemas/AdminProfile'
-
-    AdminProfile:
-      type: object
-      required:
-        - id
-        - email
-        - name
-        - role
-      properties:
-        id:
-          type: string
-          format: uuid
-        email:
-          type: string
-          format: email
-        name:
-          type: string
-        role:
-          type: string
-          enum:
-            - super_admin
-            - admin
-            - operator
-        permissions:
-          type: array
-          items:
-            type: string
+          $ref: './admin.yaml#/components/schemas/AdminProfile'
