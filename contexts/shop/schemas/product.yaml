@@ -75,3 +75,132 @@ components:
           type: integer
           minimum: 0
           default: 0
+
+    # 金銭関係のスキーマ
+    ProductFinancial:
+      type: object
+      required:
+        - id
+        - name
+        - price
+        - status
+      properties:
+        id:
+          type: integer
+          description: 商品ID
+        categoryId:
+          type: integer
+          description: カテゴリーID
+        shopName:
+          type: string
+          description: ショップ名
+        shopArea:
+          type: integer
+          description: ショップ地域
+        name:
+          type: string
+          description: 商品名
+        price:
+          type: number
+          minimum: 0
+          description: 価格
+        status:
+          type: string
+          enum:
+            - available
+            - sold
+            - rented
+          description: 商品ステータス
+        image:
+          type: string
+          description: 商品画像URL
+
+    CheckoutResponse:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          example: '商品をレジに追加しました！'
+        product:
+          $ref: '#/components/schemas/ProductFinancial'
+
+    PurchaseOrderResponse:
+      type: object
+      required:
+        - message
+        - purchaseItem
+      properties:
+        message:
+          type: string
+          example: '商品への注文（購入）がオンラインで入っています。'
+        purchaseItem:
+          type: object
+          properties:
+            serviceOption:
+              type: string
+              example: 'purchase'
+          description: 購入アイテム情報
+
+    RentalOrderResponse:
+      type: object
+      required:
+        - message
+        - rentalItem
+      properties:
+        message:
+          type: string
+          example: '商品への注文（レンタル）がオンラインで入っています。'
+        rentalItem:
+          type: object
+          properties:
+            serviceOption:
+              type: string
+              example: 'rental'
+          description: レンタルアイテム情報
+
+    CancelCheckoutRequest:
+      type: object
+      required:
+        - productIds
+      properties:
+        productIds:
+          type: array
+          items:
+            type: integer
+          description: 取り消し対象の商品IDリスト
+          minItems: 1
+          example: [1, 2, 3]
+
+    CancelCheckoutResponse:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          example: '商品のレジからの削除が完了しました'
+
+    PartialCancelError:
+      type: object
+      required:
+        - message
+        - failedProducts
+      properties:
+        message:
+          type: string
+          example: '一部の商品を更新できませんでした'
+        failedProducts:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                description: 商品ID
+              name:
+                type: string
+                description: 商品名
+            required: [id, name]
+          description: 更新に失敗した商品リスト

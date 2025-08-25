@@ -1,0 +1,213 @@
+components:
+  schemas:
+    ShopWithArea:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ·çÃ×ID
+        name:
+          type: string
+          description: ·çÃ×
+        slug:
+          type: string
+          description: ·çÃ×¹éÃ°
+        email:
+          type: string
+          format: email
+          description: ·çÃ×náüë¢Éì¹
+        description:
+          type: string
+          description: ·çÃ×n¬
+        phone:
+          type: string
+          description: ûqj÷
+        address:
+          type: string
+          description: O@
+        logo:
+          type: string
+          description: í´;ÏURL
+        coverImage:
+          type: string
+          description: «Ğü;ÏURL
+        openingHours:
+          type: string
+          description: ¶mB“
+        postalCode:
+          type: string
+          description: õ¿j÷
+        prefecture:
+          type: string
+          description: ıSœ
+        city:
+          type: string
+          description: ::Q
+        streetAddress:
+          type: string
+          description: j0ûW:
+        buildingName:
+          type: string
+          description: úiûèKj÷
+        customizations:
+          type: object
+          description: «¹¿Ş¤º-š
+        googleMapsLink:
+          type: string
+          description: GoogleŞÃ×URL
+        googleMapsEmbedSrc:
+          type: string
+          description: GoogleŞÃ×Ë¼URL
+        areaId:
+          type: integer
+          description: ¨ê¢ID
+        area:
+          $ref: '#/components/schemas/Area'
+        status:
+          type: string
+          description: ·çÃ×¹Æü¿¹
+          enum: [active, inactive, pending]
+        createdAt:
+          type: string
+          format: date-time
+          description: \åB
+        updatedAt:
+          type: string
+          format: date-time
+          description: ô°åB
+      required: [id, name, slug, areaId, area]
+
+    Area:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ¨ê¢ID
+        name:
+          type: string
+          description: ¨ê¢
+        parentId:
+          type: integer
+          description: ª¨ê¢ID
+      required: [id, name, parentId]
+      description: ¨ê¢Å1
+
+    ShopUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: ·çÃ×
+        description:
+          type: string
+          description: ·çÃ×n¬
+        logo:
+          type: string
+          description: í´;ÏURL
+        coverImage:
+          type: string
+          description: «Ğü;ÏURL
+        openingHours:
+          type: string
+          description: ¶mB“
+        postalCode:
+          type: string
+          description: õ¿j÷
+        prefecture:
+          type: string
+          description: ıSœ
+        city:
+          type: string
+          description: ::Q
+        streetAddress:
+          type: string
+          description: j0ûW:
+        buildingName:
+          type: string
+          description: úiûèKj÷
+        customizations:
+          type: object
+          description: «¹¿Ş¤º-š
+        googleMapsLink:
+          type: string
+          description: GoogleŞÃ×URL
+        googleMapsEmbedSrc:
+          type: string
+          description: GoogleŞÃ×Ë¼URL
+
+    ShopUpdateResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "·çÃ×Å1’ô°W~W_"
+        shop:
+          $ref: '#/components/schemas/ShopWithArea'
+      required: [message, shop]
+
+    ShopDeleteResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "·çÃ×’JdW~W_"
+      required: [message]
+
+    ReviewRequest:
+      type: object
+      properties:
+        rating:
+          type: number
+          minimum: 1
+          maximum: 5
+          description: U¡1-5	
+          example: 4.5
+        comment:
+          type: string
+          description: ìÓåü³áóÈ
+          example: "hf‚oD·çÃ×gW_"
+      required: [rating]
+
+    Review:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ìÓåüID
+        rating:
+          type: number
+          description: U¡
+        comment:
+          type: string
+          description: ìÓåü³áóÈ
+        shopId:
+          type: integer
+          description: ·çÃ×ID
+        userId:
+          type: integer
+          description: æü¶üID
+        createdAt:
+          type: string
+          format: date-time
+          description: \åB
+        updatedAt:
+          type: string
+          format: date-time
+          description: ô°åB
+
+    ReviewResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "ìÓåü’•?W~W_"
+        review:
+          $ref: '#/components/schemas/Review'
+      required: [message, review]
+
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+      required: [message]

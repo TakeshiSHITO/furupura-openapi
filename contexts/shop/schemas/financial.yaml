@@ -1,0 +1,266 @@
+components:
+  schemas:
+    Balance:
+      type: object
+      required:
+        - id
+        - shopId
+        - balance
+      properties:
+        id:
+          type: integer
+          description: 残高ID
+        shopId:
+          type: integer
+          description: ショップID
+        balance:
+          type: number
+          description: 残高額
+        currency:
+          type: string
+          description: 通貨
+          example: "JPY"
+        bankName:
+          type: string
+          description: 銀行名
+        branchName:
+          type: string
+          description: 支店名
+        branchCode:
+          type: string
+          description: 支店コード
+        accountNumber:
+          type: string
+          description: 口座番号
+        accountHolderName:
+          type: string
+          description: 口座名義人
+        accountType:
+          type: string
+          description: 口座種別
+          enum: [普通, 当座, 貯蓄]
+        updatedAt:
+          type: string
+          format: date-time
+          description: 最終更新日時
+
+    Transaction:
+      type: object
+      required:
+        - id
+        - shopId
+        - type
+        - amount
+        - date
+        - status
+      properties:
+        id:
+          type: integer
+          description: 取引ID
+        shopId:
+          type: integer
+          description: ショップID
+        type:
+          type: string
+          description: 取引タイプ
+          enum: [sale, refund, withdrawal, deposit, fee]
+        amount:
+          type: number
+          description: 取引金額
+        shopRevenue:
+          type: number
+          description: ショップ収益への影響額
+        commission:
+          type: number
+          description: 手数料
+        description:
+          type: string
+          description: 取引説明
+        date:
+          type: string
+          format: date-time
+          description: 取引日時
+        status:
+          type: string
+          description: 取引ステータス
+          enum: [pending, completed, failed, rejected]
+        createdAt:
+          type: string
+          format: date-time
+          description: 作成日時
+        updatedAt:
+          type: string
+          format: date-time
+          description: 更新日時
+
+    BankAccount:
+      type: object
+      required:
+        - bankName
+        - branchName
+        - branchCode
+        - accountNumber
+        - accountHolderName
+        - accountType
+      properties:
+        bankName:
+          type: string
+          description: 銀行名
+          example: "三菱UFJ銀行"
+        branchName:
+          type: string
+          description: 支店名
+          example: "渋谷支店"
+        branchCode:
+          type: string
+          description: 支店コード
+          example: "001"
+        accountNumber:
+          type: string
+          description: 口座番号
+          example: "1234567"
+        accountHolderName:
+          type: string
+          description: 口座名義人
+          example: "カブシキガイシャ フルプラ"
+        accountType:
+          type: string
+          description: 口座種別
+          enum: [普通, 当座, 貯蓄]
+          example: "普通"
+
+    BankAccountRequest:
+      type: object
+      required:
+        - bankName
+        - branchName
+        - branchCode
+        - accountNumber
+        - accountHolderName
+        - accountType
+      properties:
+        bankName:
+          type: string
+          description: 銀行名
+          example: "三菱UFJ銀行"
+        branchName:
+          type: string
+          description: 支店名
+          example: "渋谷支店"
+        branchCode:
+          type: string
+          description: 支店コード
+          example: "001"
+        accountNumber:
+          type: string
+          description: 口座番号
+          example: "1234567"
+        accountHolderName:
+          type: string
+          description: 口座名義人
+          example: "カブシキガイシャ フルプラ"
+        accountType:
+          type: string
+          description: 口座種別
+          enum: [普通, 当座, 貯蓄]
+          example: "普通"
+
+    WithdrawalRequest:
+      type: object
+      required:
+        - amount
+      properties:
+        amount:
+          type: number
+          minimum: 1
+          description: 引き出し金額
+          example: 50000
+
+    WithdrawalTransaction:
+      type: object
+      required:
+        - id
+        - shopId
+        - type
+        - amount
+        - status
+      properties:
+        id:
+          type: integer
+          description: 取引ID
+        shopId:
+          type: integer
+          description: ショップID
+        type:
+          type: string
+          description: 取引タイプ
+          enum: [withdrawal, fee, refund]
+        amount:
+          type: number
+          description: 金額
+        shopRevenue:
+          type: number
+          description: ショップ収益への影響額
+        commission:
+          type: number
+          description: 手数料（feeタイプの場合）
+        description:
+          type: string
+          description: 取引説明
+        date:
+          type: string
+          format: date-time
+          description: 申請日時
+        status:
+          type: string
+          description: ステータス
+          enum: [pending, completed, failed, rejected]
+        bankName:
+          type: string
+          description: 振込先銀行名
+        accountNumber:
+          type: string
+          description: 振込先口座番号
+        accountHolderName:
+          type: string
+          description: 振込先口座名義
+        Shop:
+          type: object
+          description: ショップ情報
+        createdAt:
+          type: string
+          format: date-time
+          description: 作成日時
+        updatedAt:
+          type: string
+          format: date-time
+          description: 更新日時
+
+    BalanceResponse:
+      type: object
+      required:
+        - balance
+        - transactions
+      properties:
+        balance:
+          $ref: '#/components/schemas/Balance'
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+          description: 取引履歴
+
+    WithdrawalRejectResponse:
+      type: object
+      required:
+        - message
+        - transaction
+        - updatedBalance
+      properties:
+        message:
+          type: string
+          example: "引き出し申請が正常に拒否されました"
+        transaction:
+          $ref: '#/components/schemas/WithdrawalTransaction'
+        updatedBalance:
+          $ref: '#/components/schemas/Balance'

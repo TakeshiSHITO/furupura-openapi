@@ -27,20 +27,66 @@ tags:
     description: 在庫管理
   - name: shop
     description: ショップ情報
+  - name: financial
+    description: 金融・決済管理
 
 paths:
+  # Products
   /products:
     $ref: './paths/products.yaml#/~1products'
+  /admin/products/shop/{shopId}:
+    $ref: './paths/products.yaml#/~1admin~1products~1shop~1{shopId}'
   /products/{productId}:
     $ref: './paths/products.yaml#/~1products~1{productId}'
+  /products/{productId}/tags:
+    $ref: './paths/products.yaml#/~1products~1{productId}~1tags'
+    
+  # Inventory
+  /products/{productId}/checkout:
+    $ref: './paths/inventory.yaml#/~1products~1{productId}~1checkout'
+  /products/cancel-checkout:
+    $ref: './paths/inventory.yaml#/~1products~1cancel-checkout'
+  /products/cancel-sold:
+    $ref: './paths/inventory.yaml#/~1products~1cancel-sold'
+  /products/{productId}/status:
+    $ref: './paths/inventory.yaml#/~1products~1{productId}~1status'
+    
+  # Orders
   /orders:
     $ref: './paths/orders.yaml#/~1orders'
+    
+  # Authentication
   /auth/signup:
     $ref: './paths/auths.yaml#/~1auth~1signup'
   /auth/login:
     $ref: './paths/auths.yaml#/~1auth~1login'
   /auth/logout:
     $ref: './paths/auths.yaml#/~1auth~1logout'
+    
+  # Shop
+  /shop:
+    $ref: './paths/controller.yaml#/~1shop'
+  /shop/{slug}:
+    $ref: './paths/controller.yaml#/~1shop~1{slug}'
+  /admin/shop/{id}:
+    $ref: './paths/controller.yaml#/~1admin~1shop~1{id}'
+    
+  # Financial
+  /shop/balance:
+    $ref: './paths/financial.yaml#/~1shop~1balance'
+  /shop/{shopId}/balance:
+    $ref: './paths/financial.yaml#/~1shop~1{shopId}~1balance'
+  /shop/{shopId}/bank-account:
+    $ref: './paths/financial.yaml#/~1shop~1{shopId}~1bank-account'
+  /shop/bank-account:
+    $ref: './paths/financial.yaml#/~1shop~1bank-account'
+  /shop/{shopId}/withdrawals:
+    $ref: './paths/financial.yaml#/~1shop~1{shopId}~1withdrawals'
+  /withdrawals:
+    $ref: './paths/financial.yaml#/~1withdrawals'
+  /withdrawals/{id}/reject:
+    $ref: './paths/financial.yaml#/~1withdrawals~1{id}~1reject'
+    
 
 components:
   securitySchemes:
