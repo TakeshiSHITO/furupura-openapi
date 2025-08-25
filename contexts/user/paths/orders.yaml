@@ -1,0 +1,323 @@
+# 注文管理エンドポイント
+
+/orders:
+  post:
+    tags:
+      - orders
+    summary: 新規注文作成
+    description: カートの商品から新規注文を作成
+    operationId: createOrder
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - orderItems
+              - shippingAddress
+              - paymentMethod
+              - itemsPrice
+              - taxPrice
+              - shippingPrice
+              - totalPrice
+            properties:
+              orderItems:
+                type: array
+                items:
+                  type: object
+                  required:
+                    - id
+                    - name
+                    - image
+                    - price
+                    - serviceOption
+                  properties:
+                    id:
+                      type: integer
+                      description: 商品ID
+                    name:
+                      type: string
+                      description: 商品名
+                    image:
+                      type: string
+                      description: 商品画像URL
+                    price:
+                      type: number
+                      format: float
+                      description: 商品価格
+                    finalPrice:
+                      type: number
+                      format: float
+                      description: 最終価格（割引後）
+                    serviceOption:
+                      type: string
+                      enum: [buy, rent]
+                      description: 購入またはレンタル
+                    rentalPeriod:
+                      type: string
+                      enum: [4days, 2weeks, 1month, unlimited]
+                      description: レンタル期間（レンタルの場合）
+                    inStore:
+                      type: boolean
+                      description: 店舗受取
+                    wasRented:
+                      type: boolean
+                      description: レンタル後購入
+                    useSubscription:
+                      type: boolean
+                      description: サブスクリプション利用
+              shippingAddress:
+                $ref: '../schemas/order.yaml#/ShippingAddress'
+              paymentMethod:
+                type: string
+                description: 支払い方法
+              itemsPrice:
+                type: number
+                format: float
+                description: 商品合計価格
+              taxPrice:
+                type: number
+                format: float
+                description: 税金
+              shippingPrice:
+                type: number
+                format: float
+                description: 送料
+              totalPrice:
+                type: number
+                format: float
+                description: 合計金額
+    responses:
+      '201':
+        description: 注文作成成功
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order:
+                  $ref: '../schemas/order.yaml#/Order'
+                usedItems:
+                  type: integer
+                  description: サブスクリプション使用数
+      '400':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '500':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
+
+/orders/myorders:
+  get:
+    tags:
+      - orders
+    summary: 自分の注文履歴取得
+    description: ログインユーザーの注文履歴を取得
+    operationId: getMyOrders
+    responses:
+      '200':
+        description: 注文履歴取得成功
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '../schemas/order.yaml#/Order'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '500':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
+
+/orders/{id}:
+  get:
+    tags:
+      - orders
+    summary: 注文詳細取得
+    description: 指定された注文の詳細情報を取得
+    operationId: getOrderById
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: 注文ID
+        schema:
+          type: integer
+    responses:
+      '200':
+        description: 注文詳細取得成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/order.yaml#/OrderDetail'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '403':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Forbidden'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+      '500':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
+
+/orders/rentals/{id}/purchase:
+  post:
+    tags:
+      - orders
+    summary: レンタル商品購入
+    description: レンタル中の商品を10%オフで購入
+    operationId: purchaseRentedItem
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: レンタルアイテムID
+        schema:
+          type: integer
+    responses:
+      '200':
+        description: 購入成功
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: 成功メッセージ
+                orderId:
+                  type: integer
+                  description: 新規注文ID
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+      '500':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
+
+/orders/rentals/{id}/extend:
+  post:
+    tags:
+      - orders
+    summary: レンタル延長
+    description: レンタル期間を延長
+    operationId: extendRental
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: レンタルアイテムID
+        schema:
+          type: integer
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - extensionPeriod
+            properties:
+              extensionPeriod:
+                type: string
+                enum: [3days, 1week]
+                description: 延長期間
+    responses:
+      '200':
+        description: 延長成功
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: 成功メッセージ
+      '400':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+      '500':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
+
+/orders/{id}/final-payment-check:
+  put:
+    tags:
+      - orders
+    summary: 支払い最終確認
+    description: 支払い処理の最終確認
+    operationId: finalPaymentCheck
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: 注文ID
+        schema:
+          type: integer
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - paymentIntentId
+              - totalPrice
+            properties:
+              paymentIntentId:
+                type: string
+                description: Stripe PaymentIntent ID
+              totalPrice:
+                type: number
+                format: float
+                description: 合計金額
+    responses:
+      '200':
+        description: 確認成功
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: 成功メッセージ
+      '400':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+      '500':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
+
+/orders/{id}/payment-failed:
+  put:
+    tags:
+      - orders
+    summary: 支払い失敗処理
+    description: 支払い失敗時の処理
+    operationId: paymentFailed
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: 注文ID
+        schema:
+          type: integer
+    responses:
+      '200':
+        description: 処理成功
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: メッセージ
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '500':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'

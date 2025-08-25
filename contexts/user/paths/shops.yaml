@@ -1,0 +1,79 @@
+/shops:
+  get:
+    tags:
+      - browsing
+    summary: ショップ一覧取得
+    description: 公開されているショップの一覧を取得します
+    operationId: getShops
+    security: []
+    parameters:
+      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PageParam'
+      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PerPageParam'
+      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/SearchParam'
+      - name: area_id
+        in: query
+        schema:
+          type: string
+        description: エリアIDでフィルタリング
+    responses:
+      '200':
+        description: ショップ一覧
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '../schemas/shop.yaml#/components/schemas/Shop'
+      '400':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
+
+/shops/{id}:
+  get:
+    tags:
+      - browsing
+    summary: ショップ詳細取得（ID）
+    description: 指定されたIDのショップ詳細情報を取得します
+    operationId: getShopById
+    security: []
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: ショップID
+    responses:
+      '200':
+        description: ショップ詳細
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/shop.yaml#/components/schemas/ShopDetail'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+
+/shops/slug/{slug}:
+  get:
+    tags:
+      - browsing
+    summary: ショップ詳細取得（スラッグ）
+    description: 指定されたスラッグのショップ詳細情報を取得します
+    operationId: getShopBySlug
+    security: []
+    parameters:
+      - name: slug
+        in: path
+        required: true
+        schema:
+          type: string
+        description: ショップスラッグ
+    responses:
+      '200':
+        description: ショップ詳細
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/shop.yaml#/components/schemas/ShopDetail'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'

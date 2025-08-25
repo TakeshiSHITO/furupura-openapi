@@ -1,0 +1,66 @@
+components:
+  schemas:
+    Tag:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          description: タグID
+        name:
+          type: string
+          description: タグ名
+        subname:
+          type: string
+          description: タグサブ名
+        slug:
+          type: string
+          description: タグスラッグ
+        productCount:
+          type: integer
+          description: タグ付けされた商品数
+          minimum: 0
+      example:
+        id: tag_123456789
+        name: おすすめ
+        subname: 今月のおすすめ商品
+        slug: recommended
+        productCount: 25
+
+    TagWithProducts:
+      type: object
+      required:
+        - id
+        - name
+        - products
+      properties:
+        id:
+          type: string
+          description: タグID
+        name:
+          type: string
+          description: タグ名
+        subname:
+          type: string
+          description: タグサブ名
+        slug:
+          type: string
+          description: タグスラッグ
+        products:
+          type: array
+          description: タグ付けされた商品（最大10件）
+          items:
+            $ref: '../schemas/product.yaml#/components/schemas/PublicProduct'
+      example:
+        id: tag_123456789
+        name: おすすめ
+        subname: 今月のおすすめ商品
+        slug: recommended
+        products:
+          - id: prod_123456789
+            name: 特産品セット
+            price: 5000
+            shopName: ふるぷらマート
+            image: https://example.com/product.jpg

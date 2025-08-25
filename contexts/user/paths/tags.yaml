@@ -1,0 +1,70 @@
+/tags:
+  get:
+    tags:
+      - browsing
+    summary: タグ一覧取得
+    description: すべてのタグを商品数付きで取得します
+    operationId: getTags
+    security: []
+    responses:
+      '200':
+        description: タグ一覧
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '../schemas/tag.yaml#/components/schemas/Tag'
+      '400':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
+      '500':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
+
+/tags/with-products:
+  get:
+    tags:
+      - browsing
+    summary: タグ一覧取得（商品付き）
+    description: タグごとに最大10件の商品を含めて取得します
+    operationId: getTagsWithProducts
+    security: []
+    responses:
+      '200':
+        description: タグ一覧（商品付き）
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '../schemas/tag.yaml#/components/schemas/TagWithProducts'
+      '400':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
+      '500':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
+
+/tags/{id}:
+  get:
+    tags:
+      - browsing
+    summary: タグ詳細取得
+    description: 指定されたIDのタグ情報を取得します
+    operationId: getTagById
+    security: []
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: タグID
+        schema:
+          type: string
+    responses:
+      '200':
+        description: タグ詳細
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/tag.yaml#/components/schemas/Tag'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+      '500':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'

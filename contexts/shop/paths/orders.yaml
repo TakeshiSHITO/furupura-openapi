@@ -34,3 +34,204 @@
                   $ref: '../../../shared/schemas/common.yaml#/components/schemas/Pagination'
       '401':
         $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+
+/orders/myshop:
+  get:
+    tags:
+      - orders
+    summary: ショップの注文取得
+    description: 自分のショップの購入・レンタル商品を取得
+    operationId: getMyShopOrders
+    responses:
+      '200':
+        description: ショップの注文情報
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                purchaseItems:
+                  type: array
+                  items:
+                    $ref: '../../user/schemas/order.yaml#/PurchaseItem'
+                rentalItems:
+                  type: array
+                  items:
+                    $ref: '../../user/schemas/order.yaml#/RentalItem'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '500':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
+
+/orders/{id}/shipping:
+  get:
+    tags:
+      - orders
+    summary: 配送先情報取得
+    description: 注文の配送先情報とユーザー情報を取得
+    operationId: getShippingAddressById
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: 注文ID
+        schema:
+          type: integer
+    responses:
+      '200':
+        description: 配送先情報
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: ユーザー名
+                shippingAddress:
+                  $ref: '../../user/schemas/order.yaml#/ShippingAddress'
+                status:
+                  type: string
+                  description: 注文ステータス
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+
+/orders/{id}/deliver:
+  put:
+    tags:
+      - orders
+    summary: 配達完了マーク
+    description: 注文商品を配達済みとしてマーク
+    operationId: updateOrderItemsAsDelivered
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: 注文ID
+        schema:
+          type: integer
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              purchaseItemIds:
+                type: array
+                items:
+                  type: integer
+                description: 配達済みにする購入アイテムID
+              rentalItemIds:
+                type: array
+                items:
+                  type: integer
+                description: 配達済みにするレンタルアイテムID
+    responses:
+      '200':
+        description: 配達完了
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+      '400':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '500':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
+
+/orders/{id}/return:
+  put:
+    tags:
+      - orders
+    summary: レンタル商品返却
+    description: レンタル商品を返却済みとしてマーク
+    operationId: returnRentalProducts
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: レンタルアイテムID
+        schema:
+          type: integer
+    responses:
+      '200':
+        description: 返却完了
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+      '400':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '403':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Forbidden'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+
+/orders/{id}/cancel:
+  put:
+    tags:
+      - orders
+    summary: 注文キャンセル
+    description: 注文商品をキャンセル
+    operationId: cancelOrderItems
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: 注文ID
+        schema:
+          type: integer
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - cancellationReason
+            properties:
+              purchaseItemIds:
+                type: array
+                items:
+                  type: integer
+                description: キャンセルする購入アイテムID
+              rentalItemIds:
+                type: array
+                items:
+                  type: integer
+                description: キャンセルするレンタルアイテムID
+              cancellationReason:
+                type: string
+                description: キャンセル理由
+    responses:
+      '200':
+        description: キャンセル完了
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                order:
+                  $ref: '../../user/schemas/order.yaml#/Order'
+      '400':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+      '500':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'

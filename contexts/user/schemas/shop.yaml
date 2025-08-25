@@ -1,0 +1,69 @@
+components:
+  schemas:
+    Shop:
+      type: object
+      required:
+        - id
+        - name
+        - slug
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ショップID
+        name:
+          type: string
+          description: ショップ名
+        slug:
+          type: string
+          description: URLスラッグ
+        description:
+          type: string
+          description: ショップ説明
+        imageUrl:
+          type: string
+          format: uri
+          description: ショップ画像URL
+        areaId:
+          type: string
+          format: uuid
+          description: エリアID
+      example:
+        id: shop_123456789
+        name: ふるぷらマート
+        slug: furupura-mart
+        description: 地域の特産品を扱うショップです
+        imageUrl: https://example.com/shop-image.jpg
+        areaId: area_123456789
+
+    ShopDetail:
+      allOf:
+        - $ref: '#/components/schemas/Shop'
+        - type: object
+          properties:
+            area:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                  description: エリアID
+                name:
+                  type: string
+                  description: エリア名
+                parentId:
+                  type: string
+                  format: uuid
+                  description: 親エリアID
+              description: エリア情報
+          example:
+            id: shop_123456789
+            name: ふるぷらマート
+            slug: furupura-mart
+            description: 地域の特産品を扱うショップです
+            imageUrl: https://example.com/shop-image.jpg
+            areaId: area_123456789
+            area:
+              id: area_123456789
+              name: 東京都
+              parentId: null

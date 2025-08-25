@@ -3,86 +3,129 @@
     tags:
       - favorites
     summary: お気に入り一覧取得
-    description: ユーザーのお気に入り商品一覧を取得します。
+    description: ユーザーのお気に入り商品とショップの一覧を取得します。
     operationId: getFavorites
-    parameters:
-      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PageParam'
-      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PerPageParam'
-      - name: sort
-        in: query
-        schema:
-          type: string
-          enum:
-            - created_at_desc
-            - created_at_asc
-            - product_name
-            - price_low
-            - price_high
-          default: created_at_desc
     responses:
       '200':
         description: お気に入り一覧
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                data:
-                  type: array
-                  items:
-                    $ref: '../schemas/favorites.yaml#/components/schemas/Favorite'
-                pagination:
-                  $ref: '../../../shared/schemas/common.yaml#/components/schemas/Pagination'
+              $ref: '../schemas/favorites.yaml#/components/schemas/FavoritesResponse'
       '401':
         $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '500':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
 
+/favorites/products/{id}:
   post:
     tags:
       - favorites
-    summary: お気に入り追加
-    description: 商品をお気に入りに追加します。
-    operationId: addFavorite
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '../schemas/favorites.yaml#/components/schemas/AddFavoriteRequest'
+    summary: 商品をお気に入りに追加
+    description: 指定した商品をお気に入りに追加します。
+    operationId: addFavoriteProduct
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: 商品ID
     responses:
       '201':
         description: 追加成功
         content:
           application/json:
             schema:
-              $ref: '../schemas/favorites.yaml#/components/schemas/Favorite'
-      '400':
-        $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
+              $ref: '../schemas/favorites.yaml#/components/schemas/AddFavoriteResponse'
+      '200':
+        description: すでにお気に入りに追加済み
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/favorites.yaml#/components/schemas/AlreadyFavoriteResponse'
       '401':
         $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
-      '409':
-        description: すでにお気に入りに追加済み
 
-/favorites/{product_id}:
   delete:
     tags:
       - favorites
-    summary: お気に入り削除
-    description: 商品をお気に入りから削除します。
-    operationId: removeFavorite
+    summary: 商品をお気に入りから削除
+    description: 指定した商品をお気に入りから削除します。
+    operationId: deleteFavoriteProduct
     parameters:
-      - name: product_id
+      - name: id
         in: path
         required: true
         schema:
           type: string
           format: uuid
+        description: 商品ID
     responses:
-      '204':
+      '201':
         description: 削除成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/favorites.yaml#/components/schemas/DeleteFavoriteResponse'
       '401':
         $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
-      '404':
-        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+
+/favorites/shops/{id}:
+  post:
+    tags:
+      - favorites
+    summary: ショップをお気に入りに追加
+    description: 指定したショップをお気に入りに追加します。
+    operationId: addFavoriteShop
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: ショップID
+    responses:
+      '201':
+        description: 追加成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/favorites.yaml#/components/schemas/AddFavoriteResponse'
+      '200':
+        description: すでにお気に入りに追加済み
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/favorites.yaml#/components/schemas/AlreadyFavoriteResponse'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+
+  delete:
+    tags:
+      - favorites
+    summary: ショップをお気に入りから削除
+    description: 指定したショップをお気に入りから削除します。
+    operationId: deleteFavoriteShop
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: ショップID
+    responses:
+      '201':
+        description: 削除成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/favorites.yaml#/components/schemas/DeleteFavoriteResponse'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
 
 /favorites/check:
   post:

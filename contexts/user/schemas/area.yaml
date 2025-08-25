@@ -1,0 +1,23 @@
+components:
+  schemas:
+    Area:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: エリアID
+        name:
+          type: string
+          description: エリア名
+        parentId:
+          type: string
+          format: uuid
+          description: 親エリアID
+      example:
+        id: area_123456789
+        name: 東京都
+        parentId: null

@@ -1,0 +1,124 @@
+components:
+  schemas:
+    SubscriptionPlan:
+      type: object
+      required:
+        - id
+        - name
+        - price
+        - maxItems
+        - itemPriceLimit
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: サブスクリプションプランID
+        name:
+          type: string
+          description: プラン名
+          example: ベーシックプラン
+        price:
+          type: integer
+          description: 月額料金（円）
+          example: 3000
+        maxItems:
+          type: integer
+          description: 月間利用可能アイテム数上限
+          example: 5
+        itemPriceLimit:
+          type: integer
+          description: 1アイテムあたりの価格上限（円）
+          example: 10000
+        description:
+          type: string
+          description: プランの説明
+          example: 月5点まで、1点10,000円以下の古着をレンタル可能
+
+    SubscriptionStatus:
+      type: object
+      required:
+        - planId
+        - name
+        - usedItems
+        - maxItems
+        - itemPriceLimit
+      properties:
+        planId:
+          type: string
+          format: uuid
+          description: 加入中のサブスクリプションプランID
+        name:
+          type: string
+          description: プラン名
+        usedItems:
+          type: integer
+          description: 今月の利用済みアイテム数
+          example: 2
+        maxItems:
+          type: integer
+          description: 月間利用可能アイテム数上限
+          example: 5
+        itemPriceLimit:
+          type: integer
+          description: 1アイテムあたりの価格上限（円）
+          example: 10000
+
+    JoinSubscriptionResponse:
+      type: object
+      required:
+        - message
+        - subscription
+      properties:
+        message:
+          type: string
+          description: 成功メッセージ
+          example: サブスクリプションに加入しました。思う存分、古着を楽しみましょう！
+        subscription:
+          $ref: '#/components/schemas/SubscriptionStatus'
+
+    UnsubscribeResponse:
+      type: object
+      required:
+        - message
+        - subscription
+      properties:
+        message:
+          type: string
+          description: 解約メッセージ
+          example: サブスクリプションを解約しました。ゲストユーザーとしても、引き続き古着をお楽しみいただけます！
+        subscription:
+          type: 'null'
+          description: 解約後はnull
+
+    UserSubscription:
+      type: object
+      required:
+        - userId
+        - subscriptionId
+        - startDate
+      properties:
+        userId:
+          type: string
+          format: uuid
+          description: ユーザーID
+        subscriptionId:
+          type: string
+          format: uuid
+          description: サブスクリプションプランID
+        startDate:
+          type: string
+          format: date-time
+          description: 加入開始日時
+        endDate:
+          type: string
+          format: date-time
+          nullable: true
+          description: 解約日時（加入中はnull）
+        status:
+          type: string
+          enum:
+            - active
+            - cancelled
+            - expired
+          description: サブスクリプションステータス
+          default: active

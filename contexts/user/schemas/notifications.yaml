@@ -19,9 +19,6 @@ components:
           $ref: '#/components/schemas/LineNotificationSettings'
         quiet_hours:
           $ref: '#/components/schemas/QuietHours'
-        updated_at:
-          type: string
-          format: date-time
 
     EmailNotificationSettings:
       type: object
@@ -54,10 +51,6 @@ components:
           type: boolean
           default: false
           description: ニュースレター
-        product_reviews:
-          type: boolean
-          default: true
-          description: 商品レビューの返信
         points_expiry:
           type: boolean
           default: true
@@ -175,7 +168,6 @@ components:
         - user_id
         - type
         - title
-        - created_at
       properties:
         id:
           type: string
@@ -192,7 +184,6 @@ components:
             - price_alert
             - stock_alert
             - points
-            - review
             - security
             - system
           description: 通知タイプ
@@ -218,9 +209,6 @@ components:
           type: string
           format: date-time
           description: 既読日時
-        created_at:
-          type: string
-          format: date-time
 
     UpdateNotificationSettingsRequest:
       type: object

@@ -38,3 +38,26 @@
         $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
       '401':
         $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+
+/profile/verify-password:
+  post:
+    tags:
+      - profile
+    summary: パスワード確認
+    description: 現在のパスワードを確認します（プロフィール更新前の確認用）
+    operationId: verifyPassword
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/user.yaml#/components/schemas/VerifyPasswordRequest'
+    responses:
+      '200':
+        description: パスワード確認成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/user.yaml#/components/schemas/VerifyPasswordResponse'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
