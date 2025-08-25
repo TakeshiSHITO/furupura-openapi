@@ -43,13 +43,13 @@ jobs:
             ${{ runner.os }}-redocly-
 
       - name: Validate OpenAPI specs
-        run: pnpm run validate:all
+        run: pnpm run validate
 
       - name: Check code formatting
         run: pnpm run lint
 
       - name: Build documentation
-        run: pnpm run docs:build
+        run: pnpm run build
 
       - name: Upload documentation artifacts
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
