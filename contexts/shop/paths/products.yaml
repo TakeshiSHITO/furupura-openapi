@@ -197,7 +197,7 @@
                   example: '1件の商品が作成されました'
               required: [message]
       '400':
-        description: バリデーションエラー
+        description: 入力が間違っています。再度お試しください。
         content:
           application/json:
             schema:
@@ -228,6 +228,81 @@
                 message:
                   type: string
                   description: エラーメッセージ
+
+/products/{productId}/tags:
+  post:
+    tags:
+      - products
+    summary: 商品にタグを追加
+    description: 指定した商品にタグを追加します。一つの商品に追加できるタグには上限があります。
+    operationId: addTagsToProduct
+    parameters:
+      - name: productId
+        in: path
+        required: true
+        description: 商品ID
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              tagIds:
+                type: array
+                items:
+                  type: integer
+                description: 追加するタグIDのリスト
+                minItems: 1
+                example: [1, 2, 3]
+            required: [tagIds]
+    responses:
+      '200':
+        description: タグ追加成功
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "タグが商品に追加されました"
+                tags:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        description: タグID
+                      name:
+                        type: string
+                        description: タグ名
+                    required: [id, name]
+                  description: 商品に登録されているすべてのタグ
+              required: [message, tags]
+      '400':
+        description: バリデーションエラーまたはタグ上限エラー
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - type: string
+                  example: "タグを追加できませんでした。何度もエラーが起こる場合は、サポートにお問い合わせください"
+                - type: object
+                  properties:
+                    message:
+                      type: string
+                      example: "一つの商品に追加できるタグは10つまでです"
+      '500':
+        description: サーバーエラー
+        content:
+          application/json:
+            schema:
+              type: string
+              example: "商品にタグを追加できませんでした。何度もエラーが起こる場合は、サポートにお問い合わせください"
 
   delete:
     tags:
@@ -562,7 +637,7 @@
                   type: string
                   example: 'この商品はあなたのお店の商品ではないようです'
       '404':
-        description: 商品が見つからない
+        description: 商品が見つかりません
         content:
           application/json:
             schema:

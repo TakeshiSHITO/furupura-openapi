@@ -1,0 +1,327 @@
+/shop/balance:
+  get:
+    tags:
+      - financial
+    summary: ショップ残高取得
+    description: 現在のショップの残高と取引履歴を取得します。
+    operationId: getMyBalance
+    responses:
+      '200':
+        description: 残高と取引履歴の取得成功
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                balance:
+                  $ref: '../schemas/financial.yaml#/components/schemas/Balance'
+                transactions:
+                  type: array
+                  items:
+                    $ref: '../schemas/financial.yaml#/components/schemas/Transaction'
+                  description: 取引履歴
+              required: [balance, transactions]
+      '404':
+        description: 残高が見つかりません
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "残高が見つかりません"
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+
+/shop/{shopId}/balance:
+  get:
+    tags:
+      - financial
+    summary: 指定ショップの残高取得
+    description: 指定したショップIDの残高と取引履歴を取得します。
+    operationId: getShopBalance
+    parameters:
+      - name: shopId
+        in: path
+        required: true
+        description: ショップID
+        schema:
+          type: string
+    responses:
+      '200':
+        description: 残高と取引履歴の取得成功
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                balance:
+                  $ref: '../schemas/financial.yaml#/components/schemas/Balance'
+                transactions:
+                  type: array
+                  items:
+                    $ref: '../schemas/financial.yaml#/components/schemas/Transaction'
+                  description: 取引履歴
+              required: [balance, transactions]
+      '404':
+        description: 残高が見つかりません
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "残高が見つかりません"
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+
+/shop/{shopId}/bank-account:
+  get:
+    tags:
+      - financial
+    summary: ショップ銀行口座情報取得
+    description: 指定したショップの銀行口座情報を取得します。
+    operationId: getShopBankAccount
+    parameters:
+      - name: shopId
+        in: path
+        required: true
+        description: ショップID
+        schema:
+          type: string
+    responses:
+      '200':
+        description: 銀行口座情報の取得成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/financial.yaml#/components/schemas/BankAccount'
+      '404':
+        description: 残高が見つかりません
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "残高が見つかりません"
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+
+/shop/bank-account:
+  put:
+    tags:
+      - financial
+    summary: 銀行口座情報登録・更新
+    description: 現在のショップの銀行口座情報を登録または更新します。
+    operationId: registerBankAccount
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              bankAccount:
+                $ref: '../schemas/financial.yaml#/components/schemas/BankAccountRequest'
+            required: [bankAccount]
+    responses:
+      '200':
+        description: 口座情報更新成功
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "口座情報が更新されました"
+              required: [message]
+      '400':
+        description: バリデーションエラー
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  oneOf:
+                    - example: "口座情報が登録されていません。口座情報を登録してください。"
+                    - example: "口座情報が不完全です。すべてのフィールドを正しく入力してください。"
+      '404':
+        description: ショップの残高が見つかりません
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "ショップの残高が見つかりません"
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+
+/shop/{shopId}/withdrawals:
+  get:
+    tags:
+      - financial
+    summary: ショップの引き出し申請取得
+    description: 指定したショップの引き出し申請履歴を取得します。
+    operationId: getShopWithdrawals
+    parameters:
+      - name: shopId
+        in: path
+        required: true
+        description: ショップID
+        schema:
+          type: string
+    responses:
+      '200':
+        description: 引き出し申請一覧の取得成功
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '../schemas/financial.yaml#/components/schemas/WithdrawalTransaction'
+      '404':
+        description: 引き出し申請が見つかりません
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "引き出し申請が見つかりません"
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+
+/withdrawals:
+  get:
+    tags:
+      - financial
+    summary: 全引き出し申請取得
+    description: すべての引き出し申請の履歴を取得します。
+    operationId: getAllWithdrawals
+    responses:
+      '200':
+        description: 引き出し申請一覧の取得成功
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '../schemas/financial.yaml#/components/schemas/WithdrawalTransaction'
+      '404':
+        description: 引き出し申請が見つかりません
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "引き出し申請が見つかりません"
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+
+  post:
+    tags:
+      - financial
+    summary: 引き出し申請作成
+    description: 新しい引き出し申請を作成します。振込手数料と事務手数料が自動計算されます。
+    operationId: createWithdrawal
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/financial.yaml#/components/schemas/WithdrawalRequest'
+    responses:
+      '201':
+        description: 引き出し申請作成成功
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '../schemas/financial.yaml#/components/schemas/WithdrawalTransaction'
+      '400':
+        description: バリデーションエラーまたは残高不足
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  oneOf:
+                    - example: "有効な引き出し金額を入力してください。"
+                    - example: "ショップの残高が見つかりません"
+                    - example: "口座情報が登録されていません。口座情報を登録してください。"
+                    - example: "口座情報が不完全です。すべてのフィールドを正しく入力してください。"
+                    - example: "残高が不足しています"
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+
+/withdrawals/{id}/reject:
+  put:
+    tags:
+      - financial
+    summary: 引き出し申請拒否
+    description: 指定した引き出し申請を拒否し、手数料を差し引いて返金処理を行います。
+    operationId: rejectWithdrawal
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: 引き出し取引ID
+        schema:
+          type: string
+    responses:
+      '200':
+        description: 引き出し申請拒否成功
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "引き出し申請が正常に拒否されました"
+                transaction:
+                  $ref: '../schemas/financial.yaml#/components/schemas/WithdrawalTransaction'
+                updatedBalance:
+                  $ref: '../schemas/financial.yaml#/components/schemas/Balance'
+              required: [message, transaction, updatedBalance]
+      '400':
+        description: バリデーションエラーまたは処理エラー
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  oneOf:
+                    - example: "このトランザクションは引き出し申請ではないか、すでに処理済みです。"
+                    - example: "引き出し申請の拒否が失敗しました: エラー詳細"
+      '404':
+        description: リソースが見つかりません
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  oneOf:
+                    - example: "トランザクションが見つかりません"
+                    - example: "ショップの残高が見つかりません"
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'

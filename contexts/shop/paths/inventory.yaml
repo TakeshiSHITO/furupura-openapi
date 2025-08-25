@@ -1,0 +1,175 @@
+/products/{productId}/checkout:
+  post:
+    tags:
+      - inventory
+    summary: 商品をレジに追加（チェックアウト）
+    description: 指定した商品をレジに追加します。商品の状態に応じて異なる処理を行います。
+    operationId: checkoutProductAtShop
+    parameters:
+      - name: productId
+        in: path
+        required: true
+        description: 商品ID
+        schema:
+          type: string
+    responses:
+      '200':
+        description: 処理成功
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '../schemas/inventory.yaml#/components/schemas/CheckoutResponse'
+                - $ref: '../schemas/inventory.yaml#/components/schemas/OnlineOrderResponse'
+      '400':
+        description: 商品の状態エラー
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/inventory.yaml#/components/schemas/CheckoutError'
+      '403':
+        description: 権限エラー
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/inventory.yaml#/components/schemas/PermissionError'
+      '404':
+        description: 商品が見つからない
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/inventory.yaml#/components/schemas/NotFoundError'
+      '500':
+        description: サーバーエラー
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/inventory.yaml#/components/schemas/InventoryError'
+
+/products/cancel-checkout:
+  post:
+    tags:
+      - inventory
+    summary: 複数商品のレジ取り消し
+    description: 指定した複数商品のレジ状態を取り消し、available状態に戻します。
+    operationId: cancelCheckoutProductsAtShop
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/inventory.yaml#/components/schemas/CancelCheckoutRequest'
+    responses:
+      '200':
+        description: レジ取り消し成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/inventory.yaml#/components/schemas/CancelCheckoutResponse'
+      '400':
+        description: バリデーションエラー
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/inventory.yaml#/components/schemas/ValidationError'
+      '404':
+        description: 商品が見つからない
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/inventory.yaml#/components/schemas/NotFoundError'
+      '500':
+        description: サーバーエラー
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '../schemas/inventory.yaml#/components/schemas/CancelCheckoutErrorResponse'
+                - $ref: '../schemas/inventory.yaml#/components/schemas/InventoryError'
+
+/products/{productId}/status:
+  put:
+    tags:
+      - inventory
+    summary: 商品ステータス更新
+    description: 指定した商品のステータス（在庫状態）を更新します。
+    operationId: updateProductStatus
+    parameters:
+      - name: productId
+        in: path
+        required: true
+        description: 商品ID
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/inventory.yaml#/components/schemas/StatusUpdateRequest'
+    responses:
+      '200':
+        description: ステータス更新成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/inventory.yaml#/components/schemas/StatusUpdateResponse'
+      '400':
+        description: バリデーションエラー
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/inventory.yaml#/components/schemas/ValidationError'
+      '404':
+        description: 商品が見つからない
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/inventory.yaml#/components/schemas/NotFoundError'
+      '500':
+        description: サーバーエラー
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/inventory.yaml#/components/schemas/InventoryError'
+
+/products/cancel-sold:
+  post:
+    tags:
+      - inventory
+    summary: 販売済み商品の取り消し
+    description: 販売済み（sold）状態の複数商品を取り消し、available状態に戻します。店舗のレジでの商品削除処理に使用されます。
+    operationId: cancelSoldProductsAtShop
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/inventory.yaml#/components/schemas/CancelCheckoutRequest'
+    responses:
+      '200':
+        description: 販売済み商品取り消し成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/inventory.yaml#/components/schemas/CancelCheckoutResponse'
+      '400':
+        description: バリデーションエラー
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/inventory.yaml#/components/schemas/ValidationError'
+      '404':
+        description: 指定された販売済み商品が見つからない
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/inventory.yaml#/components/schemas/NotFoundError'
+      '500':
+        description: サーバーエラー
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '../schemas/inventory.yaml#/components/schemas/CancelCheckoutErrorResponse'
+                - $ref: '../schemas/inventory.yaml#/components/schemas/InventoryError'

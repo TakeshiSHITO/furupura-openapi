@@ -1,0 +1,236 @@
+components:
+  schemas:
+    ProductStatus:
+      type: string
+      description: 商品の在庫ステータス
+      enum:
+        - available
+        - checkout
+        - sold
+        - reserved
+        - maintenance
+      example: available
+
+    CheckoutRequest:
+      type: object
+      description: チェックアウトリクエスト
+      properties:
+        productId:
+          type: string
+          description: 商品ID
+          example: "12345"
+
+    CheckoutResponse:
+      type: object
+      description: チェックアウト成功レスポンス
+      properties:
+        message:
+          type: string
+          example: '商品をレジに追加しました！'
+        product:
+          $ref: '#/components/schemas/CheckoutProduct'
+      required: [message, product]
+
+    CheckoutProduct:
+      type: object
+      description: チェックアウトされた商品情報
+      properties:
+        id:
+          type: integer
+          description: 商品ID
+          example: 12345
+        status:
+          $ref: '#/components/schemas/ProductStatus'
+        name:
+          type: string
+          description: 商品名
+          example: 'ヴィンテージTシャツ'
+        price:
+          type: number
+          description: 価格
+          example: 2500
+        image:
+          type: string
+          description: 商品画像URL
+          example: 'https://example.com/image.jpg'
+      required: [id, status, name, price, image]
+
+    OnlineOrderResponse:
+      anyOf:
+        - $ref: '#/components/schemas/OnlinePurchaseResponse'
+        - $ref: '#/components/schemas/OnlineRentalResponse'
+
+    OnlinePurchaseResponse:
+      type: object
+      description: オンライン購入注文があった場合のレスポンス
+      properties:
+        message:
+          type: string
+          example: '商品への注文（購入）がオンラインで入っています。'
+        purchaseItem:
+          $ref: '#/components/schemas/OnlineOrderItem'
+      required: [message, purchaseItem]
+
+    OnlineRentalResponse:
+      type: object
+      description: オンラインレンタル注文があった場合のレスポンス
+      properties:
+        message:
+          type: string
+          example: '商品への注文（レンタル）がオンラインで入っています。'
+        rentalItem:
+          $ref: '#/components/schemas/OnlineOrderItem'
+      required: [message, rentalItem]
+
+    OnlineOrderItem:
+      type: object
+      description: オンライン注文アイテム情報
+      properties:
+        serviceOption:
+          type: string
+          enum: [purchase, rental]
+          example: 'purchase'
+      required: [serviceOption]
+
+    CancelCheckoutRequest:
+      type: object
+      description: チェックアウト取り消しリクエスト
+      properties:
+        productIds:
+          type: array
+          items:
+            type: integer
+          description: 取り消し対象の商品IDリスト
+          minItems: 1
+          example: [1, 2, 3]
+      required: [productIds]
+
+    CancelCheckoutResponse:
+      type: object
+      description: チェックアウト取り消し成功レスポンス
+      properties:
+        message:
+          type: string
+          example: '商品のレジからの削除が完了しました'
+      required: [message]
+
+    CancelCheckoutErrorResponse:
+      type: object
+      description: チェックアウト取り消し失敗レスポンス
+      properties:
+        message:
+          type: string
+          example: '一部の商品を更新できませんでした'
+        failedProducts:
+          type: array
+          items:
+            $ref: '#/components/schemas/FailedProduct'
+          description: 更新に失敗した商品リスト
+      required: [message, failedProducts]
+
+    FailedProduct:
+      type: object
+      description: 更新に失敗した商品情報
+      properties:
+        id:
+          type: integer
+          description: 商品ID
+          example: 123
+        name:
+          type: string
+          description: 商品名
+          example: 'ヴィンテージジャケット'
+      required: [id, name]
+
+    StatusUpdateRequest:
+      type: object
+      description: ステータス更新リクエスト
+      properties:
+        status:
+          $ref: '#/components/schemas/ProductStatus'
+      required: [status]
+
+    StatusUpdateResponse:
+      type: object
+      description: ステータス更新成功レスポンス
+      properties:
+        message:
+          type: string
+          example: '商品ステータスを更新しました'
+        product:
+          $ref: '#/components/schemas/UpdatedProduct'
+      required: [message, product]
+
+    UpdatedProduct:
+      type: object
+      description: 更新された商品情報
+      properties:
+        id:
+          type: integer
+          description: 商品ID
+          example: 12345
+        status:
+          $ref: '#/components/schemas/ProductStatus'
+        updatedAt:
+          type: string
+          format: date-time
+          description: 更新日時
+          example: '2024-01-01T12:00:00Z'
+      required: [id, status, updatedAt]
+
+    InventoryError:
+      type: object
+      description: 在庫管理エラーレスポンス
+      properties:
+        message:
+          type: string
+          description: エラーメッセージ
+        error:
+          oneOf:
+            - type: string
+            - type: "null"
+          description: エラーの詳細
+      required: [message]
+
+    CheckoutError:
+      type: object
+      description: チェックアウトエラーレスポンス
+      properties:
+        message:
+          type: string
+          description: エラーメッセージ
+          oneOf:
+            - example: '商品はすでにレジに追加されています'
+            - example: '商品のレンタル履歴が見つかりません'
+      required: [message]
+
+    PermissionError:
+      type: object
+      description: 権限エラーレスポンス
+      properties:
+        message:
+          type: string
+          example: 'この商品はあなたのお店の商品ではないようです'
+      required: [message]
+
+    NotFoundError:
+      type: object
+      description: リソースが見つからないエラーレスポンス
+      properties:
+        message:
+          type: string
+          oneOf:
+            - example: '商品が見つかりません'
+            - example: '指定された商品が見つかりません'
+      required: [message]
+
+    ValidationError:
+      type: object
+      description: バリデーションエラーレスポンス
+      properties:
+        message:
+          type: string
+          oneOf:
+            - example: '有効な productIds の配列を提供してください'
+            - example: '無効なステータスが指定されました'
+      required: [message]
