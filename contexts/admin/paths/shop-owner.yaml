@@ -157,3 +157,26 @@
         $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
       '500':
         $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
+/shop-owners/by-shop/{shopId}:
+  get:
+    tags: [shop-owners]
+    summary: 店舗IDからショップオーナー取得
+    description: 指定した shopId に紐づくショップオーナーを返します。
+    operationId: adminGetShopOwnerByShopId
+    parameters:
+      - in: path
+        name: shopId
+        required: true
+        schema: { type: string }
+        description: ショップID
+    responses:
+      '200':
+        description: 取得成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/shop-owner.yaml#/components/schemas/ShopOwnerDetail'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+      '500':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'

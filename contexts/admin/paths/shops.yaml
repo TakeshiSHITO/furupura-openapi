@@ -115,3 +115,55 @@
         $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
       '500':
         $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
+/shops/{id}:
+  patch:
+    tags: shops
+    summary: ショップ情報を更新（管理者）
+    description: 含まれるフィールドのみ部分更新します。
+    operationId: updateShop
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: string }
+        description: 更新対象のショップID
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/shop.yaml#/components/schemas/UpdateShopRequest'
+    responses:
+      '200':
+        description: 更新成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/shop.yaml#/components/schemas/UpdateShopResponse'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+      '500':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
+
+  delete:
+    tags: shops
+    summary: ショップを削除（管理者）
+    description: 指定したショップを削除します。
+    operationId: deleteShop
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: string }
+        description: 削除対象のショップID
+    responses:
+      '200':
+        description: 削除成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/shop.yaml#/components/schemas/DeleteShopResponse'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+      '500':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'

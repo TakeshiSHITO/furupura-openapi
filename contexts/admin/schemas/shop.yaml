@@ -33,7 +33,6 @@ components:
           type: string
           nullable: true
           description: 上位エリアID（任意）
-
     ShopDetail:
       type: object
       required:
@@ -130,3 +129,26 @@ components:
           additionalProperties: true
           description: テーマカラー等の自由項目
       description: 含まれるフィールドのみ更新対象
+
+    UpdateShopResponse:
+      type: object
+      required:
+        - message
+        - shop
+      properties:
+        message:
+          type: string
+          description: 更新結果メッセージ
+          example: ショップ情報を更新しました
+        shop:
+          $ref: '#/components/schemas/ShopDetail'
+
+    DeleteShopResponse:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: 削除結果メッセージ
+          example: ショップを削除しました
