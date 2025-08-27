@@ -126,3 +126,9 @@ components:
           items:
             $ref: '#/components/schemas/Tag'
       required: [message, tags]
+
+    UpdateProductRequest:
+      type: object
+      properties:
+        name:
+          type: string

@@ -325,3 +325,85 @@ products/{productId}/tags:
               serverErr:
                 value:
                   message: 商品からタグを削除できませんでした
+
+/products/{productId}:
+  patch:
+    tags: [admin-products]
+    summary: 商品を更新（管理者）
+    description: |
+      指定した商品情報を更新します。  
+      リクエストに含まれるフィールドのみが更新対象となります。  
+      更新する項目がない場合は 400 を返します。
+    operationId: updateProduct
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: path
+        name: productId
+        required: true
+        schema:
+          type: string
+        description: 更新対象の商品ID
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateProductRequest'
+          examples:
+            updateBasic:
+              summary: 基本的な項目の更新
+              value:
+                name: 'ヴィンテージデニムジャケット'
+                price: 12000
+                status: 'active'
+            updateDetails:
+              summary: 詳細項目の更新
+              value:
+                description: '90年代のリーバイスデニム'
+                material: 'コットン100%'
+                condition: '良好'
+    responses:
+      '200':
+        description: 更新成功
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+              example:
+                message: 商品の更新に成功しました！
+      '400':
+        description: 更新項目なしなどのリクエスト不正
+        content:
+          application/json:
+            schema:
+              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
+          examples:
+            noFields:
+              value:
+                message: 更新するフィールドが見つかりませんでした
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '404':
+        description: 商品が存在しない（実装で検知する場合）
+        content:
+          application/json:
+            schema:
+              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
+          examples:
+            notFound:
+              value:
+                message: 商品が見つかりません。
+      '500':
+        description: サーバーエラー
+        content:
+          application/json:
+            schema:
+              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
+            examples:
+              serverErr:
+                value:
+                  message: 商品の更新に失敗しました
