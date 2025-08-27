@@ -1,0 +1,98 @@
+components:
+  schemas:
+    WithdrawalStatus:
+      type: string
+      description: 引き出し申請の状態
+      enum: [pending, completed, rejected]
+
+    TransactionType:
+      type: string
+      description: トランザクション種別
+      enum: [withdrawal, fee, refund]
+
+    WithdrawalTransaction:
+      type: object
+      description: 引き出し関連のトランザクション
+      required:
+        - id
+        - shopId
+        - type
+        - amount
+        - status
+        - date
+      properties:
+        id:
+          type: string
+          description: トランザクションID
+          example: tx_abc123
+        shopId:
+          type: string
+          description: ショップID
+          example: shop_001
+        type:
+          $ref: '#/components/schemas/TransactionType'
+        amount:
+          type: number
+          format: float
+          description: 金額（円）
+          example: 12000
+        shopRevenue:
+          type: [number, 'null']
+          format: float
+          description: ショップ側収益（未設定は null）
+          example: 12000
+        commission:
+          type: [number, 'null']
+          format: float
+          description: 手数料（未設定は null）
+          example: 600
+        description:
+          type: [string, 'null']
+          description: 明細説明（未設定は null）
+        status:
+          $ref: '#/components/schemas/WithdrawalStatus'
+        date:
+          type: string
+          format: date-time
+          description: 記録日時
+          example: 2025-08-01T12:00:00.000Z
+
+    BalanceBrief:
+      type: object
+      description: ショップ残高の概要
+      required:
+        - shopId
+        - balance
+      properties:
+        shopId:
+          type: string
+          description: ショップID
+          example: shop_001
+        balance:
+          type: number
+          format: float
+          description: 現在残高
+          example: 53400
+
+    GetWithdrawalsResponse:
+      type: array
+      description: 引き出し申請の配列
+      items:
+        $ref: '#/components/schemas/WithdrawalTransaction'
+
+    RejectWithdrawalResponse:
+      type: object
+      description: 引き出し申請の拒否結果
+      required:
+        - message
+        - transaction
+        - updatedBalance
+      properties:
+        message:
+          type: string
+          description: 結果メッセージ
+          example: 引き出し申請が正常に拒否されました
+        transaction:
+          $ref: '#/components/schemas/WithdrawalTransaction'
+        updatedBalance:
+          $ref: '#/components/schemas/BalanceBrief'

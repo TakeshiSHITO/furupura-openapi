@@ -19,14 +19,18 @@ servers:
 tags:
   - name: auth
     description: 管理者認証
-  - name: users
-    description: ユーザー管理
-  - name: shops
-    description: ショップ管理
-  - name: analytics
-    description: 分析・レポート
   - name: orders
     description: 注文管理
+  - name: products
+    description: 商品管理
+  - name: shops
+    description: ショップ管理
+  - name: shop-owners
+    description: ショップオーナー管理
+  - name: withdraws
+    description: 引き出し管理
+  - name: users
+    description: ユーザー管理
 
 paths:
   /auth/login:
@@ -39,6 +43,14 @@ paths:
     $ref: './paths/shops.yaml#/~1shops'
   /orders:
     $ref: './paths/orders.yaml#/~1orders'
+  /withdraws:
+    $ref: './paths/withdraws.yaml#/~1withdraws'
+  /shops/{shopId}/withdraws:
+    $ref: './paths/withdraws.yaml#/~1shops~1{shopId}~1withdraws'
+  /withdraws/{id}/complete:
+    $ref: './paths/withdraws.yaml#/~1withdraws~1{id}~1complete'
+  /withdraws/{id}/reject:
+    $ref: './paths/withdraws.yaml#/~1withdraws~1{id}~1reject'
 
 components:
   securitySchemes:

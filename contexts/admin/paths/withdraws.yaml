@@ -1,0 +1,100 @@
+/withdraws:
+  get:
+    tags:
+      - withdraws
+    summary: すべての引き出し申請一覧（管理者）
+    description: すべてのショップの引き出し申請履歴を返します。
+    operationId: adminGetAllWithdrawals
+    responses:
+      '200':
+        description: 取得成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/withdraw.yaml#/components/schemas/GetWithdrawalsResponse'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+      '500':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
+
+/shops/{shopId}/withdraws:
+  get:
+    tags:
+      - withdraws
+    summary: ショップ別の引き出し申請一覧（管理者）
+    description: 指定したショップの引き出し申請履歴を返します。
+    operationId: adminGetShopWithdrawals
+    parameters:
+      - in: path
+        name: shopId
+        required: true
+        schema:
+          type: string
+        description: ショップID
+    responses:
+      '200':
+        description: 取得成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/withdraw.yaml#/components/schemas/GetWithdrawalsResponse'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+      '500':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
+
+/withdraws/{id}/complete:
+  put:
+    tags:
+      - withdraws
+    summary: 引き出し申請の完了（管理者）
+    description: 指定した引き出し申請を `completed` に更新します。
+    operationId: adminCompleteWithdrawal
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: トランザクションID
+    responses:
+      '200':
+        description: 更新成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/withdraw.yaml#/components/schemas/WithdrawalTransaction'
+      '400':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+      '500':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
+
+/withdraws/{id}/reject:
+  put:
+    tags:
+      - withdraws
+    summary: 引き出し申請の拒否（管理者）
+    description: 指定した引き出し申請を `rejected` に更新し、手数料・返金の反映を行います。
+    operationId: adminRejectWithdrawal
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: トランザクションID
+    responses:
+      '200':
+        description: 更新成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/withdraw.yaml#/components/schemas/RejectWithdrawalResponse'
+      '400':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+      '500':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
