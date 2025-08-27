@@ -100,3 +100,60 @@
         $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
       '500':
         $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
+
+  put:
+    tags: [shop-owners]
+    summary: ショップオーナー更新（管理者）
+    description: 管理者が任意のショップオーナー情報を更新します。
+    operationId: adminUpdateShopOwner
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: string }
+        description: 更新対象のショップオーナーID
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/shop-owner.yaml#/components/schemas/ShopOwnerAdminUpdateRequest'
+    responses:
+      '200':
+        description: 更新成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/shop-owner.yaml#/components/schemas/ShopOwnerDetail'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+      '500':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
+
+  delete:
+    tags: [shop-owners]
+    summary: ショップオーナー削除（管理者）
+    description: 指定したショップオーナーおよび関連リソースを削除します。
+    operationId: adminDeleteShopOwner
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: string }
+        description: 削除対象のショップオーナーID
+    responses:
+      '200':
+        description: 削除成功
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [message]
+              properties:
+                message:
+                  type: string
+                  example: ショップオーナー、および関連するショップ、バランス、トランザクション、通知を全て削除しました
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+      '500':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'

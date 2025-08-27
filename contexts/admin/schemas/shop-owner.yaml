@@ -159,3 +159,46 @@ components:
               type: string
               description: ショップ名
               example: フルプラ下北沢店
+    ShopOwnerAdminUpdateRequest:
+      type: object
+      description: 管理者が更新可能なフィールド
+      properties:
+        name:
+          type: string
+          description: 氏名
+        email:
+          type: string
+          format: email
+          description: メールアドレス
+        password:
+          type: string
+          format: password
+          description: 新しいパスワード
+        phoneNumber:
+          type: string
+          description: 電話番号
+        serialPrinter:
+          type: string
+          description: シリアル接続プリンター
+        bluetoothPrinter:
+          type: string
+          description: Bluetoothプリンター
+        address:
+          type: object
+          description: 住所情報
+          properties:
+            postalCode:
+              type: string
+              description: 郵便番号
+            prefecture:
+              type: string
+              description: 都道府県
+            city:
+              type: string
+              description: 市区町村
+            streetAddress:
+              type: string
+              description: 町名番地
+            buildingName:
+              type: string
+              description: 建物名・部屋番号
