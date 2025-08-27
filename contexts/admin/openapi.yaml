@@ -19,14 +19,20 @@ servers:
 tags:
   - name: auth
     description: 管理者認証
-  - name: users
-    description: ユーザー管理
-  - name: shops
-    description: ショップ管理
-  - name: analytics
-    description: 分析・レポート
   - name: orders
     description: 注文管理
+  - name: products
+    description: 商品管理
+  - name: shops
+    description: ショップ管理
+  - name: shop-owners
+    description: ショップオーナー管理
+  - name: tags
+    description: タグ管理
+  - name: withdraws
+    description: 引き出し管理
+  - name: users
+    description: ユーザー管理
 
 paths:
   /auth/login:
