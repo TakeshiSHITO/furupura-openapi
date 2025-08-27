@@ -252,3 +252,76 @@ products/{productId}/tags:
               serverErr:
                 value:
                   message: '商品にタグを追加できませんでした。何度もエラーが起こる場合は、サポートにお問い合わせください'
+
+  delete:
+    tags: [admin-products]
+    summary: 商品からタグを削除（管理者）
+    description: 指定した商品からタグを削除し、削除後に紐づく全タグ一覧を返します。
+    operationId: removeTagsFromProduct
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: path
+        name: productId
+        required: true
+        schema:
+          type: string
+        description: 対象商品のID
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RemoveProductTagsRequest'
+          examples:
+            removeSome:
+              value:
+                tagIds: [101, 205]
+    responses:
+      '200':
+        description: 削除成功（残存タグ一覧を返却）
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RemoveProductTagsResponse'
+            examples:
+              ok:
+                value:
+                  message: 商品からタグを削除しました
+                  tags:
+                    - id: 102
+                      name: デニム
+                    - id: 301
+                      name: 古着女子
+      '400':
+        description: リクエスト不正（tagIds が空など）
+        content:
+          application/json:
+            schema:
+              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
+            examples:
+              invalidBody:
+                value:
+                  message: Tags should be a non-empty array of IDs
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '404':
+        description: 商品が存在しない（実装で検知する場合）
+        content:
+          application/json:
+            schema:
+              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
+            examples:
+              notFound:
+                value:
+                  message: 商品が見つかりません。
+      '500':
+        description: サーバーエラー
+        content:
+          application/json:
+            schema:
+              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
+            examples:
+              serverErr:
+                value:
+                  message: 商品からタグを削除できませんでした

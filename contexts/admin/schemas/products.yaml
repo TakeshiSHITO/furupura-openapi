@@ -70,6 +70,15 @@ components:
           description: 作成する商品の件数
       required: [count]
 
+    Tag:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+      required: [id, name]
+
     AddProductTagsRequest:
       type: object
       properties:
@@ -94,11 +103,26 @@ components:
             $ref: '#/components/schemas/Tag'
       required: [message, tags]
 
-    Tag:
+    RemoveProductTagsRequest:
       type: object
       properties:
-        id:
-          type: integer
-        name:
+        tagIds:
+          type: array
+          items:
+            type: integer
+          minItems: 1
+          description: 削除するタグIDの配列
+      required: [tagIds]
+
+    RemoveProductTagsResponse:
+      type: object
+      properties:
+        message:
           type: string
-      required: [id, name]
+          example: 商品からタグを削除しました
+        tags:
+          type: array
+          description: 削除後に商品へ紐づいている全タグ
+          items:
+            $ref: '#/components/schemas/Tag'
+      required: [message, tags]
