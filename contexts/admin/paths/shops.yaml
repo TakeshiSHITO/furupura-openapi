@@ -19,20 +19,22 @@
       '500':
         $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
 
-/shops/{shopId}:
+/shops/{id}:
+  # ← パラメータは path レベルに1回だけ定義（重複回避）
+  parameters:
+    - in: path
+      name: id # ← {id} と完全一致
+      required: true
+      schema:
+        type: string
+      description: ショップID
+
   get:
     tags:
       - shops
     summary: ショップ詳細取得
     description: 指定したショップの詳細情報を返します（エリア情報を含む）。
     operationId: getShopById
-    parameters:
-      - in: path
-        name: shopId
-        required: true
-        schema:
-          type: string
-        description: ショップID
     responses:
       '200':
         description: 取得成功
@@ -47,86 +49,10 @@
 
   patch:
     tags:
-      - shops
+      - shops # ← 配列に修正
     summary: ショップ情報を更新（管理者）
     description: 含まれるフィールドのみ部分更新します。
     operationId: updateShop
-    parameters:
-      - in: path
-        name: shopId
-        required: true
-        schema:
-          type: string
-        description: 更新対象のショップID
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '../schemas/shop.yaml#/components/schemas/UpdateShopRequest'
-    responses:
-      '200':
-        description: 更新成功
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - message
-                - shop
-              properties:
-                message:
-                  type: string
-                  example: ショップ情報を更新しました
-                shop:
-                  $ref: '../schemas/shop.yaml#/components/schemas/ShopDetail'
-      '404':
-        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
-      '500':
-        $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
-
-  delete:
-    tags:
-      - shops
-    summary: ショップを削除（管理者）
-    description: 指定したショップを削除します。
-    operationId: deleteShop
-    parameters:
-      - in: path
-        name: shopId
-        required: true
-        schema:
-          type: string
-        description: 削除対象のショップID
-    responses:
-      '200':
-        description: 削除成功
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - message
-              properties:
-                message:
-                  type: string
-                  example: ショップを削除しました
-      '404':
-        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
-      '500':
-        $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
-/shops/{id}:
-  patch:
-    tags: shops
-    summary: ショップ情報を更新（管理者）
-    description: 含まれるフィールドのみ部分更新します。
-    operationId: updateShop
-    parameters:
-      - in: path
-        name: id
-        required: true
-        schema: { type: string }
-        description: 更新対象のショップID
     requestBody:
       required: true
       content:
@@ -146,16 +72,11 @@
         $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
 
   delete:
-    tags: shops
+    tags:
+      - shops # ← 配列に修正
     summary: ショップを削除（管理者）
     description: 指定したショップを削除します。
     operationId: deleteShop
-    parameters:
-      - in: path
-        name: id
-        required: true
-        schema: { type: string }
-        description: 削除対象のショップID
     responses:
       '200':
         description: 削除成功

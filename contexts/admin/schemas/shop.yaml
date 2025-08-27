@@ -16,7 +16,6 @@ components:
         areaId:
           type: string
           description: エリアID
-
     Area:
       type: object
       required:
@@ -30,9 +29,9 @@ components:
           type: string
           description: エリア名
         parentId:
-          type: string
-          nullable: true
+          type: [string, 'null'] # ← nullable を union に
           description: 上位エリアID（任意）
+
     ShopDetail:
       type: object
       required:
