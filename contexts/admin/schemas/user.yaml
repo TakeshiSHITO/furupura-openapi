@@ -114,6 +114,26 @@ components:
           minimum: 0
           description: 現在のサブスクで利用済みの点数
           example: 1
+    UpdateUserRequest:
+      type: object
+      description: 管理者が更新可能なフィールド（指定された項目のみ更新）
+      properties:
+        name:
+          type: string
+          description: 氏名
+        email:
+          type: string
+          format: email
+          description: メールアドレス
+        password:
+          type: string
+          format: password
+          description: 新しいパスワード
+        currentSubscriptionUsedItems:
+          type: integer
+          minimum: 0
+          description: 現在のサブスクで利用済みの点数
+
     UpdateUserResponse:
       type: object
       description: ユーザー更新の結果

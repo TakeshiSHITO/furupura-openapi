@@ -18,6 +18,7 @@
         $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
       '500':
         $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
+
 /users/{id}:
   get:
     tags:
@@ -42,9 +43,7 @@
       '404':
         $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
       '500':
-      '500':
         $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
-
   put:
     tags:
       - users
@@ -98,4 +97,5 @@
               $ref: '../schemas/user.yaml#/components/schemas/DeleteUserResponse'
       '404':
         $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+      '500':
         $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
