@@ -1,53 +1,132 @@
 components:
   schemas:
-    Shop:
+    ShopListItem:
       type: object
       required:
         - id
         - name
-        - owner_id
-        - status
+        - areaId
       properties:
         id:
           type: string
-          format: uuid
+          description: ショップID
         name:
           type: string
+          description: ショップ名
+        areaId:
+          type: string
+          description: エリアID
+
+    Area:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          description: エリアID
+        name:
+          type: string
+          description: エリア名
+        parentId:
+          type: string
+          nullable: true
+          description: 上位エリアID（任意）
+
+    ShopDetail:
+      type: object
+      required:
+        - id
+        - name
+        - areaId
+      properties:
+        id:
+          type: string
+          description: ショップID
+        name:
+          type: string
+          description: ショップ名
+        areaId:
+          type: string
+          description: エリアID
         description:
           type: string
-        owner_id:
-          type: string
-        logo_url:
+          description: ショップ説明
+        logo:
           type: string
           format: uri
-        status:
+          description: ロゴ画像URL
+        coverImage:
           type: string
-          enum:
-            - active
-            - pending
-            - suspended
-        business_info:
-          $ref: '#/components/schemas/BusinessInfo'
-        created_at:
+          format: uri
+          description: カバー画像URL
+        openingHours:
+          type: object
+          additionalProperties:
+            type: string
+          description: 営業時間のマップ
+        postalCode:
           type: string
-          format: date-time
-        updated_at:
+          description: 郵便番号
+        prefecture:
           type: string
-          format: date-time
+          description: 都道府県
+        city:
+          type: string
+          description: 市区町村
+        streetAddress:
+          type: string
+          description: 町名番地
+        buildingName:
+          type: string
+          description: 建物名・部屋番号
+        customizations:
+          type: object
+          additionalProperties: true
+          description: テーマカラー等の自由項目
+        area:
+          $ref: '#/components/schemas/Area'
 
-    BusinessInfo:
+    UpdateShopRequest:
       type: object
       properties:
-        company_name:
+        name:
           type: string
-        registration_number:
+          description: ショップ名
+        description:
           type: string
-        representative:
+          description: ショップ説明
+        logo:
           type: string
-        address:
-          $ref: '../../../shared/schemas/common.yaml#/components/schemas/Address'
-        phone:
+          format: uri
+          description: ロゴ画像URL
+        coverImage:
           type: string
-        email:
+          format: uri
+          description: カバー画像URL
+        openingHours:
+          type: object
+          additionalProperties:
+            type: string
+          description: 営業時間のマップ
+        postalCode:
           type: string
-          format: email
+          description: 郵便番号
+        prefecture:
+          type: string
+          description: 都道府県
+        city:
+          type: string
+          description: 市区町村
+        streetAddress:
+          type: string
+          description: 町名番地
+        buildingName:
+          type: string
+          description: 建物名・部屋番号
+        customizations:
+          type: object
+          additionalProperties: true
+          description: テーマカラー等の自由項目
+      description: 含まれるフィールドのみ更新対象

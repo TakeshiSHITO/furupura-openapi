@@ -1,35 +1,195 @@
 /shops:
   get:
-    tags:
-      - shops
+    tags: shops
     summary: ショップ一覧取得
-    description: システム内のショップ一覧を取得します。ステータスでフィルタリング可能です。
-    operationId: listShops
-    parameters:
-      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PageParam'
-      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PerPageParam'
-      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/SearchParam'
-      - name: status
-        in: query
-        schema:
-          type: string
-          enum:
-            - active
-            - pending
-            - suspended
+    description: 登録されている全てのショップを返します。
+    operationId: getShops
     responses:
       '200':
-        description: ショップ一覧
+        description: 取得成功
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Shop'
+      '500':
+        description: サーバーエラー
+        content:
+          application/json:
+            schema:
+              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
+
+/shops/{shopId}:
+  get:
+    tags: shops
+    summary: ショップ詳細取得
+    description: 指定したショップの詳細情報を返します（エリア情報を含む）。
+    operationId: getShopById
+    parameters:
+      - in: path
+        name: shopId
+        required: true
+        schema:
+          type: string
+        description: ショップID
+    responses:
+      '200':
+        description: 取得成功
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShopWithArea'
+            examples:
+              ok:
+                value:
+                  id: 'shop_123'
+                  name: 'フルプラ下北沢店'
+                  areaId: 'area_tokyo_shimokita'
+                  area:
+                    id: 'area_tokyo_shimokita'
+                    name: '下北沢'
+                    parentId: 'area_tokyo'
+      '404':
+        description: ショップが存在しない
+        content:
+          application/json:
+            schema:
+              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
+          examples:
+            notFound:
+              value:
+                message: ショップが見つかりません
+      '500':
+        description: サーバーエラー
+        content:
+          application/json:
+            schema:
+              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
+
+  patch:
+    tags: shops
+    summary: ショップ情報を更新（管理者）
+    description: 含まれるフィールドのみ部分更新します。
+    operationId: updateShop
+    parameters:
+      - in: path
+        name: shopId
+        required: true
+        schema:
+          type: string
+        description: 更新対象のショップID
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateShopRequest'
+          examples:
+            basic:
+              value:
+                name: 'フルプラ下北沢店'
+                openingHours:
+                  mon: '11:00-20:00'
+                  tue: '11:00-20:00'
+                  wed: '定休'
+            addressOnly:
+              value:
+                postalCode: '155-0031'
+                prefecture: '東京都'
+                city: '世田谷区'
+                streetAddress: '北沢2-XX-XX'
+                buildingName: 'YYYビル 2F'
+    responses:
+      '200':
+        description: 更新成功
         content:
           application/json:
             schema:
               type: object
               properties:
-                data:
-                  type: array
-                  items:
-                    $ref: '../schemas/shop.yaml#/components/schemas/Shop'
-                pagination:
-                  $ref: '../../../shared/schemas/common.yaml#/components/schemas/Pagination'
-      '401':
-        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+                message:
+                  type: string
+                shop:
+                  $ref: '#/components/schemas/ShopDetail'
+              required:
+                - message
+                - shop
+            examples:
+              ok:
+                value:
+                  message: 'ショップ情報を更新しました'
+                  shop:
+                    id: 'shop_123'
+                    name: 'フルプラ下北沢店'
+                    areaId: 'area_tokyo_shimokita'
+                    description: '古着のセレクトショップ'
+                    logo: 'https://cdn.example.com/logo.png'
+                    coverImage: 'https://cdn.example.com/cover.jpg'
+                    openingHours: { mon: '11:00-20:00', tue: '11:00-20:00' }
+                    postalCode: '155-0031'
+                    prefecture: '東京都'
+                    city: '世田谷区'
+                    streetAddress: '北沢2-XX-XX'
+                    buildingName: 'YYYビル 2F'
+                    customizations: { themeColor: '#111111' }
+      '404':
+        description: 見つからない
+        content:
+          application/json:
+            schema:
+              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
+          examples:
+            notFound:
+              value: { message: 'ショップが見つかりません' }
+      '500':
+        description: サーバーエラー
+        content:
+          application/json:
+            schema:
+              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
+
+  delete:
+    tags: shops
+    summary: ショップを削除（管理者）
+    description: 指定したショップを削除します。
+    operationId: deleteShop
+    parameters:
+      - in: path
+        name: shopId
+        required: true
+        schema:
+        type: string
+        description: 削除対象のショップID
+    responses:
+      '200':
+        description: 削除成功
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                type: string
+              required:
+                - message
+            examples:
+              ok:
+                value:
+                message: 'ショップを削除しました'
+      '404':
+        description: 見つからない
+        content:
+          application/json:
+            schema:
+              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
+          examples:
+            notFound:
+              value:
+              message: 'ショップが見つかりません'
+      '500':
+        description: サーバーエラー
+        content:
+          application/json:
+            schema:
+              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
