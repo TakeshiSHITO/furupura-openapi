@@ -15,7 +15,9 @@ components:
             $ref: '#/components/schemas/ProductSummary'
         meta:
           $ref: '#/components/schemas/PaginationMeta'
-      required: [products, meta]
+      required:
+        - products
+        - meta
 
     ProductSummary:
       type: object
@@ -44,7 +46,15 @@ components:
         updatedAt:
           type: string
           format: date-time
-      required: [id, name, categoryId, price, image, status, shopName, updatedAt]
+      required:
+        - id
+        - name
+        - categoryId
+        - price
+        - image
+        - status
+        - shopName
+        - updatedAt
 
     PaginationMeta:
       type: object
@@ -59,7 +69,11 @@ components:
           description: 総ページ数
         pageSize:
           type: integer
-      required: [count, currentPage, pages, pageSize]
+      required:
+        - count
+        - currentPage
+        - pages
+        - pageSize
 
     CreateProductsRequest:
       type: object
@@ -68,7 +82,8 @@ components:
           type: integer
           minimum: 1
           description: 作成する商品の件数
-      required: [count]
+      required:
+        - count
 
     Tag:
       type: object
@@ -77,7 +92,9 @@ components:
           type: integer
         name:
           type: string
-      required: [id, name]
+      required:
+        - id
+        - name
 
     AddProductTagsRequest:
       type: object
@@ -88,7 +105,8 @@ components:
             type: integer
           minItems: 1
           description: 追加するタグIDの配列
-      required: [tagIds]
+      required:
+        - tagIds
 
     AddProductTagsResponse:
       type: object
@@ -101,7 +119,9 @@ components:
           description: 追加後に商品へ紐づいている全タグ
           items:
             $ref: '#/components/schemas/Tag'
-      required: [message, tags]
+      required:
+        - message
+        - tags
 
     RemoveProductTagsRequest:
       type: object
@@ -112,7 +132,8 @@ components:
             type: integer
           minItems: 1
           description: 削除するタグIDの配列
-      required: [tagIds]
+      required:
+        - tagIds
 
     RemoveProductTagsResponse:
       type: object
@@ -125,7 +146,9 @@ components:
           description: 削除後に商品へ紐づいている全タグ
           items:
             $ref: '#/components/schemas/Tag'
-      required: [message, tags]
+      required:
+        - message
+        - tags
 
     UpdateProductRequest:
       type: object

@@ -1,11 +1,9 @@
 /shops/{shopId}/products:
   get:
-    tags: [admin-products]
+    tags: products
     summary: ショップの商品一覧（管理者）
     description: 指定したショップに紐づく商品一覧を取得します。最終更新日の新しい順で返却。
     operationId: getShopProductsByAdmin
-    security:
-      - bearerAuth: []
     parameters:
       - in: path
         name: shopId
@@ -101,14 +99,12 @@
                 value:
                   message: '商品の取得中にエラーが発生しました。何度か試してみてもエラーが解消されない場合、サポートにお問い合わせください。'
   post:
-    tags: [admin-products]
+    tags: products
     summary: ショップに商品を一括作成（管理者）
     description: |
       指定されたショップにサンプル商品をまとめて作成します。  
       `count` が指定されない場合は 1 件作成されます。
     operationId: createProductsByAdmin
-    security:
-      - bearerAuth: []
     parameters:
       - in: path
         name: shopId
@@ -174,14 +170,12 @@
 
 products/{productId}/tags:
   post:
-    tags: [admin-products]
+    tags: tags
     summary: 商品にタグを追加（管理者）
     description: |
       指定した商品にタグを追加します。重複は無視され、上限数を超える場合は追加できません。
       成功時は、商品に紐づく全てのタグ一覧を返します。
     operationId: addTagsToProduct
-    security:
-      - bearerAuth: []
     parameters:
       - in: path
         name: productId
@@ -254,7 +248,7 @@ products/{productId}/tags:
                   message: '商品にタグを追加できませんでした。何度もエラーが起こる場合は、サポートにお問い合わせください'
 
   delete:
-    tags: [admin-products]
+    tags: tags
     summary: 商品からタグを削除（管理者）
     description: 指定した商品からタグを削除し、削除後に紐づく全タグ一覧を返します。
     operationId: removeTagsFromProduct
@@ -328,15 +322,13 @@ products/{productId}/tags:
 
 /products/{productId}:
   patch:
-    tags: [admin-products]
+    tags: products
     summary: 商品を更新（管理者）
     description: |
       指定した商品情報を更新します。  
       リクエストに含まれるフィールドのみが更新対象となります。  
       更新する項目がない場合は 400 を返します。
     operationId: updateProduct
-    security:
-      - bearerAuth: []
     parameters:
       - in: path
         name: productId
@@ -407,3 +399,62 @@ products/{productId}/tags:
               serverErr:
                 value:
                   message: 商品の更新に失敗しました
+
+  delete:
+    tags: products
+    summary: 商品を削除（管理者）
+    description: |
+      指定した商品を削除します。関連する外部ファイル（画像など）の削除は内部処理で行われます。
+    operationId: deleteProduct
+    parameters:
+      - in: path
+        name: productId
+        required: true
+        schema:
+          type: string
+        description: 削除対象の商品ID
+    responses:
+      '200':
+        description: 削除成功
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+              required: [message]
+            examples:
+              ok:
+                value:
+                  message: 'Product and related data deleted successfully'
+      '400':
+        description: 外部参照により削除不可（履歴保護など）
+        content:
+          application/json:
+            schema:
+              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
+            examples:
+              fkProtected:
+                value:
+                  message: 'この商品はユーザーのレンタル/購入履歴を保護するため、削除できません。売り切れにする場合は「レジ画面」からQRコードをスキャンしてください'
+      '404':
+        description: 商品が見つからない
+        content:
+          application/json:
+            schema:
+              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
+            examples:
+              notFound:
+                value:
+                  message: 'Product not found'
+      '500':
+        description: サーバーエラー
+        content:
+          application/json:
+            schema:
+              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
+            examples:
+              serverErr:
+                value:
+                  message: 'Failed to delete product'
