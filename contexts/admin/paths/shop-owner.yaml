@@ -1,0 +1,62 @@
+/admin/shop-owners:
+  post:
+    tags: shop-owners
+    summary: 店舗オーナー登録
+    description: 新しい店舗オーナーを登録し、同時に店舗も作成します。
+    operationId: registerShopOwner
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RegisterShopOwnerRequest'
+          examples:
+            basic:
+              value:
+                name: '山田太郎'
+                email: 'taro@example.com'
+                password: 'password123'
+                shopName: 'フルプラ下北沢店'
+                reading: 'やまだたろう'
+                areaId: 'area_tokyo_shimokita'
+    responses:
+      '201':
+        description: 登録成功
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterShopOwnerResponse'
+            examples:
+              ok:
+                value:
+                  id: 'owner_123'
+                  name: '山田太郎'
+                  email: 'taro@example.com'
+                  role: 'shop'
+                  shopId: 'shop_456'
+      '400':
+        description: 既に同じメールアドレスが存在する場合
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+              required:
+                - message
+            examples:
+              duplicate:
+                value:
+                  message: '既に同じメールアドレスの店舗オーナーが登録されています'
+      '500':
+        description: サーバーエラー
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+              required:
+                - message

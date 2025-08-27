@@ -1,0 +1,58 @@
+components:
+  schemas:
+    RegisterShopOwnerRequest:
+      type: object
+      required:
+        - name
+        - email
+        - password
+        - shopName
+        - areaId
+      properties:
+        name:
+          type: string
+          description: オーナー名
+        email:
+          type: string
+          format: email
+          description: メールアドレス
+        password:
+          type: string
+          format: password
+          description: パスワード
+        shopName:
+          type: string
+          description: 店舗名
+        reading:
+          type: string
+          description: 読み仮名（スラッグ生成に使用）
+        areaId:
+          type: string
+          description: エリアID
+
+    RegisterShopOwnerResponse:
+      type: object
+      required:
+        - id
+        - name
+        - email
+        - role
+        - shopId
+      properties:
+        id:
+          type: string
+          description: 店舗オーナーID
+        name:
+          type: string
+          description: 店舗オーナー名
+        email:
+          type: string
+          format: email
+          description: メールアドレス
+        role:
+          type: string
+          enum: [shop]
+          description: ロール（常に "shop"）
+        shopId:
+          type: string
+          description: 紐づくショップID
