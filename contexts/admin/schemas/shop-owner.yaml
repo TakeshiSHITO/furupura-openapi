@@ -2,12 +2,7 @@ components:
   schemas:
     RegisterShopOwnerRequest:
       type: object
-      required:
-        - name
-        - email
-        - password
-        - shopName
-        - areaId
+      required: [name, email, password, shopName, areaId]
       properties:
         name:
           type: string
@@ -32,133 +27,101 @@ components:
 
     RegisterShopOwnerResponse:
       type: object
-      required:
-        - id
-        - name
-        - email
-        - role
-        - shopId
+      required: [id, name, email, role, shopId]
       properties:
         id:
           type: string
-          description: 店舗オーナーID
+          description: オーナーID
+          example: owner_123
         name:
           type: string
-          description: 店舗オーナー名
+          description: オーナー名
         email:
           type: string
           format: email
           description: メールアドレス
         role:
           type: string
-          enum: [shop]
-          description: ロール（常に "shop"）
+          description: ロール
+          example: shop
         shopId:
           type: string
-          description: 紐づくショップID
+          description: 作成されたショップID
+          example: shop_456
+
     ShopOwnerListItem:
       type: object
-      required:
-        - id
-        - name
-        - email
+      required: [id, name, email]
       properties:
         id:
           type: string
           description: ショップオーナーID
-          example: owner_123
         name:
           type: string
           description: 氏名
-          example: 山田 太郎
         email:
           type: string
           format: email
           description: メールアドレス
-          example: owner@example.com
         phoneNumber:
           type: string
           description: 電話番号
-          example: 03-1234-5678
         shop:
-          type: object
-          nullable: true
+          type: [object, 'null'] # ← nullable排除（3.1対応）
           description: 紐付くショップの最小情報
           properties:
             id:
               type: string
               description: ショップID
-              example: shop_123
             name:
               type: string
               description: ショップ名
-              example: フルプラ下北沢店
 
     ShopOwnerDetail:
       type: object
-      required:
-        - id
-        - name
-        - email
+      required: [id, name, email]
       properties:
         id:
           type: string
           description: ショップオーナーID
-          example: owner_123
         name:
           type: string
           description: 氏名
-          example: 山田 太郎
         email:
           type: string
           format: email
           description: メールアドレス
-          example: owner@example.com
         phoneNumber:
           type: string
           description: 電話番号
-          example: 03-1234-5678
         serialPrinter:
-          type: string
-          nullable: true
+          type: [string, 'null'] # ← nullable排除（3.1対応）
           description: シリアル接続プリンター
         bluetoothPrinter:
-          type: string
-          nullable: true
+          type: [string, 'null'] # ← nullable排除（3.1対応）
           description: Bluetoothプリンター
         postalCode:
           type: string
           description: 郵便番号
-          example: 155-0031
         prefecture:
           type: string
           description: 都道府県
-          example: 東京都
         city:
           type: string
           description: 市区町村
-          example: 世田谷区
         streetAddress:
           type: string
           description: 町名番地
-          example: 北沢2-XX-XX
         buildingName:
           type: string
           description: 建物名・部屋番号
-          example: YYYビル 2F
         shop:
-          type: object
-          nullable: true
+          type: [object, 'null'] # ← nullable排除（3.1対応）
           description: 紐付くショップ情報
           properties:
-            id:
-              type: string
-              description: ショップID
-              example: shop_123
-            name:
-              type: string
-              description: ショップ名
-              example: フルプラ下北沢店
+            id: { type: string, description: ショップID }
+            name: { type: string, description: ショップ名 }
+
     ShopOwnerAdminUpdateRequest:
       type: object
       description: 管理者が更新可能なフィールド

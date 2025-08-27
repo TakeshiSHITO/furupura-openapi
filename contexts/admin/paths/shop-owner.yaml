@@ -1,6 +1,6 @@
 /shop-owners:
   post:
-    tags: shop-owners
+    tags: [shop-owners]
     summary: 店舗オーナー登録
     description: 新しい店舗オーナーを登録し、同時に店舗も作成します。
     operationId: registerShopOwner
@@ -9,7 +9,7 @@
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/RegisterShopOwnerRequest'
+            $ref: '../schemas/shop-owner.yaml#/components/schemas/RegisterShopOwnerRequest'
           examples:
             basic:
               value:
@@ -25,7 +25,7 @@
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RegisterShopOwnerResponse'
+              $ref: '../schemas/shop-owner.yaml#/components/schemas/RegisterShopOwnerResponse'
             examples:
               ok:
                 value:
@@ -35,33 +35,12 @@
                   role: 'shop'
                   shopId: 'shop_456'
       '400':
-        description: 既に同じメールアドレスが存在する場合
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                message:
-                  type: string
-              required:
-                - message
-            examples:
-              duplicate:
-                value:
-                  message: '既に同じメールアドレスの店舗オーナーが登録されています'
+        $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
       '500':
-        description: サーバーエラー
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                message:
-                  type: string
-              required:
-                - message
+        $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
+
   get:
-    tags: shop-owners
+    tags: [shop-owners]
     summary: ショップオーナー一覧取得
     description: すべてのショップオーナーを返します（パスワードは含みません）。
     operationId: adminGetShopOwners
@@ -74,21 +53,25 @@
               type: array
               items:
                 $ref: '../schemas/shop-owner.yaml#/components/schemas/ShopOwnerListItem'
+      '400':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
       '500':
         $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
 
 /shop-owners/{id}:
+  # パス変数はここで1回だけ定義（重複回避）
+  parameters:
+    - in: path
+      name: id
+      required: true
+      schema: { type: string }
+      description: ショップオーナーID
+
   get:
-    tags: shop-owners
+    tags: [shop-owners]
     summary: ショップオーナー詳細取得
     description: 指定IDのショップオーナーを返します（関連Shopも含みます）。
     operationId: adminGetShopOwnerById
-    parameters:
-      - in: path
-        name: id
-        required: true
-        schema: { type: string }
-        description: ショップオーナーID
     responses:
       '200':
         description: 取得成功
@@ -106,12 +89,6 @@
     summary: ショップオーナー更新（管理者）
     description: 管理者が任意のショップオーナー情報を更新します。
     operationId: adminUpdateShopOwner
-    parameters:
-      - in: path
-        name: id
-        required: true
-        schema: { type: string }
-        description: 更新対象のショップオーナーID
     requestBody:
       required: true
       content:
@@ -135,12 +112,6 @@
     summary: ショップオーナー削除（管理者）
     description: 指定したショップオーナーおよび関連リソースを削除します。
     operationId: adminDeleteShopOwner
-    parameters:
-      - in: path
-        name: id
-        required: true
-        schema: { type: string }
-        description: 削除対象のショップオーナーID
     responses:
       '200':
         description: 削除成功
@@ -157,18 +128,20 @@
         $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
       '500':
         $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
-/shop-owners/by-shop/{shopId}:
+
+/shop-owners/by-shop/{id}:
+  parameters:
+    - in: path
+      name: id
+      required: true
+      schema: { type: string }
+      description: ショップID
+
   get:
     tags: [shop-owners]
     summary: 店舗IDからショップオーナー取得
     description: 指定した shopId に紐づくショップオーナーを返します。
     operationId: adminGetShopOwnerByShopId
-    parameters:
-      - in: path
-        name: shopId
-        required: true
-        schema: { type: string }
-        description: ショップID
     responses:
       '200':
         description: 取得成功

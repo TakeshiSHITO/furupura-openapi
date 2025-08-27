@@ -39,6 +39,12 @@ paths:
     $ref: './paths/shops.yaml#/~1shops'
   /shops/{id}:
     $ref: './paths/shops.yaml#/~1shops~1{id}'
+  /shop-owners:
+    $ref: './paths/shop-owner.yaml#/~1shop-owners'
+  /shop-owners/{id}:
+    $ref: './paths/shop-owner.yaml#/~1shop-owners~1{id}'
+  /shop-owners/by-shop/{id}:
+    $ref: './paths/shop-owner.yaml#/~1shop-owners~1by-shop~1{id}'
 
 components:
   securitySchemes:
