@@ -100,3 +100,74 @@
               serverErr:
                 value:
                   message: '商品の取得中にエラーが発生しました。何度か試してみてもエラーが解消されない場合、サポートにお問い合わせください。'
+  post:
+    tags: [admin-products]
+    summary: ショップに商品を一括作成（管理者）
+    description: |
+      指定されたショップにサンプル商品をまとめて作成します。  
+      `count` が指定されない場合は 1 件作成されます。
+    operationId: createProductsByAdmin
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: path
+        name: shopId
+        required: true
+        schema:
+          type: string
+        description: 商品を作成する対象ショップのID
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateProductsRequest'
+          examples:
+            single:
+              summary: 1件の商品作成
+              value:
+                count: 1
+            multiple:
+              summary: 複数件の商品作成
+              value:
+                count: 10
+    responses:
+      '201':
+        description: 作成成功
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+              example:
+                message: '10件の商品が作成されました'
+      '400':
+        description: リクエスト不正
+        content:
+          application/json:
+            schema:
+              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
+          examples:
+            invalidCount:
+              value:
+                message: '商品数は1以上で指定してください。'
+      '404':
+        description: ショップが存在しない
+        content:
+          application/json:
+            schema:
+              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
+          examples:
+            notFound:
+              value:
+                message: '店舗が見つかりません。'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '500':
+        description: サーバーエラー
+        content:
+          application/json:
+            schema:
+              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'

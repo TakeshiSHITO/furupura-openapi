@@ -60,3 +60,12 @@ components:
         pageSize:
           type: integer
       required: [count, currentPage, pages, pageSize]
+
+    CreateProductsRequest:
+      type: object
+      properties:
+        count:
+          type: integer
+          minimum: 1
+          description: 作成する商品の件数
+      required: [count]
