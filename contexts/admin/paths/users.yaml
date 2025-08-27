@@ -3,84 +3,61 @@
     tags:
       - users
     summary: ユーザー一覧取得
-    description: システム内のユーザー一覧を取得します。ステータスや登録日でフィルタリング可能です。
-    operationId: listUsers
-    parameters:
-      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PageParam'
-      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PerPageParam'
-      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/SearchParam'
-      - name: status
-        in: query
-        schema:
-          type: string
-          enum:
-            - active
-            - suspended
-            - deleted
-      - name: created_from
-        in: query
-        schema:
-          type: string
-          format: date
-      - name: created_to
-        in: query
-        schema:
-          type: string
-          format: date
+    description: すべてのユーザーを返します（パスワードは含みません）。所属組織と現在のサブスク概要を含みます。
+    operationId: adminGetUsers
     responses:
       '200':
-        description: ユーザー一覧
+        description: 取得成功
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                data:
-                  type: array
-                  items:
-                    $ref: '../schemas/user.yaml#/components/schemas/User'
-                pagination:
-                  $ref: '../../../shared/schemas/common.yaml#/components/schemas/Pagination'
-      '401':
-        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
-      '403':
-        $ref: '../../../shared/responses/common.yaml#/components/responses/Forbidden'
-
-/users/{userId}:
+              type: array
+              items:
+                $ref: '../schemas/user.yaml#/components/schemas/UserListItem'
+      '400':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
+      '500':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
+/users/{id}:
   get:
     tags:
       - users
     summary: ユーザー詳細取得
-    description: 指定したユーザーの詳細情報を取得します。
-    operationId: getUser
+    description: 指定IDのユーザーを返します（パスワードは含みません）。所属組織と現在のサブスク概要を含みます。
+    operationId: adminGetUserById
     parameters:
-      - name: userId
-        in: path
+      - in: path
+        name: id
         required: true
         schema:
           type: string
+        description: ユーザーID
     responses:
       '200':
-        description: ユーザー詳細
+        description: 取得成功
         content:
           application/json:
             schema:
               $ref: '../schemas/user.yaml#/components/schemas/UserDetail'
       '404':
         $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+      '500':
+      '500':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
 
-  patch:
+  put:
     tags:
       - users
-    summary: ユーザー情報更新
-    description: ユーザーのステータスやメモを更新します。
-    operationId: updateUser
+    summary: ユーザー更新（管理者）
+    description: 管理者が指定ユーザーの基本情報を更新します。
+    operationId: adminUpdateUser
     parameters:
-      - name: userId
-        in: path
+      - in: path
+        name: id
         required: true
         schema:
           type: string
+        description: 更新対象のユーザーID
     requestBody:
       required: true
       content:
@@ -93,8 +70,32 @@
         content:
           application/json:
             schema:
-              $ref: '../schemas/user.yaml#/components/schemas/UserDetail'
-      '400':
-        $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
+              $ref: '../schemas/user.yaml#/components/schemas/UpdateUserResponse'
       '404':
         $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+      '500':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
+
+  delete:
+    tags:
+      - users
+    summary: ユーザー削除（管理者）
+    description: 指定ユーザーを削除します。
+    operationId: adminDeleteUser
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: 削除対象のユーザーID
+    responses:
+      '200':
+        description: 削除成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/user.yaml#/components/schemas/DeleteUserResponse'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+        $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'

@@ -1,63 +1,153 @@
 components:
   schemas:
-    User:
+    OrganizationBrief:
       type: object
+      description: 所属組織の概要
       required:
         - id
-        - email
         - name
-        - status
       properties:
         id:
           type: string
-          format: uuid
+          description: 組織ID
+          example: org_001
+        name:
+          type: string
+          description: 組織名
+          example: フルプラ株式会社
+
+    SubscriptionSummary:
+      type: object
+      description: 現在のサブスクリプション概要
+      required:
+        - id
+        - name
+        - price
+        - maxItems
+        - itemPriceLimit
+      properties:
+        id:
+          type: string
+          description: サブスクID
+          example: sub_basic
+        name:
+          type: string
+          description: プラン名
+          example: BASIC
+        price:
+          type: number
+          format: float
+          description: 月額料金
+          example: 1980
+        maxItems:
+          type: integer
+          description: 月間の最大レンタル点数
+          example: 3
+        itemPriceLimit:
+          type: number
+          format: float
+          description: 対象アイテムの上限価格
+          example: 10000
+        description:
+          type: string
+          description: プラン説明
+          example: 月3点まで借り放題のベーシックプラン
+
+    UserListItem:
+      type: object
+      description: ユーザー一覧用の簡略情報
+      required:
+        - id
+        - name
+        - email
+      properties:
+        id:
+          type: string
+          description: ユーザーID
+          example: user_123
+        name:
+          type: string
+          description: 氏名
+          example: 桃太郎 花子
         email:
           type: string
           format: email
-        name:
-          type: string
-        phone:
-          type: string
-        status:
-          type: string
-          enum:
-            - active
-            - suspended
-            - deleted
-        created_at:
-          type: string
-          format: date-time
-        last_login_at:
-          type: string
-          format: date-time
+          description: メールアドレス
+          example: hanako@example.com
+        organization:
+          $ref: '#/components/schemas/OrganizationBrief'
+        currentSubscription:
+          $ref: '#/components/schemas/SubscriptionSummary'
+        currentSubscriptionUsedItems:
+          type: integer
+          minimum: 0
+          description: 現在のサブスクで利用済みの点数
+          example: 1
 
     UserDetail:
-      allOf:
-        - $ref: '#/components/schemas/User'
-        - type: object
-          properties:
-            addresses:
-              type: array
-              items:
-                $ref: '../../../shared/schemas/common.yaml#/components/schemas/Address'
-            order_count:
-              type: integer
-              minimum: 0
-            total_spent:
-              type: integer
-              minimum: 0
-            notes:
-              type: string
-              description: 管理者用メモ
-
-    UpdateUserRequest:
       type: object
+      description: ユーザー詳細情報（パスワードは含まない）
+      required:
+        - id
+        - name
+        - email
       properties:
-        status:
+        id:
           type: string
-          enum:
-            - active
-            - suspended
-        notes:
+          description: ユーザーID
+          example: user_123
+        name:
           type: string
-          maxLength: 1000
+          description: 氏名
+          example: 桃太郎 花子
+        email:
+          type: string
+          format: email
+          description: メールアドレス
+          example: hanako@example.com
+        organization:
+          $ref: '#/components/schemas/OrganizationBrief'
+        currentSubscription:
+          $ref: '#/components/schemas/SubscriptionSummary'
+        currentSubscriptionUsedItems:
+          type: integer
+          minimum: 0
+          description: 現在のサブスクで利用済みの点数
+          example: 1
+    UpdateUserResponse:
+      type: object
+      description: ユーザー更新の結果
+      required:
+        - id
+        - name
+        - email
+      properties:
+        id:
+          type: string
+          description: ユーザーID
+          example: user_123
+        name:
+          type: string
+          description: 氏名
+          example: 桃太郎 花子
+        email:
+          type: string
+          format: email
+          description: メールアドレス
+          example: hanako@example.com
+        currentSubscriptionUsedItems:
+          type: integer
+          minimum: 0
+          description: 現在のサブスクで利用済みの点数
+          example: 2
+
+    DeleteUserResponse:
+      type: object
+      description: ユーザー削除の結果
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: 削除結果メッセージ
+          example: ユーザーが正常に削除されました
