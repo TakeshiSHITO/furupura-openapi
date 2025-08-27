@@ -18,7 +18,7 @@
     "build:portal": "redocly build-docs portal.yaml -o docs/index.html",
     "lint": "prettier --check '**/*.{js,json,md,yaml,yml}'",
     "lint:fix": "prettier --write '**/*.{js,json,md,yaml,yml}'",
-    "clean": "rm -rf bundled/* docs/*.html docs/*/*.html .redocly-cache",
+    "clean": "rimraf --glob \"bundled/**\" \"docs/**/*.html\" \".redocly-cache\"",
     "prepare": "husky"
   },
   "devDependencies": {
@@ -30,6 +30,7 @@
     "lint-staged": "^16.1.5",
     "npm-run-all2": "^8.0.4",
     "prettier": "^3.6.2",
+    "rimraf": "^6.0.1",
     "shx": "^0.4.0"
   },
   "packageManager": "pnpm@9.0.0",
