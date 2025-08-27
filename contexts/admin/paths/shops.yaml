@@ -19,11 +19,11 @@
       '500':
         $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
 
-/shops/{id}:
+/shops/{shopId}:
   # ← パラメータは path レベルに1回だけ定義（重複回避）
   parameters:
     - in: path
-      name: id # ← {id} と完全一致
+      name: shopId # ← {id} と完全一致
       required: true
       schema:
         type: string

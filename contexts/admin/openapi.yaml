@@ -37,14 +37,14 @@ paths:
     $ref: './paths/users.yaml#/~1users~1{userId}'
   /shops:
     $ref: './paths/shops.yaml#/~1shops'
-  /shops/{id}:
-    $ref: './paths/shops.yaml#/~1shops~1{id}'
+  /shops/{shopId}:
+    $ref: './paths/shops.yaml#/~1shops~1{shopId}'
   /shop-owners:
     $ref: './paths/shop-owner.yaml#/~1shop-owners'
-  /shop-owners/{id}:
-    $ref: './paths/shop-owner.yaml#/~1shop-owners~1{id}'
-  /shop-owners/by-shop/{id}:
-    $ref: './paths/shop-owner.yaml#/~1shop-owners~1by-shop~1{id}'
+  /shop-owners/{shopId}:
+    $ref: './paths/shop-owner.yaml#/~1shop-owners~1{shopId}'
+  /shop-owners/by-shop/{shopId}:
+    $ref: './paths/shop-owner.yaml#/~1shop-owners~1by-shop~1{shopId}'
 
 components:
   securitySchemes:

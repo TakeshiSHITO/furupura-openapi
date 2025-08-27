@@ -58,11 +58,11 @@
       '500':
         $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
 
-/shop-owners/{id}:
+/shop-owners/{shopId}:
   # パス変数はここで1回だけ定義（重複回避）
   parameters:
     - in: path
-      name: id
+      name: shopId
       required: true
       schema: { type: string }
       description: ショップオーナーID
@@ -129,10 +129,10 @@
       '500':
         $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
 
-/shop-owners/by-shop/{id}:
+/shop-owners/by-shop/{shopId}:
   parameters:
     - in: path
-      name: id
+      name: shopId
       required: true
       schema: { type: string }
       description: ショップID
