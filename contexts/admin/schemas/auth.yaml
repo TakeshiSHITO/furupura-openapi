@@ -1,5 +1,25 @@
 components:
   schemas:
+    SignupRequest:
+      type: object
+      required:
+        - shop_name
+        - email
+        - password
+      properties:
+        shop_name:
+          type: string
+          maxLength: 100
+          description: ショップ名
+        email:
+          type: string
+          format: email
+          description: ショップのメールアドレス
+        password:
+          type: string
+          format: password
+          minLength: 8
+          description: パスワード（8文字以上）
     LoginRequest:
       type: object
       required:

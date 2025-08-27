@@ -31,6 +31,10 @@ tags:
 paths:
   /auth/login:
     $ref: './paths/auth.yaml#/~1auth~1login'
+  /auth/signup:
+    $ref: './paths/auth.yaml#/~1auth~1signup'
+  /auth/logout:
+    $ref: './paths/auth.yaml#/~1auth~1logout'
   /users:
     $ref: './paths/users.yaml#/~1users'
   /users/{userId}:
