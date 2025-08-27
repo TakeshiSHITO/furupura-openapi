@@ -56,3 +56,106 @@ components:
         shopId:
           type: string
           description: 紐づくショップID
+    ShopOwnerListItem:
+      type: object
+      required:
+        - id
+        - name
+        - email
+      properties:
+        id:
+          type: string
+          description: ショップオーナーID
+          example: owner_123
+        name:
+          type: string
+          description: 氏名
+          example: 山田 太郎
+        email:
+          type: string
+          format: email
+          description: メールアドレス
+          example: owner@example.com
+        phoneNumber:
+          type: string
+          description: 電話番号
+          example: 03-1234-5678
+        shop:
+          type: object
+          nullable: true
+          description: 紐付くショップの最小情報
+          properties:
+            id:
+              type: string
+              description: ショップID
+              example: shop_123
+            name:
+              type: string
+              description: ショップ名
+              example: フルプラ下北沢店
+
+    ShopOwnerDetail:
+      type: object
+      required:
+        - id
+        - name
+        - email
+      properties:
+        id:
+          type: string
+          description: ショップオーナーID
+          example: owner_123
+        name:
+          type: string
+          description: 氏名
+          example: 山田 太郎
+        email:
+          type: string
+          format: email
+          description: メールアドレス
+          example: owner@example.com
+        phoneNumber:
+          type: string
+          description: 電話番号
+          example: 03-1234-5678
+        serialPrinter:
+          type: string
+          nullable: true
+          description: シリアル接続プリンター
+        bluetoothPrinter:
+          type: string
+          nullable: true
+          description: Bluetoothプリンター
+        postalCode:
+          type: string
+          description: 郵便番号
+          example: 155-0031
+        prefecture:
+          type: string
+          description: 都道府県
+          example: 東京都
+        city:
+          type: string
+          description: 市区町村
+          example: 世田谷区
+        streetAddress:
+          type: string
+          description: 町名番地
+          example: 北沢2-XX-XX
+        buildingName:
+          type: string
+          description: 建物名・部屋番号
+          example: YYYビル 2F
+        shop:
+          type: object
+          nullable: true
+          description: 紐付くショップ情報
+          properties:
+            id:
+              type: string
+              description: ショップID
+              example: shop_123
+            name:
+              type: string
+              description: ショップ名
+              example: フルプラ下北沢店
