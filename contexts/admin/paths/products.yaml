@@ -171,3 +171,84 @@
           application/json:
             schema:
               $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
+
+products/{productId}/tags:
+  post:
+    tags: [admin-products]
+    summary: 商品にタグを追加（管理者）
+    description: |
+      指定した商品にタグを追加します。重複は無視され、上限数を超える場合は追加できません。
+      成功時は、商品に紐づく全てのタグ一覧を返します。
+    operationId: addTagsToProduct
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: path
+        name: productId
+        required: true
+        schema:
+          type: string
+        description: タグを追加する対象商品のID
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AddProductTagsRequest'
+          examples:
+            addSomeTags:
+              value:
+                tagIds: [101, 102, 205]
+    responses:
+      '200':
+        description: 追加成功（商品に紐づく全タグ一覧を返却）
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddProductTagsResponse'
+            examples:
+              ok:
+                value:
+                  message: 'タグが商品に追加されました'
+                  tags:
+                    - id: 101
+                      name: 'ヴィンテージ'
+                    - id: 205
+                      name: '90s'
+                    - id: 102
+                      name: 'デニム'
+      '400':
+        description: リクエスト不正またはタグ上限超過
+        content:
+          application/json:
+            schema:
+              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
+            examples:
+              emptyBody:
+                value:
+                  message: 'タグを追加できませんでした。何度もエラーが起こる場合は、サポートにお問い合わせください'
+              overLimit:
+                value:
+                  message: '一つの商品に追加できるタグは{TAG_LIMIT}つまでです'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '404':
+        description: 商品が存在しない（実装で検知する場合）
+        content:
+          application/json:
+            schema:
+              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
+            examples:
+              notFound:
+                value:
+                  message: '商品が見つかりません。'
+      '500':
+        description: サーバーエラー
+        content:
+          application/json:
+            schema:
+              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
+            examples:
+              serverErr:
+                value:
+                  message: '商品にタグを追加できませんでした。何度もエラーが起こる場合は、サポートにお問い合わせください'

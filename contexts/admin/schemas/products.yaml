@@ -69,3 +69,36 @@ components:
           minimum: 1
           description: 作成する商品の件数
       required: [count]
+
+    AddProductTagsRequest:
+      type: object
+      properties:
+        tagIds:
+          type: array
+          items:
+            type: integer
+          minItems: 1
+          description: 追加するタグIDの配列
+      required: [tagIds]
+
+    AddProductTagsResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: タグが商品に追加されました
+        tags:
+          type: array
+          description: 追加後に商品へ紐づいている全タグ
+          items:
+            $ref: '#/components/schemas/Tag'
+      required: [message, tags]
+
+    Tag:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+      required: [id, name]
