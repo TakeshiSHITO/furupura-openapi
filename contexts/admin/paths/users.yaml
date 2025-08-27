@@ -19,7 +19,7 @@
       '500':
         $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
 
-/users/{id}:
+/users/{userId}:
   get:
     tags:
       - users
@@ -28,7 +28,7 @@
     operationId: adminGetUserById
     parameters:
       - in: path
-        name: id
+        name: userId
         required: true
         schema:
           type: string
@@ -52,7 +52,7 @@
     operationId: adminUpdateUser
     parameters:
       - in: path
-        name: id
+        name: userId
         required: true
         schema:
           type: string
@@ -83,7 +83,7 @@
     operationId: adminDeleteUser
     parameters:
       - in: path
-        name: id
+        name: userId
         required: true
         schema:
           type: string
