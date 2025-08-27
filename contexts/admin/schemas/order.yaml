@@ -1,0 +1,85 @@
+components:
+  schemas:
+    UserBrief:
+      type: object
+      description: ユーザー概要
+      required:
+        - id
+        - name
+        - email
+      properties:
+        id:
+          type: string
+          description: ユーザーID
+          example: user_123
+        name:
+          type: string
+          description: 氏名
+          example: 桃太郎 花子
+        email:
+          type: string
+          format: email
+          description: メールアドレス
+          example: hanako@example.com
+
+    OrderListItem:
+      type: object
+      description: 注文一覧用の軽量情報
+      required:
+        - id
+        - date
+        - total
+      properties:
+        id:
+          type: string
+          description: 注文ID
+          example: 35
+        user:
+          $ref: '#/components/schemas/UserBrief'
+        date:
+          type: string
+          format: date
+          description: 注文日（作成日）
+          example: 2025-02-23
+        total:
+          type: number
+          format: float
+          description: 合計金額
+          example: 2880
+        paidAt:
+          type: [string, 'null'] # ← nullable をやめて union に
+          format: date-time
+          description: 支払日時（未払いは null）
+          example: 2025-02-23T12:34:56.000Z
+        deliveredAt:
+          type: [string, 'null'] # ← 同様に修正
+          format: date-time
+          description: 配送完了日時（未配送は null）
+          example: null
+
+    GetOrdersResponse:
+      type: object
+      description: 注文一覧のページングレスポンス
+      required:
+        - page
+        - pageSize
+        - totalCount
+        - items
+      properties:
+        page:
+          type: integer
+          description: 現在のページ番号
+          example: 1
+        pageSize:
+          type: integer
+          description: 1ページあたりの件数
+          example: 20
+        totalCount:
+          type: integer
+          description: 総件数
+          example: 123
+        items:
+          type: array
+          description: 注文一覧
+          items:
+            $ref: '#/components/schemas/OrderListItem'

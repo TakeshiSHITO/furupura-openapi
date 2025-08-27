@@ -25,8 +25,8 @@ tags:
     description: ショップ管理
   - name: analytics
     description: 分析・レポート
-  - name: system
-    description: システム管理
+  - name: orders
+    description: 注文管理
 
 paths:
   /auth/login:
@@ -37,6 +37,8 @@ paths:
     $ref: './paths/users.yaml#/~1users~1{id}'
   /shops:
     $ref: './paths/shops.yaml#/~1shops'
+  /orders:
+    $ref: './paths/orders.yaml#/~1orders'
 
 components:
   securitySchemes:

@@ -1,0 +1,27 @@
+/orders:
+  get:
+    tags:
+      - orders
+    summary: 注文一覧取得（管理者）
+    description: 注文一覧を軽量情報で返します。ユーザー概要と支払・配送の状況を含みます。
+    operationId: adminGetOrders
+    parameters:
+      - in: query
+        name: page
+        schema: { type: integer, minimum: 1, default: 1 }
+        description: ページ番号（1始まり）
+      - in: query
+        name: pageSize
+        schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+        description: 1ページ当たり件数
+    responses:
+      '200':
+        description: 取得成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/order.yaml#/components/schemas/GetOrdersResponse'
+      '400':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
+      '500':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
