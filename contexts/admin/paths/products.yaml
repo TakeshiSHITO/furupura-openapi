@@ -1,48 +1,35 @@
 /shops/{shopId}/products:
+  parameters:
+    - in: path
+      name: shopId
+      required: true
+      schema: { type: string }
+      description: 対象ショップのID
   get:
-    tags: products
+    tags: [products]
     summary: ショップの商品一覧（管理者）
     description: 指定したショップに紐づく商品一覧を取得します。最終更新日の新しい順で返却。
     operationId: getShopProductsByAdmin
     parameters:
-      - in: path
-        name: shopId
-        required: true
-        schema:
-          type: string
-        description: 対象ショップのID
       - in: query
         name: status
         required: false
         schema:
           type: string
           description: 商品の公開状態フィルタ
-          enum: [draft, active, inactive, archived] # 実装値に合わせて調整
+          enum: [draft, active, inactive, archived]
       - in: query
         name: pageNumber
         required: false
-        schema:
-          type: integer
-          minimum: 1
-          default: 1
+        schema: { type: integer, minimum: 1, default: 1 }
         description: ページ番号（1始まり）
-      # 実装では固定でも、将来的に可変にする場合は有効化
-      # - in: query
-      #   name: pageSize
-      #   required: false
-      #   schema:
-      #     type: integer
-      #     minimum: 1
-      #     maximum: 200
-      #     default: 45
-      #   description: 1ページあたり件数
     responses:
       '200':
         description: 取得成功
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetShopProductsResponse'
+              $ref: '../schemas/products.yaml#/components/schemas/GetShopProductsResponse'
             examples:
               ok:
                 value:
@@ -70,63 +57,32 @@
                     currentPage: 1
                     pages: 3
                     pageSize: 45
-      '400':
-        description: パラメータ不備（例：shopId 未指定）
-        content:
-          application/json:
-            schema:
-              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
-            examples:
-              noShopId:
-                value:
-                  message: 'Shop ID is required'
-      '401':
-        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
-      '404':
-        description: ショップが存在しない、または権限なし
-        content:
-          application/json:
-            schema:
-              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
+      '400': { $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest' }
+      '401': { $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized' }
+      '404': { $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound' }
       '500':
-        description: サーバーエラー
-        content:
-          application/json:
-            schema:
-              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
-            examples:
-              serverErr:
-                value:
-                  message: '商品の取得中にエラーが発生しました。何度か試してみてもエラーが解消されない場合、サポートにお問い合わせください。'
+        { $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError' }
+
   post:
-    tags: products
+    tags: [products]
     summary: ショップに商品を一括作成（管理者）
     description: |
       指定されたショップにサンプル商品をまとめて作成します。  
       `count` が指定されない場合は 1 件作成されます。
     operationId: createProductsByAdmin
-    parameters:
-      - in: path
-        name: shopId
-        required: true
-        schema:
-          type: string
-        description: 商品を作成する対象ショップのID
     requestBody:
       required: true
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/CreateProductsRequest'
+            $ref: '../schemas/products.yaml#/components/schemas/CreateProductsRequest'
           examples:
             single:
               summary: 1件の商品作成
-              value:
-                count: 1
+              value: { count: 1 }
             multiple:
               summary: 複数件の商品作成
-              value:
-                count: 10
+              value: { count: 10 }
     responses:
       '201':
         description: 作成成功
@@ -135,213 +91,114 @@
             schema:
               type: object
               properties:
-                message:
-                  type: string
+                message: { type: string }
               example:
                 message: '10件の商品が作成されました'
-      '400':
-        description: リクエスト不正
-        content:
-          application/json:
-            schema:
-              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
-          examples:
-            invalidCount:
-              value:
-                message: '商品数は1以上で指定してください。'
-      '404':
-        description: ショップが存在しない
-        content:
-          application/json:
-            schema:
-              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
-          examples:
-            notFound:
-              value:
-                message: '店舗が見つかりません。'
-      '401':
-        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '400': { $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest' }
+      '401': { $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized' }
+      '404': { $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound' }
       '500':
-        description: サーバーエラー
-        content:
-          application/json:
-            schema:
-              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
+        { $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError' }
 
-products/{productId}/tags:
+/products/{productId}/tags:
+  parameters:
+    - in: path
+      name: productId
+      required: true
+      schema: { type: string }
+      description: 対象商品のID
   post:
-    tags: tags
+    tags: [tags]
     summary: 商品にタグを追加（管理者）
     description: |
       指定した商品にタグを追加します。重複は無視され、上限数を超える場合は追加できません。
       成功時は、商品に紐づく全てのタグ一覧を返します。
     operationId: addTagsToProduct
-    parameters:
-      - in: path
-        name: productId
-        required: true
-        schema:
-          type: string
-        description: タグを追加する対象商品のID
     requestBody:
       required: true
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/AddProductTagsRequest'
+            $ref: '../schemas/products.yaml#/components/schemas/AddProductTagsRequest'
           examples:
             addSomeTags:
-              value:
-                tagIds: [101, 102, 205]
+              value: { tagIds: [101, 102, 205] }
     responses:
       '200':
         description: 追加成功（商品に紐づく全タグ一覧を返却）
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AddProductTagsResponse'
+              $ref: '../schemas/products.yaml#/components/schemas/AddProductTagsResponse'
             examples:
               ok:
                 value:
                   message: 'タグが商品に追加されました'
                   tags:
-                    - id: 101
-                      name: 'ヴィンテージ'
-                    - id: 205
-                      name: '90s'
-                    - id: 102
-                      name: 'デニム'
-      '400':
-        description: リクエスト不正またはタグ上限超過
-        content:
-          application/json:
-            schema:
-              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
-            examples:
-              emptyBody:
-                value:
-                  message: 'タグを追加できませんでした。何度もエラーが起こる場合は、サポートにお問い合わせください'
-              overLimit:
-                value:
-                  message: '一つの商品に追加できるタグは{TAG_LIMIT}つまでです'
-      '401':
-        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
-      '404':
-        description: 商品が存在しない（実装で検知する場合）
-        content:
-          application/json:
-            schema:
-              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
-            examples:
-              notFound:
-                value:
-                  message: '商品が見つかりません。'
+                    - { id: 101, name: 'ヴィンテージ' }
+                    - { id: 205, name: '90s' }
+                    - { id: 102, name: 'デニム' }
+      '400': { $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest' }
+      '401': { $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized' }
+      '404': { $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound' }
       '500':
-        description: サーバーエラー
-        content:
-          application/json:
-            schema:
-              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
-            examples:
-              serverErr:
-                value:
-                  message: '商品にタグを追加できませんでした。何度もエラーが起こる場合は、サポートにお問い合わせください'
+        { $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError' }
 
   delete:
-    tags: tags
+    tags: [tags]
     summary: 商品からタグを削除（管理者）
     description: 指定した商品からタグを削除し、削除後に紐づく全タグ一覧を返します。
     operationId: removeTagsFromProduct
-    security:
-      - bearerAuth: []
-    parameters:
-      - in: path
-        name: productId
-        required: true
-        schema:
-          type: string
-        description: 対象商品のID
     requestBody:
       required: true
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/RemoveProductTagsRequest'
+            $ref: '../schemas/products.yaml#/components/schemas/RemoveProductTagsRequest'
           examples:
             removeSome:
-              value:
-                tagIds: [101, 205]
+              value: { tagIds: [101, 205] }
     responses:
       '200':
         description: 削除成功（残存タグ一覧を返却）
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RemoveProductTagsResponse'
+              $ref: '../schemas/products.yaml#/components/schemas/RemoveProductTagsResponse'
             examples:
               ok:
                 value:
                   message: 商品からタグを削除しました
                   tags:
-                    - id: 102
-                      name: デニム
-                    - id: 301
-                      name: 古着女子
-      '400':
-        description: リクエスト不正（tagIds が空など）
-        content:
-          application/json:
-            schema:
-              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
-            examples:
-              invalidBody:
-                value:
-                  message: Tags should be a non-empty array of IDs
-      '401':
-        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
-      '404':
-        description: 商品が存在しない（実装で検知する場合）
-        content:
-          application/json:
-            schema:
-              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
-            examples:
-              notFound:
-                value:
-                  message: 商品が見つかりません。
+                    - { id: 102, name: デニム }
+                    - { id: 301, name: 古着女子 }
+      '400': { $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest' }
+      '401': { $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized' }
+      '404': { $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound' }
       '500':
-        description: サーバーエラー
-        content:
-          application/json:
-            schema:
-              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
-            examples:
-              serverErr:
-                value:
-                  message: 商品からタグを削除できませんでした
+        { $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError' }
 
 /products/{productId}:
+  parameters:
+    - in: path
+      name: productId
+      required: true
+      schema: { type: string }
+      description: 対象の商品ID
   patch:
-    tags: products
+    tags: [products]
     summary: 商品を更新（管理者）
     description: |
-      指定した商品情報を更新します。  
-      リクエストに含まれるフィールドのみが更新対象となります。  
+      指定した商品情報を更新します。
+      リクエストに含まれるフィールドのみが更新対象となります。
       更新する項目がない場合は 400 を返します。
     operationId: updateProduct
-    parameters:
-      - in: path
-        name: productId
-        required: true
-        schema:
-          type: string
-        description: 更新対象の商品ID
     requestBody:
       required: true
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/UpdateProductRequest'
+            $ref: '../schemas/products.yaml#/components/schemas/UpdateProductRequest'
           examples:
             updateBasic:
               summary: 基本的な項目の更新
@@ -363,56 +220,20 @@ products/{productId}/tags:
             schema:
               type: object
               properties:
-                message:
-                  type: string
+                message: { type: string }
               example:
                 message: 商品の更新に成功しました！
-      '400':
-        description: 更新項目なしなどのリクエスト不正
-        content:
-          application/json:
-            schema:
-              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
-          examples:
-            noFields:
-              value:
-                message: 更新するフィールドが見つかりませんでした
-      '401':
-        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
-      '404':
-        description: 商品が存在しない（実装で検知する場合）
-        content:
-          application/json:
-            schema:
-              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
-          examples:
-            notFound:
-              value:
-                message: 商品が見つかりません。
+      '400': { $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest' }
+      '401': { $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized' }
+      '404': { $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound' }
       '500':
-        description: サーバーエラー
-        content:
-          application/json:
-            schema:
-              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
-            examples:
-              serverErr:
-                value:
-                  message: 商品の更新に失敗しました
+        { $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError' }
 
   delete:
-    tags: products
+    tags: [products]
     summary: 商品を削除（管理者）
-    description: |
-      指定した商品を削除します。関連する外部ファイル（画像など）の削除は内部処理で行われます。
+    description: 指定した商品を削除します。関連する外部ファイル（画像など）の削除は内部処理で行われます。
     operationId: deleteProduct
-    parameters:
-      - in: path
-        name: productId
-        required: true
-        schema:
-          type: string
-        description: 削除対象の商品ID
     responses:
       '200':
         description: 削除成功
@@ -420,41 +241,14 @@ products/{productId}/tags:
           application/json:
             schema:
               type: object
-              properties:
-                message:
-                  type: string
               required: [message]
+              properties:
+                message: { type: string }
             examples:
               ok:
-                value:
-                  message: 'Product and related data deleted successfully'
-      '400':
-        description: 外部参照により削除不可（履歴保護など）
-        content:
-          application/json:
-            schema:
-              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
-            examples:
-              fkProtected:
-                value:
-                  message: 'この商品はユーザーのレンタル/購入履歴を保護するため、削除できません。売り切れにする場合は「レジ画面」からQRコードをスキャンしてください'
-      '404':
-        description: 商品が見つからない
-        content:
-          application/json:
-            schema:
-              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
-            examples:
-              notFound:
-                value:
-                  message: 'Product not found'
+                value: { message: 'Product and related data deleted successfully' }
+      '400': { $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest' }
+      '401': { $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized' }
+      '404': { $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound' }
       '500':
-        description: サーバーエラー
-        content:
-          application/json:
-            schema:
-              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
-            examples:
-              serverErr:
-                value:
-                  message: 'Failed to delete product'
+        { $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError' }

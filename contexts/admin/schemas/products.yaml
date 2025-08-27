@@ -1,157 +1,176 @@
 components:
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-
   schemas:
     GetShopProductsResponse:
       type: object
-      properties:
-        products:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProductSummary'
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
       required:
         - products
         - meta
-
-    ProductSummary:
-      type: object
-      description: 一覧向けの商品要約
       properties:
-        id:
-          type: string
-        name:
-          type: string
-        categoryId:
-          type: string
-        categoryName:
-          type: string
-          description: マッピング追加後のカテゴリー名（実装で付与される場合）
-        price:
-          type: number
-          format: int64
-        image:
-          type: string
-          format: uri
-        status:
-          type: string
-          enum: [draft, active, inactive, archived] # 実装値に合わせて調整
-        shopName:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
+        products:
+          type: array
+          description: 取得した商品の配列
+          items:
+            $ref: '#/components/schemas/ProductListItem'
+        meta:
+          type: object
+          description: ページングメタ情報
+          required:
+            - count
+            - currentPage
+            - pages
+            - pageSize
+          properties:
+            count:
+              type: integer
+              description: 総件数
+            currentPage:
+              type: integer
+              description: 現在ページ（1始まり）
+            pages:
+              type: integer
+              description: 総ページ数
+            pageSize:
+              type: integer
+              description: 1ページあたり件数
+
+    ProductListItem:
+      type: object
       required:
         - id
         - name
         - categoryId
         - price
-        - image
         - status
-        - shopName
         - updatedAt
-
-    PaginationMeta:
-      type: object
       properties:
-        count:
-          type: integer
-          description: 総件数
-        currentPage:
-          type: integer
-        pages:
-          type: integer
-          description: 総ページ数
-        pageSize:
-          type: integer
-      required:
-        - count
-        - currentPage
-        - pages
-        - pageSize
+        id:
+          type: string
+          description: 商品ID
+        name:
+          type: string
+          description: 商品名
+        categoryId:
+          type: string
+          description: カテゴリID
+        categoryName:
+          type: string
+          description: カテゴリ名
+        price:
+          type: number
+          format: float
+          description: 価格（税抜/税込は運用で統一）
+        image:
+          type: string
+          format: uri
+          description: 代表画像URL
+        status:
+          type: string
+          description: 公開状態
+          enum: [draft, active, inactive, archived]
+        shopName:
+          type: string
+          description: 所属ショップ名
+        updatedAt:
+          type: string
+          format: date-time
+          description: 最終更新日時（ISO 8601）
 
     CreateProductsRequest:
       type: object
+      description: 店舗に対してサンプル商品を一括作成するための入力
       properties:
         count:
           type: integer
           minimum: 1
-          description: 作成する商品の件数
-      required:
-        - count
-
-    Tag:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-      required:
-        - id
-        - name
+          default: 1
+          description: 作成件数（未指定は1）
 
     AddProductTagsRequest:
       type: object
+      required:
+        - tagIds
       properties:
         tagIds:
           type: array
+          description: 追加するタグID配列
           items:
             type: integer
-          minItems: 1
-          description: 追加するタグIDの配列
-      required:
-        - tagIds
 
     AddProductTagsResponse:
       type: object
-      properties:
-        message:
-          type: string
-          example: タグが商品に追加されました
-        tags:
-          type: array
-          description: 追加後に商品へ紐づいている全タグ
-          items:
-            $ref: '#/components/schemas/Tag'
       required:
         - message
         - tags
+      properties:
+        message:
+          type: string
+          description: 結果メッセージ
+        tags:
+          type: array
+          description: 追加後に紐づく全タグ一覧
+          items:
+            $ref: '#/components/schemas/Tag'
 
     RemoveProductTagsRequest:
       type: object
+      required:
+        - tagIds
       properties:
         tagIds:
           type: array
+          description: 削除するタグID配列
           items:
             type: integer
-          minItems: 1
-          description: 削除するタグIDの配列
-      required:
-        - tagIds
 
     RemoveProductTagsResponse:
       type: object
-      properties:
-        message:
-          type: string
-          example: 商品からタグを削除しました
-        tags:
-          type: array
-          description: 削除後に商品へ紐づいている全タグ
-          items:
-            $ref: '#/components/schemas/Tag'
       required:
         - message
         - tags
+      properties:
+        message:
+          type: string
+          description: 結果メッセージ
+        tags:
+          type: array
+          description: 削除後に残存するタグ一覧
+          items:
+            $ref: '#/components/schemas/Tag'
+
+    Tag:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          description: タグID
+        name:
+          type: string
+          description: タグ名
 
     UpdateProductRequest:
       type: object
+      description: 含まれるフィールドのみ更新対象（部分更新）
       properties:
         name:
           type: string
+          description: 商品名
+        description:
+          type: string
+          description: 商品説明
+        material:
+          type: string
+          description: 素材
+        condition:
+          type: string
+          description: 状態
+        price:
+          type: number
+          format: float
+          description: 価格
+        status:
+          type: string
+          description: 公開状態
+          enum: [draft, active, inactive, archived]
