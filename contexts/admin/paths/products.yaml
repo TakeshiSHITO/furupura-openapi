@@ -1,0 +1,102 @@
+/shops/{shopId}/products:
+  get:
+    tags: [admin-products]
+    summary: ショップの商品一覧（管理者）
+    description: 指定したショップに紐づく商品一覧を取得します。最終更新日の新しい順で返却。
+    operationId: getShopProductsByAdmin
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: path
+        name: shopId
+        required: true
+        schema:
+          type: string
+        description: 対象ショップのID
+      - in: query
+        name: status
+        required: false
+        schema:
+          type: string
+          description: 商品の公開状態フィルタ
+          enum: [draft, active, inactive, archived] # 実装値に合わせて調整
+      - in: query
+        name: pageNumber
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+        description: ページ番号（1始まり）
+      # 実装では固定でも、将来的に可変にする場合は有効化
+      # - in: query
+      #   name: pageSize
+      #   required: false
+      #   schema:
+      #     type: integer
+      #     minimum: 1
+      #     maximum: 200
+      #     default: 45
+      #   description: 1ページあたり件数
+    responses:
+      '200':
+        description: 取得成功
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetShopProductsResponse'
+            examples:
+              ok:
+                value:
+                  products:
+                    - id: 'p_123'
+                      name: 'ヴィンテージデニムジャケット'
+                      categoryId: 'cat_01'
+                      categoryName: 'アウター'
+                      price: 12000
+                      image: 'https://cdn.example.com/p/p_123.jpg'
+                      status: 'active'
+                      shopName: 'FURUPURA 下北沢店'
+                      updatedAt: '2025-08-20T12:34:56.000Z'
+                    - id: 'p_456'
+                      name: 'レトロワンピース'
+                      categoryId: 'cat_02'
+                      categoryName: 'ワンピース'
+                      price: 9800
+                      image: 'https://cdn.example.com/p/p_456.jpg'
+                      status: 'draft'
+                      shopName: 'FURUPURA 下北沢店'
+                      updatedAt: '2025-08-19T08:10:00.000Z'
+                  meta:
+                    count: 123
+                    currentPage: 1
+                    pages: 3
+                    pageSize: 45
+      '400':
+        description: パラメータ不備（例：shopId 未指定）
+        content:
+          application/json:
+            schema:
+              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
+            examples:
+              noShopId:
+                value:
+                  message: 'Shop ID is required'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '404':
+        description: ショップが存在しない、または権限なし
+        content:
+          application/json:
+            schema:
+              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
+      '500':
+        description: サーバーエラー
+        content:
+          application/json:
+            schema:
+              $ref: '../../../shared/responses/common.yaml#/components/schemas/Error'
+            examples:
+              serverErr:
+                value:
+                  message: '商品の取得中にエラーが発生しました。何度か試してみてもエラーが解消されない場合、サポートにお問い合わせください。'

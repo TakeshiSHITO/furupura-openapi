@@ -1,0 +1,62 @@
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    GetShopProductsResponse:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductSummary'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+      required: [products, meta]
+
+    ProductSummary:
+      type: object
+      description: 一覧向けの商品要約
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        categoryId:
+          type: string
+        categoryName:
+          type: string
+          description: マッピング追加後のカテゴリー名（実装で付与される場合）
+        price:
+          type: number
+          format: int64
+        image:
+          type: string
+          format: uri
+        status:
+          type: string
+          enum: [draft, active, inactive, archived] # 実装値に合わせて調整
+        shopName:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+      required: [id, name, categoryId, price, image, status, shopName, updatedAt]
+
+    PaginationMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          description: 総件数
+        currentPage:
+          type: integer
+        pages:
+          type: integer
+          description: 総ページ数
+        pageSize:
+          type: integer
+      required: [count, currentPage, pages, pageSize]
