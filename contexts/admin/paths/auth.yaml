@@ -55,3 +55,23 @@
                 error:
                   type: string
                   example: 'このメールアドレスは既に使用されています'
+/auth/logout:
+  post:
+    tags:
+      - auth
+    summary: ログアウト
+    description: 現在のセッションからログアウトします。
+    operationId: logout
+    responses:
+      '200':
+        description: ログアウト成功
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: 'ログアウトしました'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
