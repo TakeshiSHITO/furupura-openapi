@@ -27,7 +27,7 @@
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "@redocly/cli": "^2.0.7",
-    "@redocly/openapi-core": "^2.0.7",
+    "@redocly/openapi-core": "^2.0.8",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.5",
     "npm-run-all2": "^8.0.4",
