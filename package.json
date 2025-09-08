@@ -29,7 +29,7 @@
     "@redocly/cli": "^2.0.7",
     "@redocly/openapi-core": "^2.0.7",
     "husky": "^9.1.7",
-    "lint-staged": "^16.1.5",
+    "lint-staged": "^16.1.6",
     "npm-run-all2": "^8.0.4",
     "prettier": "^3.6.2"
   },
