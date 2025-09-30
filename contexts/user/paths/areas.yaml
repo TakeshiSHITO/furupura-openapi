@@ -1,0 +1,21 @@
+/areas:
+  get:
+    tags:
+      - browsing
+    summary: エリア一覧取得
+    description: 利用可能なエリアの一覧を取得します（キャッシュ対応）
+    operationId: getAreas
+    security: []
+    responses:
+      '200':
+        description: エリア一覧
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '../schemas/area.yaml#/components/schemas/Area'
+      '400':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
+      '500':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'

@@ -18,7 +18,7 @@ components:
             $ref: '../schemas/common.yaml#/components/schemas/Error'
           example:
             code: UNAUTHORIZED
-            message: 認証が必要です
+            message: 認証が必要です。ログインしてください
 
     Forbidden:
       description: Forbidden
@@ -39,6 +39,16 @@ components:
           example:
             code: NOT_FOUND
             message: リソースが見つかりません
+
+    TooManyRequests:
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/common.yaml#/components/schemas/Error'
+          example:
+            code: TOO_MANY_REQUESTS
+            message: リクエストが多すぎます。しばらく待ってから再試行してください
 
     InternalServerError:
       description: Internal Server Error

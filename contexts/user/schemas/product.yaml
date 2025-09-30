@@ -6,18 +6,39 @@ components:
         - id
         - name
         - price
-        - in_stock
       properties:
         id:
           type: string
-          format: uuid
+          description: 商品ID
+        categoryId:
+          type: integer
+          description: カテゴリーID
+        shopName:
+          type: string
+          description: ショップ名
+        shopArea:
+          type: integer
+          description: ショップエリアID
         name:
           type: string
+          description: 商品名
         description:
           type: string
+          description: 商品説明
+        image:
+          type: string
+          format: uri
+          description: 商品画像URL
+        images:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: 商品画像URL一覧
         price:
           type: integer
           minimum: 0
+          description: 価格
         original_price:
           type: integer
           minimum: 0
@@ -26,21 +47,187 @@ components:
           type: object
           properties:
             id:
-              type: string
+              type: integer
+              description: カテゴリーID
             name:
               type: string
+              description: カテゴリー名
+            slug:
+              type: string
+              description: カテゴリースラッグ
+            parentId:
+              type: integer
+              description: 親カテゴリーID
+            level:
+              type: integer
+              description: カテゴリー階層レベル
+            path:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  slug:
+                    type: string
+              description: カテゴリーパス
+        brand:
+          type: object
+          properties:
+            id:
+              type: string
+              description: ブランドID
+            name:
+              type: string
+              description: ブランド名
+        area:
+          type: object
+          properties:
+            id:
+              type: integer
+              description: エリアID
+            name:
+              type: string
+              description: エリア名
+
+    ProductDetail:
+      type: object
+      required:
+        - id
+        - name
+        - price
+      properties:
+        id:
+          type: string
+          description: 商品ID
+        categoryId:
+          type: integer
+          description: カテゴリーID
+        shopId:
+          type: string
+          description: ショップID
+        shopName:
+          type: string
+          description: ショップ名
+        shopArea:
+          type: integer
+          description: ショップエリアID
+        name:
+          type: string
+          description: 商品名
+        description:
+          type: string
+          description: 商品説明
+        image:
+          type: string
+          format: uri
+          description: メイン商品画像URL
         images:
           type: array
           items:
             type: string
             format: uri
-        in_stock:
-          type: boolean
-        rating:
-          type: number
-          format: float
-          minimum: 0
-          maximum: 5
-        review_count:
+          description: 商品画像URL一覧
+        price:
           type: integer
           minimum: 0
+          description: 価格
+        original_price:
+          type: integer
+          minimum: 0
+          description: 定価（セール時のみ表示）
+        brandId:
+          type: string
+          description: ブランドID
+        gender:
+          type: integer
+          description: 性別（1:メンズ, 2:レディース, 3:ユニセックス, 4:キッズ）
+          enum: [1, 2, 3, 4]
+        sizeLabel:
+          type: array
+          items:
+            type: integer
+          description: サイズラベル配列
+        color:
+          type: array
+          items:
+            type: integer
+          description: カラー配列
+        condition:
+          type: string
+          description: 商品状態
+        material:
+          type: string
+          description: 素材
+        status:
+          type: string
+          description: 商品ステータス
+          enum: [available, sold, reserved]
+        category:
+          type: object
+          properties:
+            id:
+              type: integer
+              description: カテゴリーID
+            name:
+              type: string
+              description: カテゴリー名
+            slug:
+              type: string
+              description: カテゴリースラッグ
+            parentId:
+              type: integer
+              description: 親カテゴリーID
+            level:
+              type: integer
+              description: カテゴリー階層レベル
+            path:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  slug:
+                    type: string
+              description: カテゴリーパス
+        brand:
+          type: object
+          properties:
+            id:
+              type: string
+              description: ブランドID
+            name:
+              type: string
+              description: ブランド名
+        area:
+          type: object
+          properties:
+            id:
+              type: integer
+              description: エリアID
+            name:
+              type: string
+              description: エリア名
+        shop:
+          type: object
+          properties:
+            slug:
+              type: string
+              description: ショップスラッグ
+        tags:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: タグID
+              name:
+                type: string
+                description: タグ名
+          description: 商品に付与されたタグ一覧

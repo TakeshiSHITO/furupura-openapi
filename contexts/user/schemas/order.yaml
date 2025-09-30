@@ -1,0 +1,289 @@
+# 注文関連のスキーマ定義
+
+ShippingAddress:
+  type: object
+  required:
+    - postalCode
+    - prefecture
+    - city
+    - streetAddress
+  properties:
+    postalCode:
+      type: string
+      pattern: '^\d{3}-?\d{4}$'
+      description: 郵便番号
+      example: '123-4567'
+    prefecture:
+      type: string
+      description: 都道府県
+      example: '東京都'
+    city:
+      type: string
+      description: 市区町村
+      example: '渋谷区'
+    streetAddress:
+      type: string
+      description: 番地
+      example: '渋谷1-2-3'
+    buildingName:
+      type: string
+      description: 建物名・部屋番号
+      example: '渋谷ビル 301号室'
+
+Order:
+  type: object
+  properties:
+    id:
+      type: integer
+      description: 注文ID
+    userId:
+      type: integer
+      description: ユーザーID
+    userName:
+      type: string
+      description: ユーザー名
+    paymentMethod:
+      type: string
+      description: 支払い方法
+    paymentIntentId:
+      type: string
+      description: Stripe PaymentIntent ID
+    itemsPrice:
+      type: number
+      format: float
+      description: 商品合計価格
+    taxPrice:
+      type: number
+      format: float
+      description: 税金
+    shippingPrice:
+      type: number
+      format: float
+      description: 送料
+    totalPrice:
+      type: number
+      format: float
+      description: 合計金額
+    status:
+      type: string
+      enum: [pending, paid, canceled]
+      description: 注文ステータス
+    paidAt:
+      type: string
+      format: date-time
+      description: 支払い日時
+    canceledAt:
+      type: string
+      format: date-time
+      description: キャンセル日時
+    postalCode:
+      type: string
+      description: 郵便番号
+    prefecture:
+      type: string
+      description: 都道府県
+    city:
+      type: string
+      description: 市区町村
+    streetAddress:
+      type: string
+      description: 番地
+    buildingName:
+      type: string
+      description: 建物名
+
+PurchaseItem:
+  type: object
+  properties:
+    id:
+      type: integer
+      description: 購入アイテムID
+    orderId:
+      type: integer
+      description: 注文ID
+    productId:
+      type: integer
+      description: 商品ID
+    shopId:
+      type: integer
+      description: ショップID
+    name:
+      type: string
+      description: 商品名
+    image:
+      type: string
+      description: 商品画像URL
+    price:
+      type: number
+      format: float
+      description: 元の価格
+    finalPrice:
+      type: number
+      format: float
+      description: 最終価格
+    inStore:
+      type: boolean
+      description: 店舗受取
+    wasRented:
+      type: boolean
+      description: レンタル後購入
+    isDelivered:
+      type: boolean
+      description: 配送済み
+    deliveredAt:
+      type: string
+      format: date-time
+      description: 配送日時
+    isCanceled:
+      type: boolean
+      description: キャンセル済み
+    canceledAt:
+      type: string
+      format: date-time
+      description: キャンセル日時
+    description:
+      type: string
+      description: 備考（キャンセル理由等）
+
+RentalItem:
+  type: object
+  properties:
+    id:
+      type: integer
+      description: レンタルアイテムID
+    orderId:
+      type: integer
+      description: 注文ID
+    productId:
+      type: integer
+      description: 商品ID
+    shopId:
+      type: integer
+      description: ショップID
+    userId:
+      type: integer
+      description: ユーザーID
+    name:
+      type: string
+      description: 商品名
+    image:
+      type: string
+      description: 商品画像URL
+    price:
+      type: number
+      format: float
+      description: 元の価格
+    finalPrice:
+      type: number
+      format: float
+      description: 最終価格
+    rentalPeriod:
+      type: string
+      enum: [4days, 2weeks, 1month, unlimited]
+      description: レンタル期間
+    startDate:
+      type: string
+      format: date-time
+      description: レンタル開始日
+    endDate:
+      type: string
+      format: date-time
+      description: レンタル終了日
+    status:
+      type: string
+      enum: [rented, extended, overdue, returned, sold, canceled]
+      description: レンタルステータス
+    inStore:
+      type: boolean
+      description: 店舗受取
+    useSubscription:
+      type: boolean
+      description: サブスクリプション利用
+    isDelivered:
+      type: boolean
+      description: 配送済み
+    deliveredAt:
+      type: string
+      format: date-time
+      description: 配送日時
+    returnedAt:
+      type: string
+      format: date-time
+      description: 返却日時
+    isCanceled:
+      type: boolean
+      description: キャンセル済み
+    canceledAt:
+      type: string
+      format: date-time
+      description: キャンセル日時
+    description:
+      type: string
+      description: 備考
+
+RentalExtension:
+  type: object
+  properties:
+    id:
+      type: integer
+      description: 延長ID
+    rentalItemId:
+      type: integer
+      description: レンタルアイテムID
+    orderId:
+      type: integer
+      description: 注文ID
+    shopId:
+      type: integer
+      description: ショップID
+    fee:
+      type: number
+      format: float
+      description: 延長料金
+    extensionPeriod:
+      type: string
+      enum: [3days, 1week]
+      description: 延長期間
+    startDate:
+      type: string
+      format: date-time
+      description: 延長開始日
+    endDate:
+      type: string
+      format: date-time
+      description: 延長終了日
+    price:
+      type: number
+      format: float
+      description: 基本価格
+    overdue:
+      type: boolean
+      description: 延滞フラグ
+
+OrderDetail:
+  type: object
+  allOf:
+    - $ref: '#/Order'
+    - type: object
+      properties:
+        User:
+          type: object
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+            email:
+              type: string
+        PurchaseItems:
+          type: array
+          items:
+            $ref: '#/PurchaseItem'
+        RentalItems:
+          type: array
+          items:
+            $ref: '#/RentalItem'
+        RentalExtensions:
+          type: array
+          items:
+            $ref: '#/RentalExtension'

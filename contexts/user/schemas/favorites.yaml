@@ -1,29 +1,21 @@
 components:
   schemas:
-    Favorite:
+    FavoritesResponse:
       type: object
       required:
-        - id
-        - user_id
-        - product_id
-        - created_at
+        - products
+        - shops
       properties:
-        id:
-          type: string
-          format: uuid
-          description: お気に入りID
-        user_id:
-          type: string
-          format: uuid
-          description: ユーザーID
-        product_id:
-          type: string
-          format: uuid
-          description: 商品ID
-        created_at:
-          type: string
-          format: date-time
-          description: 追加日時
+        products:
+          type: array
+          items:
+            $ref: '../schemas/product.yaml#/components/schemas/PublicProduct'
+          description: お気に入り商品リスト
+        shops:
+          type: array
+          items:
+            $ref: '../schemas/shop.yaml#/components/schemas/Shop'
+          description: お気に入りショップリスト
 
     FavoriteList:
       type: object
@@ -42,22 +34,40 @@ components:
           type: integer
           description: 1ページあたりの件数
 
-    AddFavoriteRequest:
+    AddFavoriteResponse:
       type: object
       required:
-        - product_id
+        - message
       properties:
-        product_id:
+        message:
           type: string
-          format: uuid
-          description: 商品ID
+          description: 追加成功メッセージ
+      example:
+        message: 商品をお気に入りに追加しました
 
-    RemoveFavoriteRequest:
+    AlreadyFavoriteResponse:
       type: object
       required:
-        - product_id
+        - message
+        - alreadyFavorite
       properties:
-        product_id:
+        message:
           type: string
-          format: uuid
-          description: 商品ID
+          description: 既に追加済みメッセージ
+        alreadyFavorite:
+          type: boolean
+          description: 既にお気に入りに追加済みフラグ
+      example:
+        message: すでにお気に入りに追加されています
+        alreadyFavorite: true
+
+    DeleteFavoriteResponse:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: 削除成功メッセージ
+      example:
+        message: 商品がお気に入りから削除されました

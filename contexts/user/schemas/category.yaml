@@ -1,0 +1,107 @@
+components:
+  schemas:
+    Category:
+      type: object
+      required:
+        - id
+        - name
+        - slug
+      properties:
+        id:
+          type: integer
+          description: カテゴリーID
+          example: 1
+        name:
+          type: string
+          description: カテゴリー名
+          example: ファッション
+        slug:
+          type: string
+          description: URLスラッグ
+          example: fashion
+        parentId:
+          type: [integer, 'null']
+          description: 親カテゴリーID
+          example: null
+        measurements:
+          type: [array, 'null']
+          items:
+            type: string
+          description: このカテゴリーで使用される測定項目
+          example: ['size', 'color', 'material']
+
+    CategoryWithChildren:
+      allOf:
+        - $ref: '#/components/schemas/Category'
+        - type: object
+          properties:
+            childrenCategories:
+              type: array
+              items:
+                $ref: '#/components/schemas/CategoryWithChildren'
+              description: 子カテゴリーのリスト
+
+    CategoryTree:
+      type: array
+      items:
+        $ref: '#/components/schemas/CategoryWithChildren'
+      description: カテゴリーの階層構造
+
+    CategoryMap:
+      type: object
+      additionalProperties:
+        type: object
+        properties:
+          id:
+            type: integer
+            description: カテゴリーID
+          name:
+            type: string
+            description: カテゴリー名
+          slug:
+            type: string
+            description: URLスラッグ
+          parentId:
+            type: [integer, 'null']
+            description: 親カテゴリーID
+          measurements:
+            type: [array, 'null']
+            items:
+              type: string
+            description: 測定項目
+      description: カテゴリーIDをキーとしたカテゴリー情報のマップ
+      example:
+        '1':
+          id: 1
+          name: ファッション
+          slug: fashion
+          parentId: null
+          measurements: ['size', 'color']
+        '2':
+          id: 2
+          name: メンズファッション
+          slug: mens-fashion
+          parentId: 1
+          measurements: ['size', 'color', 'fit']
+
+    CategoryInfo:
+      type: object
+      properties:
+        id:
+          type: [integer, 'null']
+          description: カテゴリーID
+        name:
+          type: string
+          description: カテゴリー名
+        slug:
+          type: string
+          description: URLスラッグ
+        parentId:
+          type: [integer, 'null']
+          description: 親カテゴリーID
+        measurements:
+          type: [array, 'null']
+          items:
+            type: string
+          description: 測定項目
+      description: 商品に付属するカテゴリー情報

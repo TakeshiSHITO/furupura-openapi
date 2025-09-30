@@ -1,0 +1,117 @@
+/subscriptions/plans:
+  get:
+    tags:
+      - subscriptions
+    summary: サブスクリプションプラン一覧取得
+    description: 利用可能なサブスクリプションプラン一覧を取得します。
+    operationId: getSubscriptionPlans
+    responses:
+      '200':
+        description: サブスクリプションプラン一覧
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '../schemas/subscriptions.yaml#/components/schemas/SubscriptionPlan'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+
+/subscriptions/plans/{id}:
+  get:
+    tags:
+      - subscriptions
+    summary: サブスクリプションプラン詳細取得
+    description: 指定したサブスクリプションプランの詳細を取得します。
+    operationId: getSubscriptionPlanById
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: サブスクリプションプランID
+    responses:
+      '200':
+        description: サブスクリプションプラン詳細
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/subscriptions.yaml#/components/schemas/SubscriptionPlan'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+
+/subscriptions/plans/{id}/join:
+  post:
+    tags:
+      - subscriptions
+    summary: サブスクリプション加入
+    description: 指定したサブスクリプションプランに加入します。
+    operationId: joinSubscription
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: サブスクリプションプランID
+    responses:
+      '200':
+        description: 加入成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/subscriptions.yaml#/components/schemas/JoinSubscriptionResponse'
+      '400':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+
+/subscriptions/unsubscribe:
+  delete:
+    tags:
+      - subscriptions
+    summary: サブスクリプション解約
+    description: 現在加入中のサブスクリプションを解約します。
+    operationId: unsubscribe
+    responses:
+      '200':
+        description: 解約成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/subscriptions.yaml#/components/schemas/UnsubscribeResponse'
+      '400':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+
+/subscriptions/used-items:
+  get:
+    tags:
+      - subscriptions
+    summary: 利用済みアイテム数取得
+    description: 現在のサブスクリプションサイクルで利用したアイテム数を取得します。
+    operationId: getUsedItems
+    responses:
+      '200':
+        description: 利用済みアイテム数
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                usedItems:
+                  type: integer
+                  description: 利用済みアイテム数
+                  example: 3
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'

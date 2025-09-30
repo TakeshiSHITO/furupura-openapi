@@ -7,21 +7,95 @@
     operationId: browseProducts
     security: []
     parameters:
-      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PageParam'
-      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PerPageParam'
-      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/SearchParam'
-      - name: category
+      - name: keyword
         in: query
+        description: 検索キーワード（商品名・説明文で検索）
         schema:
           type: string
-      - name: min_price
+      - name: categorySlug
         in: query
+        description: カテゴリースラッグ
+        schema:
+          type: string
+      - name: brandSlug
+        in: query
+        description: ブランドスラッグ
+        schema:
+          type: string
+      - name: minPrice
+        in: query
+        description: 最低価格
         schema:
           type: integer
-      - name: max_price
+          minimum: 0
+      - name: maxPrice
         in: query
+        description: 最高価格
         schema:
           type: integer
+          minimum: 0
+      - name: area
+        in: query
+        description: エリアID
+        schema:
+          type: integer
+      - name: gender
+        in: query
+        description: 性別（1:メンズ, 2:レディース, 3:ユニセックス, 4:キッズ）
+        schema:
+          type: integer
+          enum: [1, 2, 3, 4]
+      - name: sizes
+        in: query
+        description: サイズラベル（カンマ区切り）
+        schema:
+          type: string
+      - name: colors
+        in: query
+        description: カラー（カンマ区切り）
+        schema:
+          type: string
+      - name: condition
+        in: query
+        description: 商品状態
+        schema:
+          type: string
+      - name: material
+        in: query
+        description: 素材
+        schema:
+          type: string
+      - name: shopId
+        in: query
+        description: ショップID
+        schema:
+          type: string
+      - name: tag
+        in: query
+        description: タグID
+        schema:
+          type: string
+      - name: sortBy
+        in: query
+        description: ソート項目
+        schema:
+          type: string
+          enum: [price, name, createdAt]
+          default: createdAt
+      - name: sortOrder
+        in: query
+        description: ソート順
+        schema:
+          type: string
+          enum: [ASC, DESC]
+          default: DESC
+      - name: pageNumber
+        in: query
+        description: ページ番号
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
     responses:
       '200':
         description: 商品一覧
@@ -29,12 +103,62 @@
           application/json:
             schema:
               type: object
+              required:
+                - products
+                - meta
               properties:
-                data:
+                products:
                   type: array
                   items:
                     $ref: '../schemas/product.yaml#/components/schemas/PublicProduct'
-                pagination:
-                  $ref: '../../../shared/schemas/common.yaml#/components/schemas/Pagination'
+                meta:
+                  type: object
+                  required:
+                    - count
+                    - currentPage
+                    - pages
+                    - pageSize
+                  properties:
+                    count:
+                      type: integer
+                      description: 総件数
+                    currentPage:
+                      type: integer
+                      description: 現在のページ番号
+                    pages:
+                      type: integer
+                      description: 総ページ数
+                    pageSize:
+                      type: integer
+                      description: 1ページあたりの件数
       '400':
         $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
+      '500':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
+
+/products/{id}:
+  get:
+    tags:
+      - browsing
+    summary: 商品詳細取得
+    description: 指定されたIDの商品詳細情報を取得します
+    operationId: getProductById
+    security: []
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: 商品ID
+        schema:
+          type: string
+    responses:
+      '200':
+        description: 商品詳細
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/product.yaml#/components/schemas/ProductDetail'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+      '500':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'

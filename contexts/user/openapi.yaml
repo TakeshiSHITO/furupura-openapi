@@ -23,81 +23,97 @@ tags:
     description: プロフィール管理
   - name: browsing
     description: 商品閲覧
-  - name: cart
-    description: カート管理
   - name: checkout
     description: 購入手続き
+  - name: orders
+    description: 注文管理
   - name: favorites
     description: お気に入り管理
-  - name: payment
-    description: 支払い方法管理
-  - name: points
-    description: ポイント管理
-  - name: coupons
-    description: クーポン管理
   - name: notifications
     description: 通知管理
-  - name: reviews
-    description: レビュー・評価
-  - name: wishlist
-    description: ウィッシュリスト
-  - name: activity
-    description: アクティビティ追跡
-  - name: preferences
-    description: ユーザー設定
-  - name: referral
-    description: 紹介プログラム
-  - name: sessions
-    description: セッション管理
+  - name: subscriptions
+    description: サブスクリプション管理
 
 paths:
   # 認証
   /auth/signup:
     $ref: './paths/auth.yaml#/~1auth~1signup'
+  /auth/verify-email:
+    $ref: './paths/auth.yaml#/~1auth~1verify-email'
+  /auth/resend-verification:
+    $ref: './paths/auth.yaml#/~1auth~1resend-verification'
   /auth/login:
     $ref: './paths/auth.yaml#/~1auth~1login'
+  /auth/logout:
+    $ref: './paths/auth.yaml#/~1auth~1logout'
 
   # プロフィール
   /profile:
     $ref: './paths/profile.yaml#/~1profile'
+  /profile/verify-password:
+    $ref: './paths/profile.yaml#/~1profile~1verify-password'
 
   # 商品閲覧
   /products:
     $ref: './paths/browsing.yaml#/~1products'
+  /products/{id}:
+    $ref: './paths/browsing.yaml#/~1products~1{id}'
 
-  # カート
-  /cart:
-    $ref: './paths/cart.yaml#/~1cart'
+  # カテゴリー
+  /categories:
+    $ref: './paths/categories.yaml#/~1categories'
+  /categories/tree:
+    $ref: './paths/categories.yaml#/~1categories~1tree'
+  /categories/map:
+    $ref: './paths/categories.yaml#/~1categories~1map'
+  /categories/{id}:
+    $ref: './paths/categories.yaml#/~1categories~1{id}'
+  /categories/slug/{slug}:
+    $ref: './paths/categories.yaml#/~1categories~1slug~1{slug}'
+
+  # タグ
+  /tags:
+    $ref: './paths/tags.yaml#/~1tags'
+  /tags/with-products:
+    $ref: './paths/tags.yaml#/~1tags~1with-products'
+  /tags/{id}:
+    $ref: './paths/tags.yaml#/~1tags~1{id}'
+
+  # エリア・ショップ
+  /areas:
+    $ref: './paths/areas.yaml#/~1areas'
+  /shops:
+    $ref: './paths/shops.yaml#/~1shops'
+  /shops/{id}:
+    $ref: './paths/shops.yaml#/~1shops~1{id}'
+  /shops/slug/{slug}:
+    $ref: './paths/shops.yaml#/~1shops~1slug~1{slug}'
+
+  # 注文
+  /orders:
+    $ref: './paths/orders.yaml#/~1orders'
+  /orders/myorders:
+    $ref: './paths/orders.yaml#/~1orders~1myorders'
+  /orders/{id}:
+    $ref: './paths/orders.yaml#/~1orders~1{id}'
+  /orders/rentals/{id}/purchase:
+    $ref: './paths/orders.yaml#/~1orders~1rentals~1{id}~1purchase'
+  /orders/rentals/{id}/extend:
+    $ref: './paths/orders.yaml#/~1orders~1rentals~1{id}~1extend'
+  /orders/{id}/final-payment-check:
+    $ref: './paths/orders.yaml#/~1orders~1{id}~1final-payment-check'
+  /orders/{id}/payment-failed:
+    $ref: './paths/orders.yaml#/~1orders~1{id}~1payment-failed'
 
   # お気に入り
   /favorites:
     $ref: './paths/favorites.yaml#/~1favorites'
-  /favorites/{product_id}:
-    $ref: './paths/favorites.yaml#/~1favorites~1{product_id}'
+  /favorites/products/{id}:
+    $ref: './paths/favorites.yaml#/~1favorites~1products~1{id}'
+  /favorites/shops/{id}:
+    $ref: './paths/favorites.yaml#/~1favorites~1shops~1{id}'
   /favorites/check:
     $ref: './paths/favorites.yaml#/~1favorites~1check'
-
-  # 支払い方法
-  /payment-methods:
-    $ref: './paths/payment.yaml#/~1payment-methods'
-  /payment-methods/{payment_method_id}:
-    $ref: './paths/payment.yaml#/~1payment-methods~1{payment_method_id}'
-  /payment-methods/{payment_method_id}/set-default:
-    $ref: './paths/payment.yaml#/~1payment-methods~1{payment_method_id}~1set-default'
-
-  # ポイント・クーポン
-  /points:
-    $ref: './paths/points.yaml#/~1points'
-  /points/transactions:
-    $ref: './paths/points.yaml#/~1points~1transactions'
-  /points/use:
-    $ref: './paths/points.yaml#/~1points~1use'
-  /coupons:
-    $ref: './paths/points.yaml#/~1coupons'
-  /coupons/apply:
-    $ref: './paths/points.yaml#/~1coupons~1apply'
-  /coupons/{coupon_id}/use:
-    $ref: './paths/points.yaml#/~1coupons~1{coupon_id}~1use'
 
   # 通知
   /notifications/settings:
@@ -110,40 +126,22 @@ paths:
     $ref: './paths/notifications.yaml#/~1notifications~1mark-read'
   /notifications/mark-all-read:
     $ref: './paths/notifications.yaml#/~1notifications~1mark-all-read'
+  /notifications/{id}/mark-read:
+    $ref: './paths/notifications.yaml#/~1notifications~1{id}~1mark-read'
+  /notifications/unread-count:
+    $ref: './paths/notifications.yaml#/~1notifications~1unread-count'
 
-  # レビュー
-  /products/{product_id}/reviews:
-    $ref: './paths/reviews.yaml#/~1products~1{product_id}~1reviews'
-  /reviews/{review_id}:
-    $ref: './paths/reviews.yaml#/~1reviews~1{review_id}'
-  /reviews/{review_id}/helpful:
-    $ref: './paths/reviews.yaml#/~1reviews~1{review_id}~1helpful'
-  /my-reviews:
-    $ref: './paths/reviews.yaml#/~1my-reviews'
-
-  # ウィッシュリスト
-  /wishlists:
-    $ref: './paths/wishlist.yaml#/~1wishlists'
-  /wishlists/{wishlist_id}:
-    $ref: './paths/wishlist.yaml#/~1wishlists~1{wishlist_id}'
-  /wishlists/{wishlist_id}/items:
-    $ref: './paths/wishlist.yaml#/~1wishlists~1{wishlist_id}~1items'
-  /wishlists/{wishlist_id}/items/{item_id}:
-    $ref: './paths/wishlist.yaml#/~1wishlists~1{wishlist_id}~1items~1{item_id}'
-  /browsing-history:
-    $ref: './paths/wishlist.yaml#/~1browsing-history'
-
-  # アクティビティ・設定
-  /activities:
-    $ref: './paths/activity.yaml#/~1activities'
-  /preferences:
-    $ref: './paths/activity.yaml#/~1preferences'
-  /referral:
-    $ref: './paths/activity.yaml#/~1referral'
-  /referral/apply:
-    $ref: './paths/activity.yaml#/~1referral~1apply'
-  /sessions:
-    $ref: './paths/activity.yaml#/~1sessions'
+  # サブスクリプション
+  /subscriptions/plans:
+    $ref: './paths/subscriptions.yaml#/~1subscriptions~1plans'
+  /subscriptions/plans/{id}:
+    $ref: './paths/subscriptions.yaml#/~1subscriptions~1plans~1{id}'
+  /subscriptions/plans/{id}/join:
+    $ref: './paths/subscriptions.yaml#/~1subscriptions~1plans~1{id}~1join'
+  /subscriptions/unsubscribe:
+    $ref: './paths/subscriptions.yaml#/~1subscriptions~1unsubscribe'
+  /subscriptions/used-items:
+    $ref: './paths/subscriptions.yaml#/~1subscriptions~1used-items'
 
 components:
   securitySchemes:

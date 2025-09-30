@@ -60,15 +60,19 @@
             - price_alert
             - stock_alert
             - points
-            - review
             - security
             - system
         description: 通知タイプでフィルタ
-      - name: is_read
+      - name: readStatus
         in: query
         schema:
-          type: boolean
-        description: 既読/未読でフィルタ
+          type: string
+          enum:
+            - all
+            - read
+            - unread
+          default: all
+        description: 既読ステータスでフィルタ
     responses:
       '200':
         description: 通知一覧
@@ -166,7 +170,7 @@
         $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
 
 /notifications/mark-all-read:
-  post:
+  put:
     tags:
       - notifications
     summary: 全通知を既読にする
@@ -180,8 +184,61 @@
             schema:
               type: object
               properties:
-                updated_count:
+                message:
+                  type: string
+                  example: すべての通知を既読にしました
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+
+/notifications/{id}/mark-read:
+  put:
+    tags:
+      - notifications
+    summary: 特定の通知を既読にする
+    description: 指定したIDの通知を既読にします。
+    operationId: markNotificationAsRead
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: 通知ID
+    responses:
+      '200':
+        description: 既読化成功
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: 対象の通知を既読にしました
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+
+/notifications/unread-count:
+  get:
+    tags:
+      - notifications
+    summary: 未読通知数取得
+    description: ユーザーの未読通知数を取得します。
+    operationId: getUnreadNotificationCount
+    responses:
+      '200':
+        description: 未読通知数
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                unreadCount:
                   type: integer
-                  description: 更新された通知数
+                  description: 未読通知数
+                  example: 5
       '401':
         $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'

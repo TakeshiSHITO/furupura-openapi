@@ -7,6 +7,9 @@ components:
         - password
         - name
       properties:
+        name:
+          type: string
+          maxLength: 100
         email:
           type: string
           format: email
@@ -14,12 +17,21 @@ components:
           type: string
           format: password
           minLength: 8
-        name:
+      example:
+        name: ふるぷら太郎
+        email: yamada@furupura.jp
+        password: SecurePass123!
+
+    SignupResponse:
+      type: object
+      required:
+        - message
+      properties:
+        message:
           type: string
-          maxLength: 100
-        phone:
-          type: string
-          pattern: '^\d{10,11}$'
+          description: 登録成功メッセージ
+      example:
+        message: ユーザー登録が完了しました。メールアドレスに確認メールを送信しました。
 
     LoginRequest:
       type: object
@@ -33,6 +45,126 @@ components:
         password:
           type: string
           format: password
+      example:
+        email: yamada@example.com
+        password: SecurePass123!
+
+    VerifyEmailRequest:
+      type: object
+      required:
+        - userId
+        - token
+      properties:
+        userId:
+          type: string
+          format: uuid
+          description: ユーザーID
+        token:
+          type: string
+          description: メール認証トークン
+
+    VerifyEmailResponse:
+      type: object
+      required:
+        - message
+        - verified
+      properties:
+        message:
+          type: string
+          description: 認証結果メッセージ
+        verified:
+          type: boolean
+          description: 認証成功フラグ
+
+    ResendVerificationRequest:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          format: email
+          description: 認証メールを再送信するメールアドレス
+
+    ResendVerificationResponse:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: 再送信結果メッセージ
+
+    LoginResponse:
+      type: object
+      required:
+        - name
+        - email
+        - role
+      properties:
+        name:
+          type: string
+          description: ユーザー名
+        email:
+          type: string
+          format: email
+          description: メールアドレス
+        role:
+          type: string
+          enum: [user]
+          description: ユーザーロール
+        organization:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              description: 組織ID
+            name:
+              type: string
+              description: 組織名
+          description: 所属組織情報（nullable）
+        subscription:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              description: サブスクリプションID
+            name:
+              type: string
+              description: プラン名
+            price:
+              type: number
+              description: 月額料金
+            maxItems:
+              type: integer
+              description: 最大アイテム数
+            usedItems:
+              type: integer
+              description: 使用済みアイテム数
+            itemPriceLimit:
+              type: number
+              description: アイテム価格上限
+            description:
+              type: string
+              description: プランの説明
+          description: 現在のサブスクリプション情報（nullable）
+      example:
+        name: 山田太郎
+        email: yamada@example.com
+        role: user
+        organization:
+          id: 123e4567-e89b-12d3-a456-426614174000
+          name: 株式会社Example
+        subscription:
+          id: 987fcdeb-51a2-43f1-b67e-5cde3210fedc
+          name: スタンダードプラン
+          price: 5000
+          maxItems: 100
+          usedItems: 25
+          itemPriceLimit: 50000
+          description: 中規模事業者向けプラン
 
     AuthResponse:
       type: object
@@ -50,3 +182,22 @@ components:
           description: アクセストークンの有効期限（秒）
         user:
           $ref: './user.yaml#/components/schemas/UserProfile'
+      example:
+        access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        refresh_token: 7a5f2c4e-8b1d-4e6f-9c3a-1d7e9f5b3a8c
+        expires_in: 3600
+        user:
+          id: 550e8400-e29b-41d4-a716-446655440000
+          email: yamada@example.com
+          name: 山田太郎
+
+    LogoutResponse:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: ログアウト成功メッセージ
+      example:
+        message: ログアウトに成功しました
