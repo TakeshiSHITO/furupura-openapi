@@ -98,8 +98,8 @@ components:
         - startDate
       properties:
         userId:
-          type: string
-          format: uuid
+          type: integer
+          format: int64
           description: ユーザーID
         subscriptionId:
           type: string

@@ -129,7 +129,7 @@
       '500':
         $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
 
-/orders/{id}:
+/orders/{orderId}:
   get:
     tags:
       - orders
@@ -137,7 +137,7 @@
     description: 指定された注文の詳細情報を取得
     operationId: getOrderById
     parameters:
-      - name: id
+      - name: orderId
         in: path
         required: true
         description: 注文ID
@@ -159,7 +159,7 @@
       '500':
         $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
 
-/orders/rentals/{id}/purchase:
+/orders/rentals/{rentalItemId}/purchase:
   post:
     tags:
       - orders
@@ -167,7 +167,7 @@
     description: レンタル中の商品を10%オフで購入
     operationId: purchaseRentedItem
     parameters:
-      - name: id
+      - name: rentalItemId
         in: path
         required: true
         description: レンタルアイテムID
@@ -194,7 +194,7 @@
       '500':
         $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
 
-/orders/rentals/{id}/extend:
+/orders/rentals/{rentalItemId}/extend:
   post:
     tags:
       - orders
@@ -202,7 +202,7 @@
     description: レンタル期間を延長
     operationId: extendRental
     parameters:
-      - name: id
+      - name: rentalItemId
         in: path
         required: true
         description: レンタルアイテムID
@@ -241,7 +241,7 @@
       '500':
         $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
 
-/orders/{id}/final-payment-check:
+/orders/{orderId}/final-payment-check:
   put:
     tags:
       - orders
@@ -249,7 +249,7 @@
     description: 支払い処理の最終確認
     operationId: finalPaymentCheck
     parameters:
-      - name: id
+      - name: orderId
         in: path
         required: true
         description: 注文ID
@@ -292,7 +292,7 @@
       '500':
         $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
 
-/orders/{id}/payment-failed:
+/orders/{orderId}/payment-failed:
   put:
     tags:
       - orders
@@ -300,7 +300,7 @@
     description: 支払い失敗時の処理
     operationId: paymentFailed
     parameters:
-      - name: id
+      - name: orderId
         in: path
         required: true
         description: 注文ID

@@ -8,8 +8,8 @@ components:
         - name
       properties:
         id:
-          type: string
-          format: uuid
+          type: integer
+          format: int64
           description: ユーザーID
         email:
           type: string

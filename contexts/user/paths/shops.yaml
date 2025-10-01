@@ -27,7 +27,7 @@
       '400':
         $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
 
-/shops/{id}:
+/shops/{shopId}:
   get:
     tags:
       - browsing
@@ -36,7 +36,7 @@
     operationId: getShopById
     security: []
     parameters:
-      - name: id
+      - name: shopId
         in: path
         required: true
         schema:

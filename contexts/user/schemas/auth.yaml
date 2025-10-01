@@ -56,8 +56,8 @@ components:
         - token
       properties:
         userId:
-          type: string
-          format: uuid
+          type: integer
+          format: int64
           description: ユーザーID
         token:
           type: string
@@ -187,7 +187,7 @@ components:
         refresh_token: 7a5f2c4e-8b1d-4e6f-9c3a-1d7e9f5b3a8c
         expires_in: 3600
         user:
-          id: 550e8400-e29b-41d4-a716-446655440000
+          id: 1234567890123456789
           email: yamada@example.com
           name: 山田太郎
 
