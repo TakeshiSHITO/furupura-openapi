@@ -1,0 +1,197 @@
+/shop/{slug}:
+  get:
+    tags:
+      - shop
+    summary: スラグによるショップ情報取得
+    description: 指定したスラグを持つショップの詳細情報を取得します。エリア情報も含まれます。
+    operationId: getShopBySlug
+    parameters:
+      - name: slug
+        in: path
+        required: true
+        description: ショップスラッグ
+        schema:
+          type: string
+          example: 'sample-shop'
+    responses:
+      '200':
+        description: ショップ情報取得成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/controller.yaml#/components/schemas/ShopWithArea'
+      '404':
+        description: ショップが見つかりません
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/controller.yaml#/components/schemas/ErrorResponse'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+
+/shop:
+  get:
+    tags:
+      - shop
+    summary: 自分のショップ情報取得
+    description: 認証済みユーザーが自分のショップの詳細情報を取得します。エリア情報も含まれます。
+    operationId: getMyShop
+    security:
+      - bearerAuth: []
+    responses:
+      '200':
+        description: ショップ情報取得成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/controller.yaml#/components/schemas/ShopWithArea'
+      '404':
+        description: ショップが見つかりません
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/controller.yaml#/components/schemas/ErrorResponse'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+  put:
+    tags:
+      - shop
+    summary: 自分のショップ情報更新
+    description: 認証済みユーザーが自分のショップの情報を更新します。
+    operationId: updateMyShop
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/controller.yaml#/components/schemas/ShopUpdateRequest'
+    responses:
+      '200':
+        description: ショップ情報更新成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/controller.yaml#/components/schemas/ShopUpdateResponse'
+      '404':
+        description: ショップが見つかりません
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/controller.yaml#/components/schemas/ErrorResponse'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+
+/admin/shop/{id}:
+  put:
+    tags:
+      - shop
+    summary: ショップ情報更新（ID指定）
+    description: 指定したIDのショップ情報を更新します。
+    operationId: updateShop
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: ショップID
+        schema:
+          type: integer
+          example: 1
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/controller.yaml#/components/schemas/ShopUpdateRequest'
+    responses:
+      '200':
+        description: ショップ情報更新成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/controller.yaml#/components/schemas/ShopUpdateResponse'
+      '404':
+        description: ショップが見つかりません
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/controller.yaml#/components/schemas/ErrorResponse'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+  delete:
+    tags:
+      - shop
+    summary: ショップ削除（ID指定）
+    description: 指定したIDのショップを削除します。
+    operationId: deleteShop
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: ショップID
+        schema:
+          type: integer
+          example: 1
+    security:
+      - bearerAuth: []
+    responses:
+      '200':
+        description: ショップ削除成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/controller.yaml#/components/schemas/ShopDeleteResponse'
+      '404':
+        description: ショップが見つかりません
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/controller.yaml#/components/schemas/ErrorResponse'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+  post:
+    tags:
+      - shop
+    summary: ショップレビュー投稿・更新
+    description: 指定したショップにレビューを投稿または更新します。既存のレビューがある場合は更新されます。
+    operationId: upsertShopReview
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: ショップID
+        schema:
+          type: integer
+          example: 1
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/controller.yaml#/components/schemas/ReviewRequest'
+    responses:
+      '201':
+        description: レビュー投稿・更新成功
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/controller.yaml#/components/schemas/ReviewResponse'
+      '404':
+        description: ショップが見つかりません
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/controller.yaml#/components/schemas/ErrorResponse'
+      '500':
+        description: サーバーエラー
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/controller.yaml#/components/schemas/ErrorResponse'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'

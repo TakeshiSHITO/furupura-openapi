@@ -1,76 +1,337 @@
+# contexts/shop/paths/products.yaml の想定
+
 /products:
   get:
     tags:
       - products
-    summary: 商品一覧取得
-    description: ショップの商品一覧を取得します。カテゴリやステータスでフィルタリング可能です。
-    operationId: listProducts
+    summary: 商品一覧検索 (一般公開)
+    description: キーワード、カテゴリ、価格などでフィルタリング可能な一般ユーザー向けの商品検索APIです。
+    operationId: getProducts
     parameters:
-      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PageParam'
-      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PerPageParam'
-      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/SearchParam'
-      - name: category_id
+      # 広範な検索クエリパラメータを定義 (例示のため一部省略)
+      - name: keyword
         in: query
+        description: 検索キーワード（商品名・説明文で検索）
         schema:
           type: string
-      - name: status
+      - name: categorySlug
         in: query
+        description: カテゴリースラグ
         schema:
           type: string
-          enum:
-            - active
-            - inactive
-            - draft
+      - name: shopId
+        in: query
+        description: ショップID
+        schema:
+          type: integer
+      - name: pageNumber
+        in: query
+        description: ページ番号
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+    security: [] # 認証不要（一般公開）
     responses:
       '200':
-        description: 商品一覧
+        description: 商品一覧取得成功
         content:
           application/json:
             schema:
               type: object
               properties:
-                data:
+                products:
                   type: array
                   items:
-                    $ref: '../schemas/product.yaml#/components/schemas/Product'
-                pagination:
-                  $ref: '../../../shared/schemas/common.yaml#/components/schemas/Pagination'
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        description: 商品ID
+                      categoryId:
+                        type: integer
+                        description: カテゴリーID
+                      shopName:
+                        type: string
+                        description: ショップ名
+                      shopArea:
+                        type: integer
+                        description: ショップ地域
+                      name:
+                        type: string
+                        description: 商品名
+                      image:
+                        type: string
+                        description: 商品画像URL
+                      price:
+                        type: number
+                        description: 価格
+                      Brand:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                        required: [id, name]
+                      category:
+                        type: object
+                        description: カテゴリー情報
+                    required: [id, categoryId, shopName, shopArea, name, image, price]
+                meta:
+                  type: object
+                  properties:
+                    count:
+                      type: integer
+                      description: 総商品数
+                    currentPage:
+                      type: integer
+                      description: 現在のページ番号
+                    pages:
+                      type: integer
+                      description: 総ページ数
+                    pageSize:
+                      type: integer
+                      description: 1ページあたりの商品数
+                  required: [count, currentPage, pages, pageSize]
       '400':
         $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
-      '401':
-        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
 
   post:
     tags:
       - products
     summary: 商品登録
-    description: 新しい商品を登録します。画像URLや在庫数も同時に設定できます。
+    description: 新しい商品を登録します。指定した数だけサンプル商品を一括作成できます。
     operationId: createProduct
     requestBody:
       required: true
       content:
         application/json:
           schema:
-            $ref: '../schemas/product.yaml#/components/schemas/ProductCreateRequest'
+            type: object
+            properties:
+              count:
+                type: integer
+                minimum: 1
+                description: 作成する商品数
+                example: 1
+            required: [count]
     responses:
       '201':
-        description: 商品登録成功
+        description: 商品作成成功
         content:
           application/json:
             schema:
-              $ref: '../schemas/product.yaml#/components/schemas/Product'
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: '1件の商品が作成されました'
+              required: [message]
       '400':
+        description: バリデーションエラー
         $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
       '401':
         $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '404':
+        description: 店舗が見つかりません
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: '店舗が見つかりません。'
+      '500':
+        description: サーバーエラー
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: エラーメッセージ/common.yaml#/components/responses/Unauthorized'
+
+# --- SKUごとの利用可能数確認 ---
+
+/products/{productId}/inventory:
+  get:
+    tags:
+      - inventory # 在庫管理タグ
+    summary: SKUごとの在庫状況確認
+    description: 商品IDを指定して、その商品に紐づくSKUごとの**利用可能在庫数**を確認します。
+    operationId: getProductInventory
+    parameters:
+      - name: productId
+        in: path
+        required: true
+        description: 商品ID
+        schema:
+          type: string
+    responses:
+      '200':
+        description: 在庫状況一覧
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '../schemas/inventory.yaml#/components/schemas/SkuInventoryStatus'
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+
+/products/{productId}/tags:
+  post:
+    tags:
+      - products
+    summary: 商品にタグを追加
+    description: 指定した商品にタグを追加します。一つの商品に追加できるタグには上限があります。
+    operationId: addTagsToProduct
+    parameters:
+      - name: productId
+        in: path
+        required: true
+        description: 商品ID
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              tagIds:
+                type: array
+                items:
+                  type: integer
+                description: 追加するタグIDのリスト
+                minItems: 1
+                example: [1, 2, 3]
+            required: [tagIds]
+    responses:
+      '200':
+        description: タグ追加成功
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: 'タグが商品に追加されました'
+                tags:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        description: タグID
+                      name:
+                        type: string
+                        description: タグ名
+                    required: [id, name]
+                  description: 商品に登録されているすべてのタグ
+              required: [message, tags]
+      '400':
+        description: バリデーションエラーまたはタグ上限エラー
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - type: string
+                  example: 'タグを追加できませんでした。何度もエラーが起こる場合は、サポートにお問い合わせください'
+                - type: object
+                  properties:
+                    message:
+                      type: string
+                      example: '一つの商品に追加できるタグは10つまでです'
+      '500':
+        description: サーバーエラー
+        content:
+          application/json:
+            schema:
+              type: string
+              example: '商品にタグを追加できませんでした。何度もエラーが起こる場合は、サポートにお問い合わせください'
+
+  delete:
+    tags:
+      - products
+    summary: 商品からタグを削除
+    description: 指定した商品から指定したタグを削除します。
+    operationId: removeTagsFromProduct
+    parameters:
+      - name: productId
+        in: path
+        required: true
+        description: 商品ID
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              tagIds:
+                type: array
+                items:
+                  type: integer
+                description: 削除するタグIDのリスト
+                minItems: 1
+                example: [1, 2, 3]
+            required: [tagIds]
+    responses:
+      '200':
+        description: タグ削除成功
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: '商品からタグを削除しました'
+                tags:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        description: タグID
+                      name:
+                        type: string
+                        description: タグ名
+                    required: [id, name]
+                  description: 商品に残っているすべてのタグ
+              required: [message, tags]
+      '400':
+        description: バリデーションエラー
+        content:
+          application/json:
+            schema:
+              type: string
+              example: 'Tags should be a non-empty array of IDs'
+      '500':
+        description: サーバーエラー
+        content:
+          application/json:
+            schema:
+              type: string
+              example: '商品からタグを削除できませんでした'
 
 /products/{productId}:
   get:
     tags:
       - products
     summary: 商品詳細取得
-    description: 指定した商品の詳細情報を取得します。
-    operationId: getProduct
+    description: 指定した商品の詳細情報を取得します。ショップ、タグ、カテゴリー、ブランド、エリア情報も含まれます。
+    operationId: getProductById
     parameters:
       - name: productId
         in: path
@@ -83,6 +344,295 @@
         content:
           application/json:
             schema:
-              $ref: '../schemas/product.yaml#/components/schemas/Product'
+              type: object
+              properties:
+                id:
+                  type: integer
+                  description: 商品ID
+                name:
+                  type: string
+                  description: 商品名
+                categoryId:
+                  type: integer
+                  description: カテゴリーID
+                price:
+                  type: number
+                  description: 価格
+                image:
+                  type: string
+                  description: 商品画像URL
+                Shop:
+                  type: object
+                  properties:
+                    slug:
+                      type: string
+                      description: ショップスラッグ
+                  required: [slug]
+                Tags:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        description: タグID
+                      name:
+                        type: string
+                        description: タグ名
+                    required: [id, name]
+                category:
+                  type: object
+                  description: カテゴリー情報
+                brand:
+                  type: object
+                  description: ブランド情報
+                area:
+                  type: object
+                  description: エリア情報
+              required: [id, name, categoryId, price, image]
       '404':
-        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+        description: 商品が見つかりませんでした
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: '商品が見つかりませんでした'
+      '500':
+        description: サーバーエラーが発生しました
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: 'サーバーエラーが発生しました。復旧に努めてまいりますので今しばらくお待ちください'
+
+  put:
+    tags:
+      - products
+    summary: 商品情報更新
+    description: 指定した商品の情報を更新します。更新したいフィールドのみ送信してください。
+    operationId: updateProduct
+    parameters:
+      - name: productId
+        in: path
+        required: true
+        description: 商品ID
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                description: 商品名
+              description:
+                type: string
+                description: 商品説明
+              gender:
+                type: integer
+                description: 性別 (1:メンズ, 2:レディース, 3:キッズ, 4:ユニセックス)
+                enum: [1, 2, 3, 4]
+              sizeLabel:
+                type: string
+                description: サイズラベル
+              sizeMeasurements:
+                type: string
+                description: サイズ測定値
+              color:
+                type: integer
+                description: カラー値
+              condition:
+                type: string
+                description: 商品状態
+              material:
+                type: string
+                description: 素材
+              price:
+                type: number
+                minimum: 0
+                description: 価格
+              status:
+                type: string
+                description: 商品ステータス
+              categoryId:
+                type: integer
+                description: カテゴリーID
+              brandId:
+                type: integer
+                description: ブランドID
+    responses:
+      '200':
+        description: 商品更新成功
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: '商品の更新に成功しました！'
+              required: [message]
+      '400':
+        description: バリデーションエラー
+        content:
+          application/json:
+            schema:
+              type: string
+              example: '更新するフィールドが見つかりませんでした'
+      '500':
+        description: サーバーエラー
+        content:
+          application/json:
+            schema:
+              type: string
+              example: '商品の更新に失敗しました'
+
+  post:
+    tags:
+      - products
+    summary: 商品をレジに追加（チェックアウト）
+    description: 指定した商品をレジに追加します。商品の状態に応じて異なる処理を行います。
+    operationId: checkoutProductAtShop
+    parameters:
+      - name: productId
+        in: path
+        required: true
+        description: 商品ID
+        schema:
+          type: string
+    responses:
+      '200':
+        description: 処理成功
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '../schemas/product.yaml#/components/schemas/CheckoutResponse'
+                - $ref: '../schemas/product.yaml#/components/schemas/PurchaseOrderResponse'
+                - $ref: '../schemas/product.yaml#/components/schemas/RentalOrderResponse'
+      '400':
+        description: 商品の状態エラー
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  oneOf:
+                    - example: '商品はすでにレジに追加されています'
+                    - example: '商品のレンタル履歴が見つかりません'
+      '403':
+        description: 権限エラー
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: 'この商品はあなたのお店の商品ではないようです'
+      '404':
+        description: 商品が見つかりません
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: '商品が見つかりません'
+      '500':
+        description: サーバーエラー
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: '商品をレジに追加できませんでした'
+                error:
+                  type: string
+                  description: エラーの詳細
+
+/products/shop/{shopId}:
+  post:
+    tags:
+      - products
+    summary: 管理者用商品一括作成
+    description: 管理者が指定したショップに商品を一括作成します。指定した数だけサンプル商品を作成できます。
+    operationId: createProductsByAdmin
+    parameters:
+      - name: shopId
+        in: path
+        required: true
+        description: ショップID
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              count:
+                type: integer
+                minimum: 1
+                description: 作成する商品数
+                example: 1
+            required: [count]
+    responses:
+      '201':
+        description: 商品作成成功
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: '1件の商品が作成されました'
+              required: [message]
+      '400':
+        description: バリデーションエラー
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: '商品数は1以上で指定してください。'
+      '401':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
+      '404':
+        description: 店舗が見つかりません
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: '店舗が見つかりません。'
+      '500':
+        description: サーバーエラー
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: エラーメッセージ

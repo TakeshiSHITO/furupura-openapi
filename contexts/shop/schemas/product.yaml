@@ -71,7 +71,209 @@ components:
           items:
             type: string
             format: uri
-        stock_quantity:
+    # -----------------------------------------------------
+    # SKU定義
+    # -----------------------------------------------------
+    Sku:
+      type: object
+      description: 商品のSKU（在庫管理単位）
+      required:
+        - id
+        - attributes
+        - total_quantity
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: SKU ID
+          example: 'sku-ab1c2d3e'
+        attributes:
+          type: object
+          description: SKUを定義する属性（例 { "Size" "M", "Color" "Red" }）
+          additionalProperties:
+            type: string
+        total_quantity:
+          type: integer
+          description: このSKUの総在庫ユニット数
+          minimum: 0
+          example: 10
+        price_modifier:
+          type: number
+          description: 基本価格からのSKU別価格調整額
+          example: 500.00
+
+    ProductWithSkus:
+      type: object
+      description: SKU情報を含む完全な商品詳細
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          maxLength: 200
+        description:
+          type: string
+        price:
           type: integer
           minimum: 0
-          default: 0
+        skus:
+          type: array
+          items:
+            $ref: '#/components/schemas/Sku'
+          description: 商品に紐づくすべてのSKUリスト
+      required:
+        - id
+        - name
+        - price
+
+    CreateSkuRequest:
+      type: object
+      description: 新規SKUの定義
+      required:
+        - attributes
+        - initial_stock
+      properties:
+        attributes:
+          type: object
+          description: SKUを定義する属性（例 { "Size" "L", "Color" "Black" }）
+          additionalProperties:
+            type: string
+        initial_stock:
+          type: integer
+          description: 初期在庫数
+          minimum: 1
+          example: 5
+        price_modifier:
+          type: number
+          description: 基本価格からの価格調整額（オプション）
+          example: 0.00
+
+    # 金銭関係のスキーマ
+    ProductFinancial:
+      type: object
+      required:
+        - id
+        - name
+        - price
+        - status
+      properties:
+        id:
+          type: integer
+          description: 商品ID
+        categoryId:
+          type: integer
+          description: カテゴリーID
+        shopName:
+          type: string
+          description: ショップ名
+        shopArea:
+          type: integer
+          description: ショップ地域
+        name:
+          type: string
+          description: 商品名
+        price:
+          type: number
+          minimum: 0
+          description: 価格
+        status:
+          type: string
+          enum:
+            - available
+            - sold
+            - rented
+          description: 商品ステータス
+        image:
+          type: string
+          description: 商品画像URL
+
+    CheckoutResponse:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          example: '商品をレジに追加しました！'
+        product:
+          $ref: '#/components/schemas/ProductFinancial'
+
+    PurchaseOrderResponse:
+      type: object
+      required:
+        - message
+        - purchaseItem
+      properties:
+        message:
+          type: string
+          example: '商品への注文（購入）がオンラインで入っています。'
+        purchaseItem:
+          type: object
+          properties:
+            serviceOption:
+              type: string
+              example: 'purchase'
+          description: 購入アイテム情報
+
+    RentalOrderResponse:
+      type: object
+      required:
+        - message
+        - rentalItem
+      properties:
+        message:
+          type: string
+          example: '商品への注文（レンタル）がオンラインで入っています。'
+        rentalItem:
+          type: object
+          properties:
+            serviceOption:
+              type: string
+              example: 'rental'
+          description: レンタルアイテム情報
+
+    CancelCheckoutRequest:
+      type: object
+      required:
+        - productIds
+      properties:
+        productIds:
+          type: array
+          items:
+            type: integer
+          description: 取り消し対象の商品IDリスト
+          minItems: 1
+          example: [1, 2, 3]
+
+    CancelCheckoutResponse:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          example: '商品のレジからの削除が完了しました'
+
+    PartialCancelError:
+      type: object
+      required:
+        - message
+        - failedProducts
+      properties:
+        message:
+          type: string
+          example: '一部の商品を更新できませんでした'
+        failedProducts:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                description: 商品ID
+              name:
+                type: string
+                description: 商品名
+            required: [id, name]
+          description: 更新に失敗した商品リスト

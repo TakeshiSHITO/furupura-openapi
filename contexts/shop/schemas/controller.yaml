@@ -1,0 +1,213 @@
+components:
+  schemas:
+    ShopWithArea:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ショップID
+        name:
+          type: string
+          description: ショップ名
+        slug:
+          type: string
+          description: ショップスラッグ
+        email:
+          type: string
+          format: email
+          description: ショップのメールアドレス
+        description:
+          type: string
+          description: ショップの説明
+        phone:
+          type: string
+          description: 電話番号
+        address:
+          type: string
+          description: 住所
+        logo:
+          type: string
+          description: ロゴ画像URL
+        coverImage:
+          type: string
+          description: カバー画像URL
+        openingHours:
+          type: string
+          description: 営業時間
+        postalCode:
+          type: string
+          description: 郵便番号
+        prefecture:
+          type: string
+          description: 都道府県
+        city:
+          type: string
+          description: 市区町村
+        streetAddress:
+          type: string
+          description: 番地・街区
+        buildingName:
+          type: string
+          description: 建物名・部屋番号
+        customizations:
+          type: object
+          description: カスタマイズ設定
+        googleMapsLink:
+          type: string
+          description: GoogleマップURL
+        googleMapsEmbedSrc:
+          type: string
+          description: Googleマップ埋め込みURL
+        areaId:
+          type: integer
+          description: エリアID
+        area:
+          $ref: '#/components/schemas/Area'
+        status:
+          type: string
+          description: ショップステータス
+          enum: [active, inactive, pending]
+        createdAt:
+          type: string
+          format: date-time
+          description: 作成日時
+        updatedAt:
+          type: string
+          format: date-time
+          description: 更新日時
+      required: [id, name, slug, areaId, area]
+
+    Area:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: エリアID
+        name:
+          type: string
+          description: エリア名
+        parentId:
+          type: integer
+          description: 親エリアID
+      required: [id, name, parentId]
+      description: エリア情報
+
+    ShopUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: ショップ名
+        description:
+          type: string
+          description: ショップの説明
+        logo:
+          type: string
+          description: ロゴ画像URL
+        coverImage:
+          type: string
+          description: カバー画像URL
+        openingHours:
+          type: string
+          description: 営業時間
+        postalCode:
+          type: string
+          description: 郵便番号
+        prefecture:
+          type: string
+          description: 都道府県
+        city:
+          type: string
+          description: 市区町村
+        streetAddress:
+          type: string
+          description: 番地・街区
+        buildingName:
+          type: string
+          description: 建物名・部屋番号
+        customizations:
+          type: object
+          description: カスタマイズ設定
+        googleMapsLink:
+          type: string
+          description: GoogleマップURL
+        googleMapsEmbedSrc:
+          type: string
+          description: Googleマップ埋め込みURL
+
+    ShopUpdateResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'ショップ情報を更新しました'
+        shop:
+          $ref: '#/components/schemas/ShopWithArea'
+      required: [message, shop]
+
+    ShopDeleteResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'ショップを削除しました'
+      required: [message]
+
+    ReviewRequest:
+      type: object
+      properties:
+        rating:
+          type: number
+          minimum: 1
+          maximum: 5
+          description: 評価（1-5）
+          example: 4.5
+        comment:
+          type: string
+          description: レビューコメント
+          example: 'とても良いショップでした。'
+      required: [rating]
+
+    Review:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: レビューID
+        rating:
+          type: number
+          description: 評価
+        comment:
+          type: string
+          description: レビューコメント
+        shopId:
+          type: integer
+          description: ショップID
+        userId:
+          type: integer
+          description: ユーザーID
+        createdAt:
+          type: string
+          format: date-time
+          description: 作成日時
+        updatedAt:
+          type: string
+          format: date-time
+          description: 更新日時
+
+    ReviewResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'レビューを投稿しました'
+        review:
+          $ref: '#/components/schemas/Review'
+      required: [message, review]
+
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+      required: [message]

@@ -1,0 +1,332 @@
+# contexts/shop/schemas/shopOwner.yaml
+
+components:
+  schemas:
+    # -----------------------------------------------------
+    # 1. 認証リクエスト/レスポンス
+    # -----------------------------------------------------
+
+    ShopOwnerLoginRequest:
+      type: object
+      description: ショップオーナー認証リクエストボディ
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+          description: ショップオーナーのメールアドレス
+          example: shop@example.com
+        password:
+          type: string
+          description: パスワード
+          example: password123
+
+    ShopOwnerAuthResponse:
+      type: object
+      description: 認証成功時のレスポンス（ログイン、新規登録）
+      required: [id, name, email, role, shopId, slug]
+      properties:
+        id:
+          type: integer
+          description: ショップオーナーID
+          example: 1
+        name:
+          type: string
+          description: ショップオーナー名
+          example: 田中太郎
+        email:
+          type: string
+          format: email
+          description: メールアドレス
+          example: shop@example.com
+        role:
+          type: string
+          description: ユーザーの役割
+          example: shop
+        shopId:
+          type: integer
+          description: ショップID
+          example: 1
+        slug:
+          type: string
+          description: ショップスラッグ
+          example: myShop
+        serialPrinter:
+          type: string
+          description: シリアルプリンター設定
+          nullable: true
+          example: COM1
+        bluetoothPrinter:
+          type: string
+          description: Bluetoothプリンター設定
+          nullable: true
+          example: Printer-001
+
+    # -----------------------------------------------------
+    # 2. ショップオーナー本体データモデル
+    # -----------------------------------------------------
+
+    ShopOwnerDetails:
+      type: object
+      description: ショップオーナーの詳細情報（パスワードなし）
+      required: [id, name, email, shopId]
+      properties:
+        id:
+          type: integer
+          description: ショップオーナーID
+          example: 1
+        name:
+          type: string
+          description: ショップオーナー名
+          example: 田中太郎
+        email:
+          type: string
+          format: email
+          description: メールアドレス
+          example: shop@example.com
+        shopId:
+          type: integer
+          description: ショップID
+          example: 1
+        phoneNumber:
+          type: string
+          description: 電話番号
+          nullable: true
+          example: 090-1234-5678
+        postalCode:
+          type: string
+          description: 郵便番号
+          nullable: true
+          example: 123-4567
+        prefecture:
+          type: string
+          description: 都道府県
+          nullable: true
+          example: 東京都
+        city:
+          type: string
+          description: 市区町村
+          nullable: true
+          example: 渋谷区
+        streetAddress:
+          type: string
+          description: 番地
+          nullable: true
+          example: 1-2-3
+        buildingName:
+          type: string
+          description: 建物名
+          nullable: true
+          example: ABCビル4階
+        serialPrinter:
+          type: string
+          description: シリアルプリンター設定
+          nullable: true
+          example: COM1
+        bluetoothPrinter:
+          type: string
+          description: Bluetoothプリンター設定
+          nullable: true
+          example: Printer-001
+        createdAt:
+          type: string
+          format: date-time
+          description: 作成日時
+          example: 2024-01-01T00:00:00Z
+        updatedAt:
+          type: string
+          format: date-time
+          description: 更新日時
+          example: 2024-01-01T00:00:00Z
+
+    ShopOwnerWithShop:
+      type: object
+      description: ショップオーナー詳細情報と紐づくショップ情報
+      allOf:
+        - $ref: '#/components/schemas/ShopOwnerDetails'
+        - type: object
+          properties:
+            Shop:
+              $ref: '#/components/schemas/ShopInfo' # 紐づくショップ情報
+          required: [Shop]
+
+    # -----------------------------------------------------
+    # 3. リクエストボディ
+    # -----------------------------------------------------
+
+    ShopOwnerRegisterRequest:
+      type: object
+      description: 新規登録リクエストボディ
+      required: [name, email, password, shopName, areaId]
+      properties:
+        name:
+          type: string
+          description: ショップオーナー名
+          example: 田中太郎
+        email:
+          type: string
+          format: email
+          description: メールアドレス
+          example: shop@example.com
+        password:
+          type: string
+          description: パスワード
+          example: password123
+        shopName:
+          type: string
+          description: ショップ名
+          example: マイショップ
+        reading:
+          type: string
+          description: ショップ名の読み仮名
+          example: まいしょっぷ
+        areaId:
+          type: integer
+          description: エリアID
+          example: 1
+
+    ShopOwnerProfileUpdateRequest:
+      type: object
+      description: プロフィール更新リクエストボディ（更新したいフィールドのみ）
+      properties:
+        name:
+          type: string
+          description: ショップオーナー名
+          example: 田中太郎
+        email:
+          type: string
+          format: email
+          description: メールアドレス
+          example: shop@example.com
+        password:
+          type: string
+          description: 新しいパスワード
+          example: newPassword123
+        phoneNumber:
+          type: string
+          description: 電話番号
+          example: 090-1234-5678
+        # 住所はフラットな構造で受け取る
+        postalCode:
+          type: string
+          description: 郵便番号
+          example: 123-4567
+        prefecture:
+          type: string
+          description: 都道府県
+          example: 東京都
+        city:
+          type: string
+          description: 市区町村
+          example: 渋谷区
+        streetAddress:
+          type: string
+          description: 番地
+          example: 1-2-3
+        buildingName:
+          type: string
+          description: 建物名
+          example: ABCビル4階
+
+    ShopOwnerManagementUpdateRequest:
+      type: object
+      description: 管理者によるショップオーナー情報更新リクエストボディ
+      properties:
+        name:
+          type: string
+          description: ショップオーナー名
+          example: 田中太郎
+        email:
+          type: string
+          format: email
+          description: メールアドレス
+          example: shop@example.com
+        password:
+          type: string
+          description: 新しいパスワード
+          example: newPassword123
+        phoneNumber:
+          type: string
+          description: 電話番号
+          example: 090-1234-5678
+        serialPrinter:
+          type: string
+          description: シリアルプリンター設定
+          example: COM1
+        bluetoothPrinter:
+          type: string
+          description: Bluetoothプリンター設定
+          example: Printer-001
+        address:
+          $ref: '#/components/schemas/Address' # 住所オブジェクトを参照
+
+    ShopOwnerPasswordVerificationRequest:
+      type: object
+      description: パスワード確認リクエストボディ
+      required: [password]
+      properties:
+        password:
+          type: string
+          description: 確認したい現在のパスワード
+          example: currentPassword123
+
+    # -----------------------------------------------------
+    # 4. 共通サブモデル
+    # -----------------------------------------------------
+
+    ShopInfo:
+      type: object
+      description: 紐づくショップの概要情報
+      required: [id, name, slug, areaId]
+      properties:
+        id:
+          type: integer
+          description: ショップID
+          example: 1
+        name:
+          type: string
+          description: ショップ名
+          example: マイショップ
+        slug:
+          type: string
+          description: ショップスラッグ
+          example: my-shop
+        areaId:
+          type: integer
+          description: エリアID
+          example: 1
+        createdAt:
+          type: string
+          format: date-time
+          description: 作成日時
+          example: 2024-01-01T00:00:00Z
+        updatedAt:
+          type: string
+          format: date-time
+          description: 更新日時
+          example: 2024-01-01T00:00:00Z
+
+    Address:
+      type: object
+      description: 住所情報
+      properties:
+        postalCode:
+          type: string
+          description: 郵便番号
+          example: 123-4567
+        prefecture:
+          type: string
+          description: 都道府県
+          example: 東京都
+        city:
+          type: string
+          description: 市区町村
+          example: 渋谷区
+        streetAddress:
+          type: string
+          description: 番地
+          example: 1-2-3
+        buildingName:
+          type: string
+          description: 建物名
+          example: ABCビル4階

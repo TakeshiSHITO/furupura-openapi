@@ -27,20 +27,97 @@ tags:
     description: 在庫管理
   - name: shop
     description: ショップ情報
+  - name: shopowner
+    description: ショップオーナー管理
+  - name: financial
+    description: 金融・決済管理
 
 paths:
+  # Products
   /products:
     $ref: './paths/products.yaml#/~1products'
+  /products/shop/{shopId}:
+    $ref: './paths/products.yaml#/~1products~1shop~1{shopId}'
   /products/{productId}:
     $ref: './paths/products.yaml#/~1products~1{productId}'
+  /products/{productId}/inventory:
+    $ref: './paths/products.yaml#/~1products~1{productId}~1inventory'
+  /products/{productId}/tags:
+    $ref: './paths/products.yaml#/~1products~1{productId}~1tags'
+
+  # Inventory
+  /products/{productId}/checkout:
+    $ref: './paths/inventory.yaml#/~1products~1{productId}~1checkout'
+  /products/cancel-checkout:
+    $ref: './paths/inventory.yaml#/~1products~1cancel-checkout'
+  /products/cancel-sold:
+    $ref: './paths/inventory.yaml#/~1products~1cancel-sold'
+  /products/{productId}/status:
+    $ref: './paths/inventory.yaml#/~1products~1{productId}~1status'
+
+  # Orders
   /orders:
     $ref: './paths/orders.yaml#/~1orders'
+  /orders/myshop:
+    $ref: './paths/orders.yaml#/~1orders~1myshop'
+  /orders/{id}/shipping:
+    $ref: './paths/orders.yaml#/~1orders~1{id}~1shipping'
+  /orders/{id}/deliver:
+    $ref: './paths/orders.yaml#/~1orders~1{id}~1deliver'
+  /orders/{id}/return:
+    $ref: './paths/orders.yaml#/~1orders~1{id}~1return'
+  /orders/{id}/cancel:
+    $ref: './paths/orders.yaml#/~1orders~1{id}~1cancel'
+
+  # Authentication
   /auth/signup:
     $ref: './paths/auths.yaml#/~1auth~1signup'
   /auth/login:
     $ref: './paths/auths.yaml#/~1auth~1login'
   /auth/logout:
     $ref: './paths/auths.yaml#/~1auth~1logout'
+
+  # Shop Owner
+  /auth:
+    $ref: './paths/shopowner.yaml#/~1auth'
+  /register:
+    $ref: './paths/shopowner.yaml#/~1register'
+  /logout:
+    $ref: './paths/shopowner.yaml#/~1logout'
+  /shopOwners:
+    $ref: './paths/shopowner.yaml#/~1shopOwners'
+  /shopOwners/{id}:
+    $ref: './paths/shopowner.yaml#/~1shopOwners~1{id}'
+  /shop/{shopId}/owner:
+    $ref: './paths/shopowner.yaml#/~1shop~1{shopId}~1owner'
+  /verifyPassword:
+    $ref: './paths/shopowner.yaml#/~1verifyPassword'
+  /profile:
+    $ref: './paths/shopowner.yaml#/~1profile'
+
+  # Shop
+  /shop:
+    $ref: './paths/controller.yaml#/~1shop'
+  /shop/{slug}:
+    $ref: './paths/controller.yaml#/~1shop~1{slug}'
+  /admin/shop/{id}:
+    $ref: './paths/controller.yaml#/~1admin~1shop~1{id}'
+
+  # Financial
+  /shop/balance:
+    $ref: './paths/financial.yaml#/~1shop~1balance'
+  /shop/{shopId}/balance:
+    $ref: './paths/financial.yaml#/~1shop~1{shopId}~1balance'
+  /shop/{shopId}/bankAccount:
+    $ref: './paths/financial.yaml#/~1shop~1{shopId}~1bankAccount'
+  /shop/bankAccount:
+    $ref: './paths/financial.yaml#/~1shop~1bankAccount'
+  /shop/{shopId}/withdrawals:
+    $ref: './paths/financial.yaml#/~1shop~1{shopId}~1withdrawals'
+  /withdrawals:
+    $ref: './paths/financial.yaml#/~1withdrawals'
+  /withdrawals/{id}/reject:
+    $ref: './paths/financial.yaml#/~1withdrawals~1{id}~1reject'
 
 components:
   securitySchemes:

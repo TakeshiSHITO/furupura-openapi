@@ -67,3 +67,59 @@ components:
         subtotal:
           type: integer
           minimum: 0
+
+    RentalOrder:
+      type: object
+      description: レンタル中の注文情報
+      required:
+        - order_id
+        - product_name
+        - rental_end_date
+      properties:
+        order_id:
+          type: string
+          format: uuid
+          description: 注文ID
+          example: 'ord-12345'
+        product_name:
+          type: string
+          description: レンタルされている商品名
+          example: '高性能カメラ X9'
+        rental_end_date:
+          type: string
+          format: date-time
+          description: レンタル終了予定日時
+          example: '2025-11-20T10:00:00Z'
+
+    ExtensionRequest:
+      type: object
+      description: レンタル延長申請の詳細
+      required:
+        - extension_id
+        - order_id
+        - requested_end_date
+        - status
+      properties:
+        extension_id:
+          type: string
+          format: uuid
+          description: 延長申請ID
+          example: 'ext-98765'
+        order_id:
+          type: string
+          format: uuid
+          description: 対象の注文ID
+          example: 'ord-12345'
+        requested_end_date:
+          type: string
+          format: date-time
+          description: ユーザーが希望する新しいレンタル終了日時
+          example: '2025-12-05T10:00:00Z'
+        status:
+          type: string
+          enum:
+            - PENDING
+            - APPROVED
+            - REJECTED
+          description: 申請ステータス
+          example: 'PENDING'

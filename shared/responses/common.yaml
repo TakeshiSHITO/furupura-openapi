@@ -11,7 +11,7 @@ components:
             message: リクエストが不正です
 
     Unauthorized:
-      description: Unauthorized
+      description: 情報が無効または期限切れです。
       content:
         application/json:
           schema:
