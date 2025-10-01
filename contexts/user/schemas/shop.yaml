@@ -3,11 +3,11 @@ components:
     Shop:
       type: object
       required:
-        - id
+        - shopId
         - name
         - slug
       properties:
-        id:
+        shopId:
           type: string
           format: uuid
           description: ショップID
@@ -29,7 +29,7 @@ components:
           format: uuid
           description: エリアID
       example:
-        id: shop_123456789
+        shopId: shop_123456789
         name: ふるぷらマート
         slug: furupura-mart
         description: 地域の特産品を扱うショップです
@@ -44,7 +44,7 @@ components:
             area:
               type: object
               properties:
-                id:
+                areaId:
                   type: string
                   format: uuid
                   description: エリアID
@@ -57,13 +57,13 @@ components:
                   description: 親エリアID
               description: エリア情報
           example:
-            id: shop_123456789
+            shopId: shop_123456789
             name: ふるぷらマート
             slug: furupura-mart
             description: 地域の特産品を扱うショップです
             imageUrl: https://example.com/shop-image.jpg
             areaId: area_123456789
             area:
-              id: area_123456789
+              areaId: area_123456789
               name: 東京都
               parentId: null

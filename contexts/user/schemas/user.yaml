@@ -3,11 +3,11 @@ components:
     UserProfile:
       type: object
       required:
-        - id
+        - userId
         - email
         - name
       properties:
-        id:
+        userId:
           type: integer
           format: int64
           description: ユーザーID
@@ -21,7 +21,7 @@ components:
         organization:
           type: object
           properties:
-            id:
+            organizationId:
               type: string
               description: 組織ID
             name:
@@ -31,7 +31,7 @@ components:
         subscription:
           type: object
           properties:
-            id:
+            subscriptionId:
               type: string
               description: サブスクリプションID
             name:
@@ -99,7 +99,7 @@ components:
         - $ref: '../../../shared/schemas/common.yaml#/components/schemas/Address'
         - type: object
           properties:
-            id:
+            addressId:
               type: string
               format: uuid
             label:

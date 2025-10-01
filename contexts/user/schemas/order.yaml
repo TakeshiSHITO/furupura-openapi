@@ -33,7 +33,7 @@ ShippingAddress:
 Order:
   type: object
   properties:
-    id:
+    orderId:
       type: integer
       description: 注文ID
     userId:
@@ -96,7 +96,7 @@ Order:
 PurchaseItem:
   type: object
   properties:
-    id:
+    purchaseItemId:
       type: integer
       description: 購入アイテムID
     orderId:
@@ -149,7 +149,7 @@ PurchaseItem:
 RentalItem:
   type: object
   properties:
-    id:
+    rentalItemId:
       type: integer
       description: レンタルアイテムID
     orderId:
@@ -226,7 +226,7 @@ RentalItem:
 RentalExtension:
   type: object
   properties:
-    id:
+    rentalExtensionId:
       type: integer
       format: int64
       description: 延長ID
@@ -272,7 +272,7 @@ OrderDetail:
         User:
           type: object
           properties:
-            id:
+            userId:
               type: integer
             format: int64
             name:

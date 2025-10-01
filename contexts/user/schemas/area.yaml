@@ -3,10 +3,10 @@ components:
     Area:
       type: object
       required:
-        - id
+        - areaId
         - name
       properties:
-        id:
+        areaId:
           type: string
           format: uuid
           description: エリアID
@@ -18,6 +18,6 @@ components:
           format: uuid
           description: 親エリアID
       example:
-        id: area_123456789
+        areaId: area_123456789
         name: 東京都
         parentId: null

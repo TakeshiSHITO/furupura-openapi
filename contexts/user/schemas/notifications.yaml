@@ -3,9 +3,9 @@ components:
     NotificationSettings:
       type: object
       required:
-        - user_id
+        - userId
       properties:
-        user_id:
+        userId:
           type: integer
           format: int64
           description: ユーザーID
@@ -123,7 +123,7 @@ components:
           type: boolean
           default: false
           description: LINE通知の有効/無効
-        line_id:
+        lineId:
           type: string
           description: 連携済みLINE ID
         order_updates:
@@ -164,15 +164,15 @@ components:
     Notification:
       type: object
       required:
-        - id
-        - user_id
+        - notificationId
+        - userId
         - type
         - title
       properties:
-        id:
+        notificationId:
           type: string
           format: uuid
-        user_id:
+        userId:
           type: integer
           format: int64
         type:
@@ -193,19 +193,19 @@ components:
         message:
           type: string
           description: 通知メッセージ
-        action_url:
+        actionUrl:
           type: string
           format: uri
           description: アクションURL
-        image_url:
+        imageUrl:
           type: string
           format: uri
           description: 画像URL
-        is_read:
+        isRead:
           type: boolean
           default: false
           description: 既読フラグ
-        read_at:
+        readAt:
           type: string
           format: date-time
           description: 既読日時
@@ -213,23 +213,23 @@ components:
     UpdateNotificationSettingsRequest:
       type: object
       properties:
-        email_notifications:
+        emailNotifications:
           $ref: '#/components/schemas/EmailNotificationSettings'
-        push_notifications:
+        pushNotifications:
           $ref: '#/components/schemas/PushNotificationSettings'
-        sms_notifications:
+        smsNotifications:
           $ref: '#/components/schemas/SmsNotificationSettings'
-        line_notifications:
+        lineNotifications:
           $ref: '#/components/schemas/LineNotificationSettings'
-        quiet_hours:
+        quietHours:
           $ref: '#/components/schemas/QuietHours'
 
     MarkNotificationAsReadRequest:
       type: object
       required:
-        - notification_ids
+        - notificationIds
       properties:
-        notification_ids:
+        notificationIds:
           type: array
           items:
             type: string

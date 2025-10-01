@@ -3,11 +3,11 @@ components:
     Category:
       type: object
       required:
-        - id
+        - categoryId
         - name
         - slug
       properties:
-        id:
+        categoryId:
           type: integer
           description: カテゴリーID
           example: 1
@@ -52,7 +52,7 @@ components:
       additionalProperties:
         type: object
         properties:
-          id:
+          categoryId:
             type: integer
             description: カテゴリーID
           name:
@@ -72,13 +72,13 @@ components:
       description: カテゴリーIDをキーとしたカテゴリー情報のマップ
       example:
         '1':
-          id: 1
+          categoryId: 1
           name: ファッション
           slug: fashion
           parentId: null
           measurements: ['size', 'color']
         '2':
-          id: 2
+          categoryId: 2
           name: メンズファッション
           slug: mens-fashion
           parentId: 1
@@ -87,7 +87,7 @@ components:
     CategoryInfo:
       type: object
       properties:
-        id:
+        categoryId:
           type: [integer, 'null']
           description: カテゴリーID
         name:

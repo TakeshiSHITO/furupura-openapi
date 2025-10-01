@@ -3,11 +3,11 @@ components:
     PublicProduct:
       type: object
       required:
-        - id
+        - productId
         - name
         - price
       properties:
-        id:
+        productId:
           type: string
           description: 商品ID
         categoryId:
@@ -46,7 +46,7 @@ components:
         category:
           type: object
           properties:
-            id:
+            categoryId:
               type: integer
               description: カテゴリーID
             name:
@@ -66,7 +66,7 @@ components:
               items:
                 type: object
                 properties:
-                  id:
+                  categoryId:
                     type: integer
                   name:
                     type: string
@@ -76,7 +76,7 @@ components:
         brand:
           type: object
           properties:
-            id:
+            brandId:
               type: string
               description: ブランドID
             name:
@@ -85,7 +85,7 @@ components:
         area:
           type: object
           properties:
-            id:
+            areaId:
               type: integer
               description: エリアID
             name:
@@ -95,11 +95,11 @@ components:
     ProductDetail:
       type: object
       required:
-        - id
+        - productId
         - name
         - price
       properties:
-        id:
+        productId:
           type: string
           description: 商品ID
         categoryId:
@@ -168,7 +168,7 @@ components:
         category:
           type: object
           properties:
-            id:
+            categoryId:
               type: integer
               description: カテゴリーID
             name:
@@ -188,7 +188,7 @@ components:
               items:
                 type: object
                 properties:
-                  id:
+                  categoryId:
                     type: integer
                   name:
                     type: string
@@ -198,7 +198,7 @@ components:
         brand:
           type: object
           properties:
-            id:
+            brandId:
               type: string
               description: ブランドID
             name:
@@ -207,7 +207,7 @@ components:
         area:
           type: object
           properties:
-            id:
+            areaId:
               type: integer
               description: エリアID
             name:
@@ -224,7 +224,7 @@ components:
           items:
             type: object
             properties:
-              id:
+              tagId:
                 type: string
                 description: タグID
               name:
