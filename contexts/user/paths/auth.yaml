@@ -95,24 +95,6 @@
           application/json:
             schema:
               $ref: '../schemas/auth.yaml#/components/schemas/LoginResponse'
-            examples:
-              successWithUser:
-                summary: ログイン成功（ユーザー情報付き）
-                value:
-                  name: 山田太郎
-                  email: yamada@example.com
-                  role: user
-                  organization:
-                    organizationId: 123e4567-e89b-12d3-a456-426614174000
-                    name: 株式会社Example
-                  subscription:
-                    subscriptionId: 987fcdeb-51a2-43f1-b67e-5cde3210fedc
-                    name: スタンダードプラン
-                    price: 5000
-                    maxItems: 100
-                    usedItems: 25
-                    itemPriceLimit: 50000
-                    description: 中規模事業者向けプラン
       '401':
         $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
 

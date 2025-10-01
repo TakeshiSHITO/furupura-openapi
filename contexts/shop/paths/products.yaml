@@ -7,12 +7,13 @@
     operationId: listProducts
     parameters:
       - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PageParam'
-      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PerPageParam'
+      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PageSizeParam'
       - $ref: '../../../shared/parameters/common.yaml#/components/parameters/SearchParam'
-      - name: category_id
+      - name: categoryId
         in: query
         schema:
-          type: string
+          type: integer
+          format: int64
       - name: status
         in: query
         schema:

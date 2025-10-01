@@ -23,8 +23,6 @@ tags:
     description: プロフィール管理
   - name: browsing
     description: 商品閲覧
-  - name: checkout
-    description: 購入手続き
   - name: orders
     description: 注文管理
   - name: favorites
@@ -68,8 +66,8 @@ paths:
     $ref: './paths/categories.yaml#/~1categories~1map'
   /categories/{categoryId}:
     $ref: './paths/categories.yaml#/~1categories~1{categoryId}'
-  /categories/slug/{slug}:
-    $ref: './paths/categories.yaml#/~1categories~1slug~1{slug}'
+  /categories/slug/{categorySlug}:
+    $ref: './paths/categories.yaml#/~1categories~1slug~1{categorySlug}'
 
   # タグ
   /tags:
@@ -86,8 +84,8 @@ paths:
     $ref: './paths/shops.yaml#/~1shops'
   /shops/{shopId}:
     $ref: './paths/shops.yaml#/~1shops~1{shopId}'
-  /shops/slug/{slug}:
-    $ref: './paths/shops.yaml#/~1shops~1slug~1{slug}'
+  /shops/slug/{shopSlug}:
+    $ref: './paths/shops.yaml#/~1shops~1slug~1{shopSlug}'
 
   # 注文
   /orders:

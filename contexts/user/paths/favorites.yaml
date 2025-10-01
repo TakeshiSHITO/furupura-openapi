@@ -29,8 +29,8 @@
         in: path
         required: true
         schema:
-          type: string
-          format: uuid
+          type: integer
+          format: int64
         description: 商品ID
     responses:
       '201':
@@ -69,6 +69,12 @@
           application/json:
             schema:
               $ref: '../schemas/favorites.yaml#/components/schemas/DeleteFavoriteResponse'
+      '200':
+        description: すでにお気に入りから削除済み
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/favorites.yaml#/components/schemas/AlreadyDeletedFavoriteResponse'
       '401':
         $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
 
@@ -84,8 +90,8 @@
         in: path
         required: true
         schema:
-          type: string
-          format: uuid
+          type: integer
+          format: int64
         description: ショップID
     responses:
       '201':
@@ -114,8 +120,8 @@
         in: path
         required: true
         schema:
-          type: string
-          format: uuid
+          type: integer
+          format: int64
         description: ショップID
     responses:
       '201':
@@ -124,6 +130,12 @@
           application/json:
             schema:
               $ref: '../schemas/favorites.yaml#/components/schemas/DeleteFavoriteResponse'
+      '200':
+        description: すでにお気に入りから削除済み
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/favorites.yaml#/components/schemas/AlreadyDeletedFavoriteResponse'
       '401':
         $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
 
@@ -132,28 +144,20 @@
     tags:
       - favorites
     summary: お気に入り状態確認
-    description: 複数商品のお気に入り状態を一括確認します。
+    description: 複数商品のお気に入り状態を一括確認します。参照系だから GET が原則だが、「複数 ID をまとめて送る」ために POST を妥協策として採用
     operationId: checkFavorites
     requestBody:
       required: true
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              product_ids:
-                type: array
-                items:
-                  type: string
-                  format: uuid
+            $ref: '../schemas/favorites.yaml#/components/schemas/CheckFavoritesRequest'
     responses:
       '200':
         description: お気に入り状態
         content:
           application/json:
             schema:
-              type: object
-              additionalProperties:
-                type: boolean
+              $ref: '../schemas/favorites.yaml#/components/schemas/CheckFavoritesResponse'
       '401':
         $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'

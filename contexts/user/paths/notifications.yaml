@@ -48,7 +48,7 @@
     operationId: getNotifications
     parameters:
       - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PageParam'
-      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PerPageParam'
+      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PageSizeParam'
       - name: type
         in: query
         schema:
@@ -57,8 +57,8 @@
             - order
             - shipping
             - promotion
-            - price_alert
-            - stock_alert
+            - priceAlert
+            - stockAlert
             - points
             - security
             - system
@@ -87,7 +87,7 @@
                     $ref: '../schemas/notifications.yaml#/components/schemas/Notification'
                 pagination:
                   $ref: '../../../shared/schemas/common.yaml#/components/schemas/Pagination'
-                unread_count:
+                unreadCount:
                   type: integer
                   description: 未読通知数
       '401':
@@ -105,8 +105,8 @@
         in: path
         required: true
         schema:
-          type: string
-          format: uuid
+          type: integer
+          format: int64
     responses:
       '200':
         description: 通知詳細
@@ -130,8 +130,8 @@
         in: path
         required: true
         schema:
-          type: string
-          format: uuid
+          type: integer
+          format: int64
     responses:
       '204':
         description: 削除成功
@@ -161,7 +161,7 @@
             schema:
               type: object
               properties:
-                updated_count:
+                updatedCount:
                   type: integer
                   description: 更新された通知数
       '400':
@@ -202,8 +202,8 @@
         in: path
         required: true
         schema:
-          type: string
-          format: uuid
+          type: integer
+          format: int64
         description: 通知ID
     responses:
       '200':

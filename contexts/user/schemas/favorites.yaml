@@ -71,3 +71,49 @@ components:
           description: 削除成功メッセージ
       example:
         message: 商品がお気に入りから削除されました
+
+    AlreadyDeletedFavoriteResponse:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: すでに削除済みメッセージ
+      example:
+        message: すでにお気に入りから削除されています
+
+    CheckFavoritesRequest:
+      type: object
+      description: 複数商品のIDを指定してお気に入り状態を確認するリクエスト
+      required:
+        - productIds
+      properties:
+        productIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+
+    CheckFavoriteStatus:
+      type: object
+      description: 商品のお気に入り状態
+      required:
+        - productId
+        - isFavorite
+      properties:
+        productId:
+          type: integer
+          format: int64
+        isFavorite:
+          type: boolean
+
+    CheckFavoritesResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/CheckFavoriteStatus'
+      example:
+        - productId: 1
+          isFavorite: true
+        - productId: 2
+          isFavorite: false

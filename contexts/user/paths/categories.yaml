@@ -88,7 +88,7 @@
       '500':
         $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
 
-/categories/slug/{slug}:
+/categories/slug/{categorySlug}:
   get:
     tags:
       - browsing
@@ -97,7 +97,7 @@
     operationId: getCategoryBySlug
     security: []
     parameters:
-      - name: slug
+      - name: categorySlug
         in: path
         required: true
         description: カテゴリースラッグ

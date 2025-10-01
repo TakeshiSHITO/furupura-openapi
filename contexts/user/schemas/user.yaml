@@ -7,17 +7,19 @@ components:
         - email
         - name
       properties:
-        userId:
-          type: integer
-          format: int64
-          description: ユーザーID
-        email:
-          type: string
-          format: email
-          description: メールアドレス
-        name:
-          type: string
-          description: 氏名
+        user:
+          properties:
+            userId:
+              type: integer
+              format: int64
+              description: ユーザーID
+            email:
+              type: string
+              format: email
+              description: メールアドレス
+            name:
+              type: string
+              description: 氏名
         organization:
           type: object
           properties:

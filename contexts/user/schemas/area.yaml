@@ -7,17 +7,17 @@ components:
         - name
       properties:
         areaId:
-          type: string
-          format: uuid
+          type: integer
+          format: int64
           description: エリアID
         name:
           type: string
           description: エリア名
         parentId:
-          type: string
-          format: uuid
+          type: integer
+          format: int64
           description: 親エリアID
       example:
-        areaId: area_123456789
+        areaId: 123456
         name: 東京都
         parentId: null

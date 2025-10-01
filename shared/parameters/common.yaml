@@ -9,8 +9,8 @@ components:
         minimum: 1
         default: 1
 
-    PerPageParam:
-      name: per_page
+    PageSizeParam:
+      name: pageSize
       in: query
       description: 1ページあたりの件数
       schema:
@@ -20,7 +20,16 @@ components:
         default: 20
 
     SortParam:
-      name: sort
+      name: sortBy
+      in: query
+      description: ソートキー
+      schema:
+        type: string
+        enum: [price, name, createdAt]
+        default: createdAt
+
+    SortOrderParam:
+      name: sortOrder
       in: query
       description: ソート順
       schema:
@@ -29,13 +38,6 @@ components:
           - asc
           - desc
         default: desc
-
-    OrderByParam:
-      name: order_by
-      in: query
-      description: ソートキー
-      schema:
-        type: string
 
     SearchParam:
       name: q

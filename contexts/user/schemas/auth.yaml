@@ -98,21 +98,23 @@ components:
     LoginResponse:
       type: object
       required:
-        - name
-        - email
-        - role
+        - user
       properties:
-        name:
-          type: string
-          description: ユーザー名
-        email:
-          type: string
-          format: email
-          description: メールアドレス
-        role:
-          type: string
-          enum: [user]
-          description: ユーザーロール
+        user:
+          type: object
+          properties:
+            userId:
+              type: integer
+              format: int64
+              description: ユーザーID
+            name:
+              type: string
+              description: ユーザー名
+            email:
+              type: string
+              format: email
+              description: メールアドレス
+          description: ユーザー情報
         organization:
           type: object
           properties:
@@ -151,9 +153,10 @@ components:
               description: プランの説明
           description: 現在のサブスクリプション情報（nullable）
       example:
-        name: 山田太郎
-        email: yamada@example.com
-        role: user
+        user:
+          userId: 1234567890123456789
+          name: 山田太郎
+          email: yamada@example.com
         organization:
           organizationId: 123e4567-e89b-12d3-a456-426614174000
           name: 株式会社Example
@@ -165,31 +168,6 @@ components:
           usedItems: 25
           itemPriceLimit: 50000
           description: 中規模事業者向けプラン
-
-    AuthResponse:
-      type: object
-      required:
-        - access_token
-        - refresh_token
-        - expires_in
-      properties:
-        access_token:
-          type: string
-        refresh_token:
-          type: string
-        expires_in:
-          type: integer
-          description: アクセストークンの有効期限（秒）
-        user:
-          $ref: './user.yaml#/components/schemas/UserProfile'
-      example:
-        access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-        refresh_token: 7a5f2c4e-8b1d-4e6f-9c3a-1d7e9f5b3a8c
-        expires_in: 3600
-        user:
-          userId: 1234567890123456789
-          email: yamada@example.com
-          name: 山田太郎
 
     LogoutResponse:
       type: object

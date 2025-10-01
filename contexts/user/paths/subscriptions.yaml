@@ -97,7 +97,7 @@
     tags:
       - subscriptions
     summary: 利用済みアイテム数取得
-    description: 現在のサブスクリプションサイクルで利用したアイテム数を取得します。
+    description: 現在のサブスクリプションプランでの利用済みアイテム数を取得します。
     operationId: getUsedItems
     responses:
       '200':

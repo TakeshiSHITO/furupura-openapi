@@ -7,7 +7,7 @@
     operationId: listOrders
     parameters:
       - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PageParam'
-      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PerPageParam'
+      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PageSizeParam'
       - name: status
         in: query
         schema:

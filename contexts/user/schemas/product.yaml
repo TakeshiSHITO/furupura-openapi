@@ -8,7 +8,8 @@ components:
         - price
       properties:
         productId:
-          type: string
+          type: integer
+          format: int64
           description: 商品ID
         categoryId:
           type: integer
@@ -39,7 +40,7 @@ components:
           type: integer
           minimum: 0
           description: 価格
-        original_price:
+        originalPrice:
           type: integer
           minimum: 0
           description: 定価（セール時のみ表示）
@@ -52,27 +53,12 @@ components:
             name:
               type: string
               description: カテゴリー名
-            slug:
+            categorySlug:
               type: string
               description: カテゴリースラッグ
             parentId:
               type: integer
               description: 親カテゴリーID
-            level:
-              type: integer
-              description: カテゴリー階層レベル
-            path:
-              type: array
-              items:
-                type: object
-                properties:
-                  categoryId:
-                    type: integer
-                  name:
-                    type: string
-                  slug:
-                    type: string
-              description: カテゴリーパス
         brand:
           type: object
           properties:
@@ -100,20 +86,12 @@ components:
         - price
       properties:
         productId:
-          type: string
+          type: integer
+          format: int64
           description: 商品ID
         categoryId:
           type: integer
           description: カテゴリーID
-        shopId:
-          type: string
-          description: ショップID
-        shopName:
-          type: string
-          description: ショップ名
-        shopArea:
-          type: integer
-          description: ショップエリアID
         name:
           type: string
           description: 商品名
@@ -124,23 +102,20 @@ components:
           type: string
           format: uri
           description: メイン商品画像URL
-        images:
+        subImages:
           type: array
           items:
             type: string
             format: uri
-          description: 商品画像URL一覧
+          description: サブ商品画像URL一覧
         price:
           type: integer
           minimum: 0
           description: 価格
-        original_price:
+        originalPrice:
           type: integer
           minimum: 0
           description: 定価（セール時のみ表示）
-        brandId:
-          type: string
-          description: ブランドID
         gender:
           type: integer
           description: 性別（1:メンズ, 2:レディース, 3:ユニセックス, 4:キッズ）
@@ -174,33 +149,21 @@ components:
             name:
               type: string
               description: カテゴリー名
-            slug:
+            categorySlug:
               type: string
               description: カテゴリースラッグ
             parentId:
               type: integer
               description: 親カテゴリーID
-            level:
-              type: integer
-              description: カテゴリー階層レベル
-            path:
-              type: array
-              items:
-                type: object
-                properties:
-                  categoryId:
-                    type: integer
-                  name:
-                    type: string
-                  slug:
-                    type: string
-              description: カテゴリーパス
         brand:
           type: object
           properties:
             brandId:
               type: string
               description: ブランドID
+            brandSlug:
+              type: string
+              description: ブランドスラッグ
             name:
               type: string
               description: ブランド名
@@ -216,9 +179,19 @@ components:
         shop:
           type: object
           properties:
-            slug:
+            shopSlug:
               type: string
               description: ショップスラッグ
+            shopId:
+              type: integer
+              format: int64
+              description: ショップID
+            shopName:
+              type: string
+              description: ショップ名
+            shopArea:
+              type: integer
+              description: ショップエリアID
         tags:
           type: array
           items:
