@@ -17,7 +17,7 @@
       '401':
         $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
 
-/subscriptions/plans/{id}:
+/subscriptions/plans/{subscriptionPlanId}:
   get:
     tags:
       - subscriptions
@@ -25,7 +25,7 @@
     description: 指定したサブスクリプションプランの詳細を取得します。
     operationId: getSubscriptionPlanById
     parameters:
-      - name: id
+      - name: subscriptionPlanId
         in: path
         required: true
         schema:
@@ -44,7 +44,7 @@
       '404':
         $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
 
-/subscriptions/plans/{id}/join:
+/subscriptions/plans/{subscriptionPlanId}/join:
   post:
     tags:
       - subscriptions
@@ -52,7 +52,7 @@
     description: 指定したサブスクリプションプランに加入します。
     operationId: joinSubscription
     parameters:
-      - name: id
+      - name: subscriptionPlanId
         in: path
         required: true
         schema:

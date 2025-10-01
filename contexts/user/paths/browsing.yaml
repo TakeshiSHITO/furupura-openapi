@@ -136,7 +136,7 @@
       '500':
         $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
 
-/products/{id}:
+/products/{productId}:
   get:
     tags:
       - browsing
@@ -145,7 +145,7 @@
     operationId: getProductById
     security: []
     parameters:
-      - name: id
+      - name: productId
         in: path
         required: true
         description: 商品ID

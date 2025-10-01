@@ -42,7 +42,7 @@
       '500':
         $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
 
-/tags/{id}:
+/tags/{tagId}:
   get:
     tags:
       - browsing
@@ -51,7 +51,7 @@
     operationId: getTagById
     security: []
     parameters:
-      - name: id
+      - name: tagId
         in: path
         required: true
         description: タグID

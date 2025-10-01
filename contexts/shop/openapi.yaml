@@ -35,6 +35,14 @@ paths:
     $ref: './paths/products.yaml#/~1products~1{productId}'
   /orders:
     $ref: './paths/orders.yaml#/~1orders'
+  /orders/{orderId}/shipping:
+    $ref: './paths/orders.yaml#/~1orders~1{orderId}~1shipping'
+  /orders/{orderId}/deliver:
+    $ref: './paths/orders.yaml#/~1orders~1{orderId}~1deliver'
+  /orders/{orderId}/return:
+    $ref: './paths/orders.yaml#/~1orders~1{orderId}~1return'
+  /orders/{orderId}/cancel:
+    $ref: './paths/orders.yaml#/~1orders~1{orderId}~1cancel'
   /auth/signup:
     $ref: './paths/auths.yaml#/~1auth~1signup'
   /auth/login:

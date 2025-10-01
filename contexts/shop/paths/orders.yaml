@@ -63,7 +63,7 @@
       '500':
         $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
 
-/orders/{id}/shipping:
+/orders/{orderId}/shipping:
   get:
     tags:
       - orders
@@ -71,7 +71,7 @@
     description: 注文の配送先情報とユーザー情報を取得
     operationId: getShippingAddressById
     parameters:
-      - name: id
+      - name: orderId
         in: path
         required: true
         description: 注文ID
@@ -98,7 +98,7 @@
       '404':
         $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
 
-/orders/{id}/deliver:
+/orders/{orderId}/deliver:
   put:
     tags:
       - orders
@@ -106,7 +106,7 @@
     description: 注文商品を配達済みとしてマーク
     operationId: updateOrderItemsAsDelivered
     parameters:
-      - name: id
+      - name: orderId
         in: path
         required: true
         description: 注文ID
@@ -146,7 +146,7 @@
       '500':
         $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
 
-/orders/{id}/return:
+/orders/{orderId}/return:
   put:
     tags:
       - orders
@@ -154,7 +154,7 @@
     description: レンタル商品を返却済みとしてマーク
     operationId: returnRentalProducts
     parameters:
-      - name: id
+      - name: orderId
         in: path
         required: true
         description: レンタルアイテムID
@@ -179,7 +179,7 @@
       '404':
         $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
 
-/orders/{id}/cancel:
+/orders/{orderId}/cancel:
   put:
     tags:
       - orders
@@ -187,7 +187,7 @@
     description: 注文商品をキャンセル
     operationId: cancelOrderItems
     parameters:
-      - name: id
+      - name: orderId
         in: path
         required: true
         description: 注文ID

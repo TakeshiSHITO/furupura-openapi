@@ -60,7 +60,7 @@
       '500':
         $ref: '../../../shared/responses/common.yaml#/components/responses/InternalServerError'
 
-/categories/{id}:
+/categories/{categoryId}:
   get:
     tags:
       - browsing
@@ -69,7 +69,7 @@
     operationId: getCategoryById
     security: []
     parameters:
-      - name: id
+      - name: categoryId
         in: path
         required: true
         description: カテゴリーID

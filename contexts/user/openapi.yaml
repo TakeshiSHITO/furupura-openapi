@@ -56,8 +56,8 @@ paths:
   # 商品閲覧
   /products:
     $ref: './paths/browsing.yaml#/~1products'
-  /products/{id}:
-    $ref: './paths/browsing.yaml#/~1products~1{id}'
+  /products/{productId}:
+    $ref: './paths/browsing.yaml#/~1products~1{productId}'
 
   # カテゴリー
   /categories:
@@ -66,8 +66,8 @@ paths:
     $ref: './paths/categories.yaml#/~1categories~1tree'
   /categories/map:
     $ref: './paths/categories.yaml#/~1categories~1map'
-  /categories/{id}:
-    $ref: './paths/categories.yaml#/~1categories~1{id}'
+  /categories/{categoryId}:
+    $ref: './paths/categories.yaml#/~1categories~1{categoryId}'
   /categories/slug/{slug}:
     $ref: './paths/categories.yaml#/~1categories~1slug~1{slug}'
 
@@ -76,16 +76,16 @@ paths:
     $ref: './paths/tags.yaml#/~1tags'
   /tags/with-products:
     $ref: './paths/tags.yaml#/~1tags~1with-products'
-  /tags/{id}:
-    $ref: './paths/tags.yaml#/~1tags~1{id}'
+  /tags/{tagId}:
+    $ref: './paths/tags.yaml#/~1tags~1{tagId}'
 
   # エリア・ショップ
   /areas:
     $ref: './paths/areas.yaml#/~1areas'
   /shops:
     $ref: './paths/shops.yaml#/~1shops'
-  /shops/{id}:
-    $ref: './paths/shops.yaml#/~1shops~1{id}'
+  /shops/{shopId}:
+    $ref: './paths/shops.yaml#/~1shops~1{shopId}'
   /shops/slug/{slug}:
     $ref: './paths/shops.yaml#/~1shops~1slug~1{slug}'
 
@@ -94,24 +94,24 @@ paths:
     $ref: './paths/orders.yaml#/~1orders'
   /orders/myorders:
     $ref: './paths/orders.yaml#/~1orders~1myorders'
-  /orders/{id}:
-    $ref: './paths/orders.yaml#/~1orders~1{id}'
-  /orders/rentals/{id}/purchase:
-    $ref: './paths/orders.yaml#/~1orders~1rentals~1{id}~1purchase'
-  /orders/rentals/{id}/extend:
-    $ref: './paths/orders.yaml#/~1orders~1rentals~1{id}~1extend'
-  /orders/{id}/final-payment-check:
-    $ref: './paths/orders.yaml#/~1orders~1{id}~1final-payment-check'
-  /orders/{id}/payment-failed:
-    $ref: './paths/orders.yaml#/~1orders~1{id}~1payment-failed'
+  /orders/{orderId}:
+    $ref: './paths/orders.yaml#/~1orders~1{orderId}'
+  /orders/rentals/{rentalItemId}/purchase:
+    $ref: './paths/orders.yaml#/~1orders~1rentals~1{rentalItemId}~1purchase'
+  /orders/rentals/{rentalItemId}/extend:
+    $ref: './paths/orders.yaml#/~1orders~1rentals~1{rentalItemId}~1extend'
+  /orders/{orderId}/final-payment-check:
+    $ref: './paths/orders.yaml#/~1orders~1{orderId}~1final-payment-check'
+  /orders/{orderId}/payment-failed:
+    $ref: './paths/orders.yaml#/~1orders~1{orderId}~1payment-failed'
 
   # お気に入り
   /favorites:
     $ref: './paths/favorites.yaml#/~1favorites'
-  /favorites/products/{id}:
-    $ref: './paths/favorites.yaml#/~1favorites~1products~1{id}'
-  /favorites/shops/{id}:
-    $ref: './paths/favorites.yaml#/~1favorites~1shops~1{id}'
+  /favorites/products/{productId}:
+    $ref: './paths/favorites.yaml#/~1favorites~1products~1{productId}'
+  /favorites/shops/{shopId}:
+    $ref: './paths/favorites.yaml#/~1favorites~1shops~1{shopId}'
   /favorites/check:
     $ref: './paths/favorites.yaml#/~1favorites~1check'
 
@@ -120,24 +120,24 @@ paths:
     $ref: './paths/notifications.yaml#/~1notifications~1settings'
   /notifications:
     $ref: './paths/notifications.yaml#/~1notifications'
-  /notifications/{notification_id}:
-    $ref: './paths/notifications.yaml#/~1notifications~1{notification_id}'
+  /notifications/{notificationId}:
+    $ref: './paths/notifications.yaml#/~1notifications~1{notificationId}'
   /notifications/mark-read:
     $ref: './paths/notifications.yaml#/~1notifications~1mark-read'
   /notifications/mark-all-read:
     $ref: './paths/notifications.yaml#/~1notifications~1mark-all-read'
-  /notifications/{id}/mark-read:
-    $ref: './paths/notifications.yaml#/~1notifications~1{id}~1mark-read'
+  /notifications/{notificationId}/mark-read:
+    $ref: './paths/notifications.yaml#/~1notifications~1{notificationId}~1mark-read'
   /notifications/unread-count:
     $ref: './paths/notifications.yaml#/~1notifications~1unread-count'
 
   # サブスクリプション
   /subscriptions/plans:
     $ref: './paths/subscriptions.yaml#/~1subscriptions~1plans'
-  /subscriptions/plans/{id}:
-    $ref: './paths/subscriptions.yaml#/~1subscriptions~1plans~1{id}'
-  /subscriptions/plans/{id}/join:
-    $ref: './paths/subscriptions.yaml#/~1subscriptions~1plans~1{id}~1join'
+  /subscriptions/plans/{subscriptionPlanId}:
+    $ref: './paths/subscriptions.yaml#/~1subscriptions~1plans~1{subscriptionPlanId}'
+  /subscriptions/plans/{subscriptionPlanId}/join:
+    $ref: './paths/subscriptions.yaml#/~1subscriptions~1plans~1{subscriptionPlanId}~1join'
   /subscriptions/unsubscribe:
     $ref: './paths/subscriptions.yaml#/~1subscriptions~1unsubscribe'
   /subscriptions/used-items:
