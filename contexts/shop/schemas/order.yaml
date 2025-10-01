@@ -3,13 +3,13 @@ components:
     Order:
       type: object
       required:
-        - id
+        - orderId
         - order_number
         - customer_id
         - total_amount
         - status
       properties:
-        id:
+        orderId:
           type: string
           format: uuid
         order_number:

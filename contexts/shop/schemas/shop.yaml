@@ -3,12 +3,12 @@ components:
     ShopProfile:
       type: object
       required:
-        - id
+        - shopId
         - name
         - email
         - status
       properties:
-        id:
+        shopId:
           type: string
           format: uuid
           description: ショップID

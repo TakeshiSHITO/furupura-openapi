@@ -27,13 +27,13 @@
                 items:
                   type: object
                   required:
-                    - id
+                    - productId
                     - name
                     - image
                     - price
                     - serviceOption
                   properties:
-                    id:
+                    productId:
                       type: integer
                       description: 商品ID
                     name:

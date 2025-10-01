@@ -37,12 +37,12 @@ components:
     AdminProfile:
       type: object
       required:
-        - id
+        - adminId
         - email
         - name
         - role
       properties:
-        id:
+        adminId:
           type: string
           format: uuid
         email:

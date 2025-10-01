@@ -103,10 +103,10 @@
                   email: yamada@example.com
                   role: user
                   organization:
-                    id: 123e4567-e89b-12d3-a456-426614174000
+                    organizationId: 123e4567-e89b-12d3-a456-426614174000
                     name: 株式会社Example
                   subscription:
-                    id: 987fcdeb-51a2-43f1-b67e-5cde3210fedc
+                    subscriptionId: 987fcdeb-51a2-43f1-b67e-5cde3210fedc
                     name: スタンダードプラン
                     price: 5000
                     maxItems: 100
