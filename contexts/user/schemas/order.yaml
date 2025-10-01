@@ -274,7 +274,7 @@ OrderDetail:
           properties:
             userId:
               type: integer
-            format: int64
+              format: int64
             name:
               type: string
             email:
