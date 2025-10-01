@@ -38,6 +38,7 @@ Order:
       description: 注文ID
     userId:
       type: integer
+      format: int64
       description: ユーザーID
     userName:
       type: string
@@ -162,6 +163,7 @@ RentalItem:
       description: ショップID
     userId:
       type: integer
+      format: int64
       description: ユーザーID
     name:
       type: string
@@ -226,6 +228,7 @@ RentalExtension:
   properties:
     id:
       type: integer
+      format: int64
       description: 延長ID
     rentalItemId:
       type: integer
@@ -271,6 +274,7 @@ OrderDetail:
           properties:
             id:
               type: integer
+            format: int64
             name:
               type: string
             email:
