@@ -3,12 +3,12 @@ components:
     User:
       type: object
       required:
-        - id
+        - userId
         - email
         - name
         - status
       properties:
-        id:
+        userId:
           type: string
           format: uuid
         email:

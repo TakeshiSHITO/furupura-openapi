@@ -49,12 +49,17 @@
         in: query
         description: サイズラベル（カンマ区切り）
         schema:
-          type: string
+          type: array
+          items: { type: string }
+        style: form
+        explode: false
       - name: colors
         in: query
-        description: カラー（カンマ区切り）
         schema:
-          type: string
+          type: array
+          items: { type: string }
+        style: form
+        explode: false
       - name: condition
         in: query
         description: 商品状態
@@ -69,12 +74,14 @@
         in: query
         description: ショップID
         schema:
-          type: string
+          type: integer
+          format: int64
       - name: tag
         in: query
         description: タグID
         schema:
-          type: string
+          type: integer
+          format: int64
       - name: sortBy
         in: query
         description: ソート項目
@@ -89,48 +96,19 @@
           type: string
           enum: [ASC, DESC]
           default: DESC
-      - name: pageNumber
+      - name: page
         in: query
-        description: ページ番号
-        schema:
-          type: integer
-          minimum: 1
-          default: 1
+        schema: { type: integer, minimum: 1, default: 1 }
+      - name: pageSize
+        in: query
+        schema: { type: integer, minimum: 1, default: 24, maximum: 100 }
     responses:
       '200':
         description: 商品一覧
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - products
-                - meta
-              properties:
-                products:
-                  type: array
-                  items:
-                    $ref: '../schemas/product.yaml#/components/schemas/PublicProduct'
-                meta:
-                  type: object
-                  required:
-                    - count
-                    - currentPage
-                    - pages
-                    - pageSize
-                  properties:
-                    count:
-                      type: integer
-                      description: 総件数
-                    currentPage:
-                      type: integer
-                      description: 現在のページ番号
-                    pages:
-                      type: integer
-                      description: 総ページ数
-                    pageSize:
-                      type: integer
-                      description: 1ページあたりの件数
+              $ref: '../schemas/browsing.yaml#/components/schemas/BrowseProductsResponse'
       '400':
         $ref: '../../../shared/responses/common.yaml#/components/responses/BadRequest'
       '500':
@@ -150,7 +128,8 @@
         required: true
         description: 商品ID
         schema:
-          type: string
+          type: integer
+          format: int64
     responses:
       '200':
         description: 商品詳細

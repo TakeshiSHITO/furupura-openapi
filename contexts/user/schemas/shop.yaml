@@ -3,18 +3,18 @@ components:
     Shop:
       type: object
       required:
-        - id
+        - shopId
         - name
-        - slug
+        - shopSlug
       properties:
-        id:
-          type: string
-          format: uuid
+        shopId:
+          type: integer
+          format: int64
           description: ショップID
         name:
           type: string
           description: ショップ名
-        slug:
+        shopSlug:
           type: string
           description: URLスラッグ
         description:
@@ -25,13 +25,13 @@ components:
           format: uri
           description: ショップ画像URL
         areaId:
-          type: string
-          format: uuid
+          type: integer
+          format: int64
           description: エリアID
       example:
-        id: shop_123456789
+        shopId: 123456
         name: ふるぷらマート
-        slug: furupura-mart
+        shopSlug: furupura-mart
         description: 地域の特産品を扱うショップです
         imageUrl: https://example.com/shop-image.jpg
         areaId: area_123456789
@@ -44,26 +44,26 @@ components:
             area:
               type: object
               properties:
-                id:
-                  type: string
-                  format: uuid
+                areaId:
+                  type: integer
+                  format: int64
                   description: エリアID
                 name:
                   type: string
                   description: エリア名
                 parentId:
-                  type: string
-                  format: uuid
+                  type: integer
+                  format: int64
                   description: 親エリアID
               description: エリア情報
           example:
-            id: shop_123456789
+            shopId: 123456
             name: ふるぷらマート
-            slug: furupura-mart
+            shopSlug: furupura-mart
             description: 地域の特産品を扱うショップです
             imageUrl: https://example.com/shop-image.jpg
-            areaId: area_123456789
+            areaId: 123456
             area:
-              id: area_123456789
+              areaId: 123456
               name: 東京都
               parentId: null

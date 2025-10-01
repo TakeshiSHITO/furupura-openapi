@@ -3,21 +3,21 @@ components:
     Area:
       type: object
       required:
-        - id
+        - areaId
         - name
       properties:
-        id:
-          type: string
-          format: uuid
+        areaId:
+          type: integer
+          format: int64
           description: エリアID
         name:
           type: string
           description: エリア名
         parentId:
-          type: string
-          format: uuid
+          type: integer
+          format: int64
           description: 親エリアID
       example:
-        id: area_123456789
+        areaId: 123456
         name: 東京都
         parentId: null

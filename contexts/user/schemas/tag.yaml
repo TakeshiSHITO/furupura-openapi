@@ -3,11 +3,12 @@ components:
     Tag:
       type: object
       required:
-        - id
+        - tagId
         - name
       properties:
-        id:
-          type: string
+        tagId:
+          type: integer
+          format: int64
           description: タグID
         name:
           type: string
@@ -15,7 +16,7 @@ components:
         subname:
           type: string
           description: タグサブ名
-        slug:
+        tagSlug:
           type: string
           description: タグスラッグ
         productCount:
@@ -23,21 +24,22 @@ components:
           description: タグ付けされた商品数
           minimum: 0
       example:
-        id: tag_123456789
+        tagId: 123456
         name: おすすめ
         subname: 今月のおすすめ商品
-        slug: recommended
+        tagSlug: recommended
         productCount: 25
 
     TagWithProducts:
       type: object
       required:
-        - id
+        - tagId
         - name
         - products
       properties:
-        id:
-          type: string
+        tagId:
+          type: integer
+          format: int64
           description: タグID
         name:
           type: string
@@ -45,7 +47,7 @@ components:
         subname:
           type: string
           description: タグサブ名
-        slug:
+        tagSlug:
           type: string
           description: タグスラッグ
         products:
@@ -54,12 +56,12 @@ components:
           items:
             $ref: '../schemas/product.yaml#/components/schemas/PublicProduct'
       example:
-        id: tag_123456789
+        tagId: 123456
         name: おすすめ
         subname: 今月のおすすめ商品
-        slug: recommended
+        tagSlug: recommended
         products:
-          - id: prod_123456789
+          - productId: 123456
             name: 特産品セット
             price: 5000
             shopName: ふるぷらマート

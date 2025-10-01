@@ -3,12 +3,12 @@ components:
     Product:
       type: object
       required:
-        - id
+        - productId
         - name
         - price
         - status
       properties:
-        id:
+        productId:
           type: string
           format: uuid
         name:

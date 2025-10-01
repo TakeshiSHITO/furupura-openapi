@@ -7,7 +7,7 @@
     operationId: listShops
     parameters:
       - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PageParam'
-      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PerPageParam'
+      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PageSizeParam'
       - $ref: '../../../shared/parameters/common.yaml#/components/parameters/SearchParam'
       - name: status
         in: query

@@ -3,11 +3,11 @@ components:
     Category:
       type: object
       required:
-        - id
+        - categoryId
         - name
-        - slug
+        - categorySlug
       properties:
-        id:
+        categoryId:
           type: integer
           description: カテゴリーID
           example: 1
@@ -15,7 +15,7 @@ components:
           type: string
           description: カテゴリー名
           example: ファッション
-        slug:
+        categorySlug:
           type: string
           description: URLスラッグ
           example: fashion
@@ -24,11 +24,12 @@ components:
           description: 親カテゴリーID
           example: null
         measurements:
-          type: [array, 'null']
-          items:
-            type: string
+          type: [object, 'null']
           description: このカテゴリーで使用される測定項目
-          example: ['size', 'color', 'material']
+          example:
+            size: string
+            color: string
+            material: string
 
     CategoryWithChildren:
       allOf:
@@ -52,13 +53,13 @@ components:
       additionalProperties:
         type: object
         properties:
-          id:
+          categoryId:
             type: integer
             description: カテゴリーID
           name:
             type: string
             description: カテゴリー名
-          slug:
+          categorySlug:
             type: string
             description: URLスラッグ
           parentId:
@@ -72,28 +73,28 @@ components:
       description: カテゴリーIDをキーとしたカテゴリー情報のマップ
       example:
         '1':
-          id: 1
+          categoryId: 1
           name: ファッション
-          slug: fashion
+          categorySlug: fashion
           parentId: null
           measurements: ['size', 'color']
         '2':
-          id: 2
+          categoryId: 2
           name: メンズファッション
-          slug: mens-fashion
+          categorySlug: mens-fashion
           parentId: 1
           measurements: ['size', 'color', 'fit']
 
     CategoryInfo:
       type: object
       properties:
-        id:
+        categoryId:
           type: [integer, 'null']
           description: カテゴリーID
         name:
           type: string
           description: カテゴリー名
-        slug:
+        categorySlug:
           type: string
           description: URLスラッグ
         parentId:

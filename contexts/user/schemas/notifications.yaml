@@ -3,21 +3,21 @@ components:
     NotificationSettings:
       type: object
       required:
-        - user_id
+        - userId
       properties:
-        user_id:
+        userId:
           type: integer
           format: int64
           description: ユーザーID
-        email_notifications:
+        emailNotifications:
           $ref: '#/components/schemas/EmailNotificationSettings'
-        push_notifications:
+        pushNotifications:
           $ref: '#/components/schemas/PushNotificationSettings'
-        sms_notifications:
+        smsNotifications:
           $ref: '#/components/schemas/SmsNotificationSettings'
-        line_notifications:
+        lineNotifications:
           $ref: '#/components/schemas/LineNotificationSettings'
-        quiet_hours:
+        quietHours:
           $ref: '#/components/schemas/QuietHours'
 
     EmailNotificationSettings:
@@ -27,11 +27,11 @@ components:
           type: boolean
           default: true
           description: メール通知の有効/無効
-        order_updates:
+        orderUpdates:
           type: boolean
           default: true
           description: 注文状況の更新
-        shipping_updates:
+        shippingUpdates:
           type: boolean
           default: true
           description: 配送状況の更新
@@ -39,11 +39,11 @@ components:
           type: boolean
           default: true
           description: プロモーション・セール情報
-        price_alerts:
+        priceAlerts:
           type: boolean
           default: false
           description: 価格変動アラート
-        stock_alerts:
+        stockAlerts:
           type: boolean
           default: false
           description: 在庫復活アラート
@@ -51,11 +51,11 @@ components:
           type: boolean
           default: false
           description: ニュースレター
-        points_expiry:
+        pointsExpiry:
           type: boolean
           default: true
           description: ポイント失効通知
-        account_security:
+        accountSecurity:
           type: boolean
           default: true
           description: アカウントセキュリティ通知
@@ -67,11 +67,11 @@ components:
           type: boolean
           default: false
           description: プッシュ通知の有効/無効
-        order_updates:
+        orderUpdates:
           type: boolean
           default: true
           description: 注文状況の更新
-        shipping_updates:
+        shippingUpdates:
           type: boolean
           default: true
           description: 配送状況の更新
@@ -79,15 +79,15 @@ components:
           type: boolean
           default: false
           description: プロモーション・セール情報
-        price_alerts:
+        priceAlerts:
           type: boolean
           default: false
           description: 価格変動アラート
-        in_app_messages:
+        inAppMessages:
           type: boolean
           default: true
           description: アプリ内メッセージ
-        chat_messages:
+        chatMessages:
           type: boolean
           default: true
           description: チャットメッセージ
@@ -99,19 +99,19 @@ components:
           type: boolean
           default: false
           description: SMS通知の有効/無効
-        order_confirmation:
+        orderConfirmation:
           type: boolean
           default: false
           description: 注文確認
-        shipping_updates:
+        shippingUpdates:
           type: boolean
           default: false
           description: 配送状況の更新
-        delivery_alerts:
+        deliveryAlerts:
           type: boolean
           default: false
           description: 配達完了通知
-        security_alerts:
+        securityAlerts:
           type: boolean
           default: true
           description: セキュリティアラート
@@ -123,14 +123,14 @@ components:
           type: boolean
           default: false
           description: LINE通知の有効/無効
-        line_id:
+        lineId:
           type: string
           description: 連携済みLINE ID
-        order_updates:
+        orderUpdates:
           type: boolean
           default: true
           description: 注文状況の更新
-        shipping_updates:
+        shippingUpdates:
           type: boolean
           default: true
           description: 配送状況の更新
@@ -146,12 +146,12 @@ components:
           type: boolean
           default: false
           description: 通知制限時間の有効/無効
-        start_time:
+        startTime:
           type: string
           pattern: '^([01]?[0-9]|2[0-3]):[0-5][0-9]$'
           example: '22:00'
           description: 開始時刻
-        end_time:
+        endTime:
           type: string
           pattern: '^([01]?[0-9]|2[0-3]):[0-5][0-9]$'
           example: '07:00'
@@ -164,15 +164,15 @@ components:
     Notification:
       type: object
       required:
-        - id
-        - user_id
+        - notificationId
+        - userId
         - type
         - title
       properties:
-        id:
-          type: string
-          format: uuid
-        user_id:
+        notificationId:
+          type: integer
+          format: int64
+        userId:
           type: integer
           format: int64
         type:
@@ -181,8 +181,8 @@ components:
             - order
             - shipping
             - promotion
-            - price_alert
-            - stock_alert
+            - priceAlert
+            - stockAlert
             - points
             - security
             - system
@@ -193,19 +193,19 @@ components:
         message:
           type: string
           description: 通知メッセージ
-        action_url:
+        actionUrl:
           type: string
           format: uri
           description: アクションURL
-        image_url:
+        imageUrl:
           type: string
           format: uri
           description: 画像URL
-        is_read:
+        isRead:
           type: boolean
           default: false
           description: 既読フラグ
-        read_at:
+        readAt:
           type: string
           format: date-time
           description: 既読日時
@@ -213,25 +213,25 @@ components:
     UpdateNotificationSettingsRequest:
       type: object
       properties:
-        email_notifications:
+        emailNotifications:
           $ref: '#/components/schemas/EmailNotificationSettings'
-        push_notifications:
+        pushNotifications:
           $ref: '#/components/schemas/PushNotificationSettings'
-        sms_notifications:
+        smsNotifications:
           $ref: '#/components/schemas/SmsNotificationSettings'
-        line_notifications:
+        lineNotifications:
           $ref: '#/components/schemas/LineNotificationSettings'
-        quiet_hours:
+        quietHours:
           $ref: '#/components/schemas/QuietHours'
 
     MarkNotificationAsReadRequest:
       type: object
       required:
-        - notification_ids
+        - notificationIds
       properties:
-        notification_ids:
+        notificationIds:
           type: array
           items:
-            type: string
-            format: uuid
+            type: integer
+            format: int64
           description: 既読にする通知ID

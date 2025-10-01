@@ -3,12 +3,12 @@ components:
     Shop:
       type: object
       required:
-        - id
+        - shopId
         - name
         - owner_id
         - status
       properties:
-        id:
+        shopId:
           type: string
           format: uuid
         name:

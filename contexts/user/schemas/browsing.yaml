@@ -1,0 +1,32 @@
+components:
+  schemas:
+    BrowseProductsResponse:
+      type: object
+      required:
+        - products
+        - meta
+      properties:
+        products:
+          type: array
+          items:
+            $ref: './product.yaml#/components/schemas/PublicProduct'
+        meta:
+          type: object
+          required:
+            - count
+            - currentPage
+            - pages
+            - pageSize
+          properties:
+            count:
+              type: integer
+              description: 総件数
+            currentPage:
+              type: integer
+              description: 現在のページ番号
+            pages:
+              type: integer
+              description: 総ページ数
+            pageSize:
+              type: integer
+              description: 1ページあたりの件数

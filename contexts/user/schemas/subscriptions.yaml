@@ -3,13 +3,13 @@ components:
     SubscriptionPlan:
       type: object
       required:
-        - id
+        - subscriptionPlanId
         - name
         - price
         - maxItems
         - itemPriceLimit
       properties:
-        id:
+        subscriptionPlanId:
           type: string
           format: uuid
           description: サブスクリプションプランID

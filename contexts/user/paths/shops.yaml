@@ -8,13 +8,16 @@
     security: []
     parameters:
       - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PageParam'
-      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PerPageParam'
+      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PageSizeParam'
       - $ref: '../../../shared/parameters/common.yaml#/components/parameters/SearchParam'
-      - name: area_id
+      - name: areaId
         in: query
         schema:
-          type: string
+          type: integer
+          format: int64
         description: エリアIDでフィルタリング
+      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/SortParam'
+      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/SortOrderParam'
     responses:
       '200':
         description: ショップ一覧
@@ -40,8 +43,8 @@
         in: path
         required: true
         schema:
-          type: string
-          format: uuid
+          type: integer
+          format: int64
         description: ショップID
     responses:
       '200':
@@ -53,7 +56,7 @@
       '404':
         $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
 
-/shops/slug/{slug}:
+/shops/slug/{shopSlug}:
   get:
     tags:
       - browsing
@@ -62,7 +65,7 @@
     operationId: getShopBySlug
     security: []
     parameters:
-      - name: slug
+      - name: shopSlug
         in: path
         required: true
         schema:
