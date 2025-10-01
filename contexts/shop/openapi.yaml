@@ -36,14 +36,14 @@ paths:
   # Products
   /products:
     $ref: './paths/products.yaml#/~1products'
-  /products/shop/{shopId}:
-    $ref: './paths/products.yaml#/~1products~1shop~1{shopId}'
   /products/{productId}:
     $ref: './paths/products.yaml#/~1products~1{productId}'
   /products/{productId}/inventory:
     $ref: './paths/products.yaml#/~1products~1{productId}~1inventory'
   /products/{productId}/tags:
     $ref: './paths/products.yaml#/~1products~1{productId}~1tags'
+  /shops/{shopId}/products:
+    $ref: './paths/products.yaml#/~1products~1shop~1{shopId}'
 
   # Inventory
   /products/{productId}/checkout:
@@ -60,14 +60,14 @@ paths:
     $ref: './paths/orders.yaml#/~1orders'
   /orders/myshop:
     $ref: './paths/orders.yaml#/~1orders~1myshop'
-  /orders/{id}/shipping:
-    $ref: './paths/orders.yaml#/~1orders~1{id}~1shipping'
-  /orders/{id}/deliver:
-    $ref: './paths/orders.yaml#/~1orders~1{id}~1deliver'
-  /orders/{id}/return:
-    $ref: './paths/orders.yaml#/~1orders~1{id}~1return'
-  /orders/{id}/cancel:
-    $ref: './paths/orders.yaml#/~1orders~1{id}~1cancel'
+  /orders/{orderId}/shipping:
+    $ref: './paths/orders.yaml#/~1orders~1{orderId}~1shipping'
+  /orders/{orderId}/deliver:
+    $ref: './paths/orders.yaml#/~1orders~1{orderId}~1deliver'
+  /orders/{orderId}/return:
+    $ref: './paths/orders.yaml#/~1orders~1{orderId}~1return'
+  /orders/{orderId}/cancel:
+    $ref: './paths/orders.yaml#/~1orders~1{orderId}~1cancel'
 
   # Authentication
   /auth/signup:

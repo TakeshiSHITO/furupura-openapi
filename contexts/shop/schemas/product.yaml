@@ -23,8 +23,33 @@ components:
           type: number
           format: float
           default: 0.10
-        category_id:
+        category:
+          $ref: '#/components/schemas/Category'
+        brand:
+          $ref: '#/components/schemas/Brand'
+        color:
           type: string
+          description: カラー
+          example: 'ブラック'
+        size:
+          type: string
+          description: サイズ
+          example: 'M'
+        condition:
+          type: string
+          description: 商品の品質状態
+          enum:
+            - new
+            - like_new
+            - excellent
+            - good
+            - fair
+            - poor
+          example: 'excellent'
+        material:
+          type: string
+          description: 素材
+          example: 'コットン100%'
         images:
           type: array
           items:
@@ -66,6 +91,33 @@ components:
           default: 0.10
         category_id:
           type: string
+          description: カテゴリーID
+        brand_id:
+          type: string
+          description: ブランドID
+        color:
+          type: string
+          description: カラー
+          example: 'ブラック'
+        size:
+          type: string
+          description: サイズ
+          example: 'M'
+        condition:
+          type: string
+          description: 商品の品質状態
+          enum:
+            - new
+            - like_new
+            - excellent
+            - good
+            - fair
+            - poor
+          example: 'excellent'
+        material:
+          type: string
+          description: 素材
+          example: 'コットン100%'
         images:
           type: array
           items:
@@ -277,3 +329,52 @@ components:
                 description: 商品名
             required: [id, name]
           description: 更新に失敗した商品リスト
+
+    # -----------------------------------------------------
+    # カテゴリーとブランド
+    # -----------------------------------------------------
+    Category:
+      type: object
+      description: 商品カテゴリー
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: カテゴリーID
+        name:
+          type: string
+          description: カテゴリー名
+          example: 'アウター'
+        parent_id:
+          type: [string, 'null']
+          format: uuid
+          description: 親カテゴリーID（階層構造の場合）
+        description:
+          type: string
+          description: カテゴリーの説明
+
+    Brand:
+      type: object
+      description: ブランド情報
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ブランドID
+        name:
+          type: string
+          description: ブランド名
+          example: 'UNIQLO'
+        description:
+          type: string
+          description: ブランドの説明
+        logo_url:
+          type: string
+          format: uri
+          description: ブランドロゴURL

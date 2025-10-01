@@ -199,6 +199,17 @@
                   type: string
                   example: Logged out seccessfully
               required: [message]
+      '401':
+        description: 認証エラー
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: 認証が必要です
+              required: [message]
 
 /shopOwners:
   get:
@@ -284,6 +295,17 @@
                         example: 2024-01-01T00:00:00Z
                     required: [id, name, slug, areaId]
                 required: [id, name, email, shopId, Shop]
+      '401':
+        description: 認証エラー
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: 認証が必要です
+              required: [message]
       '500':
         description: サーバーエラー
         content:
