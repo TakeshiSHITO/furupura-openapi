@@ -1,0 +1,57 @@
+# contexts/shop/paths/rentals.yaml の想定
+/rentals:
+  get:
+    tags:
+      - orders
+    summary: レンタル中の注文一覧取得
+    description: ショップの商品に関する、現在レンタル中の購入情報（レンタル注文）の一覧を取得します。
+    operationId: getActiveRentals
+    security:
+      - ShopAuth: []
+    responses:
+      '200':
+        description: レンタル中の注文一覧
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '../schemas/order.yaml#/components/schemas/RentalOrder'
+
+/rentals/extensions:
+  get:
+    tags:
+      - orders
+    summary: レンタル延長申請一覧取得
+    description: ユーザーから提出されたレンタル期間延長申請の一覧を取得します。
+    operationId: listRentalExtensions
+    security:
+      - ShopAuth: []
+    responses:
+      '200':
+        description: 延長申請一覧
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '../schemas/order.yaml#/components/schemas/ExtensionRequest'
+
+/returns/{returnId}/authorize:
+  patch:
+    tags:
+      - orders
+    summary: 返品リクエストの承認
+    description: 指定された返品リクエストをショップオーナーとして承認します。
+    operationId: authorizeReturnRequest
+    parameters:
+      - $ref: '../schemas/common.yaml#/components/parameters/ReturnIdParam'
+    security:
+      - ShopAuth: []
+    responses:
+      '204':
+        description: 承認成功
+      '404':
+        $ref: '../../../shared/responses/common.yaml#/components/responses/NotFound'
+      '409':
+        description: 既に承認/拒否済みのリクエスト

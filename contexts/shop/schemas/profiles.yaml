@@ -1,0 +1,293 @@
+components:
+  schemas:
+    # ショッププロフィール関連
+    ShopProfileResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ショップID
+        name:
+          type: string
+          description: ショップ名
+        slug:
+          type: string
+          description: ショップスラッグ
+        email:
+          type: string
+          format: email
+          description: ショップのメールアドレス
+        description:
+          type: string
+          description: ショップの説明
+        phone:
+          type: string
+          description: 電話番号
+        address:
+          type: string
+          description: 住所
+        logo:
+          type: string
+          description: ロゴ画像URL
+        coverImage:
+          type: string
+          description: カバー画像URL
+        openingHours:
+          type: string
+          description: 営業時間
+        postalCode:
+          type: string
+          description: 郵便番号
+        prefecture:
+          type: string
+          description: 都道府県
+        city:
+          type: string
+          description: 市区町村
+        streetAddress:
+          type: string
+          description: 番地・街区
+        buildingName:
+          type: string
+          description: 建物名・部屋番号
+        customizations:
+          type: object
+          description: カスタマイズ設定
+        googleMapsLink:
+          type: string
+          description: GoogleマップURL
+        googleMapsEmbedSrc:
+          type: string
+          description: Googleマップ埋め込みURL
+        areaId:
+          type: integer
+          description: エリアID
+        area:
+          $ref: '#/components/schemas/Area'
+        status:
+          type: string
+          description: ショップステータス
+          enum: [active, inactive, pending]
+        createdAt:
+          type: string
+          format: date-time
+          description: 作成日時
+        updatedAt:
+          type: string
+          format: date-time
+          description: 更新日時
+      required: [id, name, slug, areaId, area]
+
+    Area:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: エリアID
+        name:
+          type: string
+          description: エリア名
+        parentId:
+          type: integer
+          description: 親エリアID
+      required: [id, name, parentId]
+      description: エリア情報
+
+    ShopProfileUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: ショップ名
+        description:
+          type: string
+          description: ショップの説明
+        logo:
+          type: string
+          description: ロゴ画像URL
+        coverImage:
+          type: string
+          description: カバー画像URL
+        openingHours:
+          type: string
+          description: 営業時間
+        postalCode:
+          type: string
+          description: 郵便番号
+        prefecture:
+          type: string
+          description: 都道府県
+        city:
+          type: string
+          description: 市区町村
+        streetAddress:
+          type: string
+          description: 番地・街区
+        buildingName:
+          type: string
+          description: 建物名・部屋番号
+        customizations:
+          type: object
+          description: カスタマイズ設定
+        googleMapsLink:
+          type: string
+          description: GoogleマップURL
+        googleMapsEmbedSrc:
+          type: string
+          description: Googleマップ埋め込みURL
+
+    ShopProfileUpdateResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'ショップ情報を更新しました'
+        shop:
+          $ref: '#/components/schemas/ShopProfileResponse'
+      required: [message, shop]
+
+    # ショップオーナープロフィール関連
+    ShopOwnerProfileUpdateRequest:
+      type: object
+      description: プロフィール更新リクエストボディ（更新したいフィールドのみ）
+      properties:
+        name:
+          type: string
+          description: ショップオーナー名
+          example: 田中太郎
+        email:
+          type: string
+          format: email
+          description: メールアドレス
+          example: shop@example.com
+        password:
+          type: string
+          description: 新しいパスワード
+          example: newPassword123
+        phoneNumber:
+          type: string
+          description: 電話番号
+          example: 090-1234-5678
+        postalCode:
+          type: string
+          description: 郵便番号
+          example: 123-4567
+        prefecture:
+          type: string
+          description: 都道府県
+          example: 東京都
+        city:
+          type: string
+          description: 市区町村
+          example: 渋谷区
+        streetAddress:
+          type: string
+          description: 番地
+          example: 1-2-3
+        buildingName:
+          type: string
+          description: 建物名
+          example: ABCビル4階
+
+    ShopOwnerProfileResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ショップオーナーID
+          example: 1
+        name:
+          type: string
+          description: ショップオーナー名
+          example: 田中太郎
+        email:
+          type: string
+          format: email
+          description: メールアドレス
+          example: shop@example.com
+        role:
+          type: string
+          description: ユーザーの役割
+          example: shop
+        shopId:
+          type: integer
+          description: ショップID
+          example: 1
+        phoneNumber:
+          type: [string, 'null']
+          description: 電話番号
+          example: 090-1234-5678
+        postalCode:
+          type: [string, 'null']
+          description: 郵便番号
+          example: 123-4567
+        prefecture:
+          type: [string, 'null']
+          description: 都道府県
+          example: 東京都
+        city:
+          type: [string, 'null']
+          description: 市区町村
+          example: 渋谷区
+        streetAddress:
+          type: [string, 'null']
+          description: 番地
+          example: 1-2-3
+        buildingName:
+          type: [string, 'null']
+          description: 建物名
+          example: ABCビル4階
+        serialPrinter:
+          type: [string, 'null']
+          description: シリアルプリンター設定
+          example: COM1
+        bluetoothPrinter:
+          type: [string, 'null']
+          description: Bluetoothプリンター設定
+          example: Printer-001
+        createdAt:
+          type: string
+          format: date-time
+          description: 作成日時
+          example: 2024-01-01T00:00:00Z
+        updatedAt:
+          type: string
+          format: date-time
+          description: 更新日時
+          example: 2024-01-01T00:00:00Z
+      required: [id, name, email, role, shopId]
+
+    PasswordVerificationRequest:
+      type: object
+      description: パスワード確認リクエストボディ
+      required: [password]
+      properties:
+        password:
+          type: string
+          description: 確認したい現在のパスワード
+          example: currentPassword123
+
+    PasswordChangeRequest:
+      type: object
+      description: パスワード変更リクエストボディ
+      required: [currentPassword, newPassword]
+      properties:
+        currentPassword:
+          type: string
+          format: password
+          description: 現在のパスワード
+          example: currentPassword123
+        newPassword:
+          type: string
+          format: password
+          minLength: 8
+          description: 新しいパスワード（8文字以上）
+          example: newPassword456
+
+    # 共通エラーレスポンス
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+      required: [message]

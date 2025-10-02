@@ -18,7 +18,7 @@ servers:
 
 tags:
   - name: auth
-    description: 認証
+    description: 商品管理
   - name: products
     description: 商品管理
   - name: orders
@@ -27,12 +27,32 @@ tags:
     description: 在庫管理
   - name: shop
     description: ショップ情報
+  - name: financial
+    description: 金融・決済管理
+  - name: shopOwner
+    description: ショップオーナー管理
 
 paths:
+  # Products
   /products:
     $ref: './paths/products.yaml#/~1products'
   /products/{productId}:
     $ref: './paths/products.yaml#/~1products~1{productId}'
+  /products/{productId}/inventory:
+    $ref: './paths/products.yaml#/~1products~1{productId}~1inventory'
+  /products/{productId}/tags:
+    $ref: './paths/products.yaml#/~1products~1{productId}~1tags'
+  # Inventory
+  /products/{productId}/checkout:
+    $ref: './paths/inventory.yaml#/~1products~1{productId}~1checkout'
+  /products/cancel-checkout:
+    $ref: './paths/inventory.yaml#/~1products~1cancel-checkout'
+  /products/cancel-sold:
+    $ref: './paths/inventory.yaml#/~1products~1cancel-sold'
+  /products/{productId}/status:
+    $ref: './paths/inventory.yaml#/~1products~1{productId}~1status'
+
+  # Orders
   /orders:
     $ref: './paths/orders.yaml#/~1orders'
   /orders/{orderId}/shipping:
@@ -43,12 +63,32 @@ paths:
     $ref: './paths/orders.yaml#/~1orders~1{orderId}~1return'
   /orders/{orderId}/cancel:
     $ref: './paths/orders.yaml#/~1orders~1{orderId}~1cancel'
+
+  # Authentication (Shop Owner)
   /auth/signup:
     $ref: './paths/auths.yaml#/~1auth~1signup'
   /auth/login:
     $ref: './paths/auths.yaml#/~1auth~1login'
   /auth/logout:
     $ref: './paths/auths.yaml#/~1auth~1logout'
+
+  # Profiles
+  /shop/profile:
+    $ref: './paths/profiles.yaml#/~1shop~1profile'
+  /shopowner/profile:
+    $ref: './paths/profiles.yaml#/~1shopowner~1profile'
+  /shopowner/verify-password:
+    $ref: './paths/profiles.yaml#/~1shopowner~1verify-password'
+  /shopowner/change-password:
+    $ref: './paths/profiles.yaml#/~1shopowner~1change-password'
+
+  # Financial
+  /shop/balance:
+    $ref: './paths/financial.yaml#/~1shop~1balance'
+  /shop/bankAccount:
+    $ref: './paths/financial.yaml#/~1shop~1bankAccount'
+  /withdrawals:
+    $ref: './paths/financial.yaml#/~1withdrawals'
 
 components:
   securitySchemes:
