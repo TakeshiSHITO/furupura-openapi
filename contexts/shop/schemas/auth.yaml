@@ -49,4 +49,4 @@ components:
           type: integer
           description: アクセストークンの有効期限（秒）
         shop:
-          $ref: './shop.yaml#/components/schemas/ShopProfile'
+          $ref: './profiles.yaml#/components/schemas/ShopProfileResponse'

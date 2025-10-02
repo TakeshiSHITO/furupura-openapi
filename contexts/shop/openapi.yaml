@@ -18,7 +18,7 @@ servers:
 
 tags:
   - name: auth
-    description: 認証
+    description: 商品管理
   - name: products
     description: 商品管理
   - name: orders
@@ -27,10 +27,10 @@ tags:
     description: 在庫管理
   - name: shop
     description: ショップ情報
-  - name: shopowner
-    description: ショップオーナー管理
   - name: financial
     description: 金融・決済管理
+  - name: shopOwner
+    description: ショップオーナー管理
 
 paths:
   # Products
@@ -55,8 +55,6 @@ paths:
   # Orders
   /orders:
     $ref: './paths/orders.yaml#/~1orders'
-  /orders/myshop:
-    $ref: './paths/orders.yaml#/~1orders~1myshop'
   /orders/{orderId}/shipping:
     $ref: './paths/orders.yaml#/~1orders~1{orderId}~1shipping'
   /orders/{orderId}/deliver:
@@ -73,16 +71,16 @@ paths:
     $ref: './paths/auths.yaml#/~1auth~1login'
   /auth/logout:
     $ref: './paths/auths.yaml#/~1auth~1logout'
-  /auth/verify-password:
-    $ref: './paths/shopowner.yaml#/~1verifyPassword'
 
-  # Shop Owner Profile
-  /profile:
-    $ref: './paths/shopowner.yaml#/~1profile'
-
-  # Shop
-  /shop:
-    $ref: './paths/controller.yaml#/~1shop'
+  # Profiles
+  /shop/profile:
+    $ref: './paths/profiles.yaml#/~1shop~1profile'
+  /shopowner/profile:
+    $ref: './paths/profiles.yaml#/~1shopowner~1profile'
+  /shopowner/verify-password:
+    $ref: './paths/profiles.yaml#/~1shopowner~1verify-password'
+  /shopowner/change-password:
+    $ref: './paths/profiles.yaml#/~1shopowner~1change-password'
 
   # Financial
   /shop/balance:

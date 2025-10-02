@@ -2,43 +2,6 @@
   get:
     tags:
       - orders
-    summary: 注文一覧取得
-    description: ショップの注文一覧を取得します。ステータスでフィルタリング可能です。
-    operationId: listOrders
-    parameters:
-      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PageParam'
-      - $ref: '../../../shared/parameters/common.yaml#/components/parameters/PageSizeParam'
-      - name: status
-        in: query
-        schema:
-          type: string
-          enum:
-            - pending
-            - processing
-            - shipped
-            - delivered
-            - cancelled
-    responses:
-      '200':
-        description: 注文一覧
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                data:
-                  type: array
-                  items:
-                    $ref: '../schemas/order.yaml#/components/schemas/Order'
-                pagination:
-                  $ref: '../../../shared/schemas/common.yaml#/components/schemas/Pagination'
-      '401':
-        $ref: '../../../shared/responses/common.yaml#/components/responses/Unauthorized'
-
-/orders/myshop:
-  get:
-    tags:
-      - orders
     summary: ショップの注文取得
     description: 自分のショップの購入・レンタル商品を取得
     operationId: getMyShopOrders
