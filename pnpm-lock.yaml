@@ -18,8 +18,8 @@ importers:
         specifier: ^2.2.2
         version: 2.2.2(@opentelemetry/api@1.9.0)(ajv@8.17.1)(core-js@3.45.0)
       '@redocly/openapi-core':
-        specifier: ^2.0.7
-        version: 2.0.7(ajv@8.17.1)
+        specifier: ^2.11.0
+        version: 2.11.0(ajv@8.17.1)
       chokidar-cli:
         specifier: ^3.0.0
         version: 3.0.0
@@ -44,10 +44,6 @@ packages:
 
   '@babel/helper-validator-identifier@7.27.1':
     resolution: {integrity: sha512-D2hP9eA+Sqx1kBZgzxZh0y1trbuU+JoDkiEwqhQ36nodYqJwyEIhPSdMNd7lOm/4io72luTPWH20Yda0xOuUow==}
-    engines: {node: '>=6.9.0'}
-
-  '@babel/runtime@7.28.3':
-    resolution: {integrity: sha512-9uIQ10o0WGdpP6GDhXcdOJPJuDgFtIDtN/9+ArJQ2NAfAmiuhTQdzkaTGR33v43GYS2UrSA0eX2pPPHoFVvpxA==}
     engines: {node: '>=6.9.0'}
 
   '@babel/runtime@7.28.4':
@@ -280,8 +276,8 @@ packages:
   '@redocly/ajv@8.11.2':
     resolution: {integrity: sha512-io1JpnwtIcvojV7QKDUSIuMN/ikdOUd1ReEnUnMKGfDVridQZ31J0MmIuqwuRjWDZfmvr+Q0MqCcfHM2gTivOg==}
 
-  '@redocly/ajv@8.11.3':
-    resolution: {integrity: sha512-4P3iZse91TkBiY+Dx5DUgxQ9GXkVJf++cmI0MOyLDxV9b5MUBI4II6ES8zA5JCbO72nKAJxWrw4PUPW+YP3ZDQ==}
+  '@redocly/ajv@8.11.4':
+    resolution: {integrity: sha512-77MhyFgZ1zGMwtCpqsk532SJEc3IJmSOXKTCeWoMTAvPnQOkuOgxEip1n5pG5YX1IzCTJ4kCvPKr8xYyzWFdhg==}
 
   '@redocly/cli@2.2.2':
     resolution: {integrity: sha512-LqC7VGoMxWZZC6P96vZO5JOXGSo5Aj6A2KiLcPYPLrZT4Rr/aMBjMauJ4lacX/Z2SuaWZ5CrcnprY1QlL/ZFkQ==}
@@ -291,18 +287,18 @@ packages:
   '@redocly/config@0.22.2':
     resolution: {integrity: sha512-roRDai8/zr2S9YfmzUfNhKjOF0NdcOIqF7bhf4MVC5UxpjIysDjyudvlAiVbpPHp3eDRWbdzUgtkK1a7YiDNyQ==}
 
-  '@redocly/config@0.28.0':
-    resolution: {integrity: sha512-IdY4bSX9bbjXkDX91oO1OVwCzB00UNF0ozoygacTpS5Exa3ewYCB/6BcbA0tGCAvKDIwSY9Jor2cWQ/ycQfBTg==}
-
   '@redocly/config@0.31.0':
     resolution: {integrity: sha512-KPm2v//zj7qdGvClX0YqRNLQ9K7loVJWFEIceNxJIYPXP4hrhNvOLwjmxIkdkai0SdqYqogR2yjM/MjF9/AGdQ==}
+
+  '@redocly/config@0.37.0':
+    resolution: {integrity: sha512-cYN+rTTCQIp5mVt1xumJsNqpZcaPVUf1x0ryD0QKXpVKsxKc+lHaMF2P1CqMgdQNY9B7i84z/kvxD0EhxzlxbQ==}
 
   '@redocly/openapi-core@1.34.5':
     resolution: {integrity: sha512-0EbE8LRbkogtcCXU7liAyC00n9uNG9hJ+eMyHFdUsy9lB/WGqnEBgwjA9q2cyzAVcdTkQqTBBU1XePNnN3OijA==}
     engines: {node: '>=18.17.0', npm: '>=9.5.0'}
 
-  '@redocly/openapi-core@2.0.7':
-    resolution: {integrity: sha512-OKSqhvJXPu2s4s6xB5ykUYXvAuQNubZcexd9AEdWse6dz8Ke3EqCmMEuAZkpFWaiunBReu7Wam8kE0vh4CrLBg==}
+  '@redocly/openapi-core@2.11.0':
+    resolution: {integrity: sha512-CF4QpCoxxHIB7Dib1XnhdL0WuW4dO4zvNfaEWpN7TASlitOX2mhrc6sD3dYG9knW1iG16e3Oauv2O+tVJx1E9Q==}
     engines: {node: '>=22.12.0 || >=20.19.0 <21.0.0', npm: '>=10'}
 
   '@redocly/openapi-core@2.2.2':
@@ -1608,8 +1604,6 @@ snapshots:
 
   '@babel/helper-validator-identifier@7.27.1': {}
 
-  '@babel/runtime@7.28.3': {}
-
   '@babel/runtime@7.28.4': {}
 
   '@commitlint/cli@19.8.1(@types/node@24.2.0)(typescript@5.9.2)':
@@ -1871,7 +1865,7 @@ snapshots:
       require-from-string: 2.0.2
       uri-js-replace: 1.0.1
 
-  '@redocly/ajv@8.11.3':
+  '@redocly/ajv@8.11.4':
     dependencies:
       fast-deep-equal: 3.1.3
       json-schema-traverse: 1.0.0
@@ -1918,17 +1912,17 @@ snapshots:
 
   '@redocly/config@0.22.2': {}
 
-  '@redocly/config@0.28.0':
+  '@redocly/config@0.31.0':
     dependencies:
       json-schema-to-ts: 2.7.2
 
-  '@redocly/config@0.31.0':
+  '@redocly/config@0.37.0':
     dependencies:
       json-schema-to-ts: 2.7.2
 
   '@redocly/openapi-core@1.34.5':
     dependencies:
-      '@redocly/ajv': 8.11.3
+      '@redocly/ajv': 8.11.4
       '@redocly/config': 0.22.2
       colorette: 1.4.0
       https-proxy-agent: 7.0.6
@@ -1940,15 +1934,15 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@redocly/openapi-core@2.0.7(ajv@8.17.1)':
+  '@redocly/openapi-core@2.11.0(ajv@8.17.1)':
     dependencies:
-      '@redocly/ajv': 8.11.3
-      '@redocly/config': 0.28.0
+      '@redocly/ajv': 8.11.4
+      '@redocly/config': 0.37.0
       ajv-formats: 2.1.1(ajv@8.17.1)
       colorette: 1.4.0
       js-levenshtein: 1.1.6
       js-yaml: 4.1.0
-      minimatch: 10.0.3
+      picomatch: 4.0.3
       pluralize: 8.0.0
       yaml-ast-parser: 0.0.43
     transitivePeerDependencies:
@@ -1956,7 +1950,7 @@ snapshots:
 
   '@redocly/openapi-core@2.2.2(ajv@8.17.1)':
     dependencies:
-      '@redocly/ajv': 8.11.3
+      '@redocly/ajv': 8.11.4
       '@redocly/config': 0.31.0
       ajv-formats: 2.1.1(ajv@8.17.1)
       colorette: 1.4.0
@@ -2500,7 +2494,7 @@ snapshots:
 
   json-schema-to-ts@2.7.2:
     dependencies:
-      '@babel/runtime': 7.28.3
+      '@babel/runtime': 7.28.4
       '@types/json-schema': 7.0.15
       ts-algebra: 1.2.2
 
